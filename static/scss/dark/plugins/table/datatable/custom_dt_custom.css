@@ -1,0 +1,100 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+body.dark .widget-content-area {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  border: none;
+  border-radius: 6px;
+}
+
+body.dark .table-hover:not(.table-dark) tbody tr td:first-child {
+  border-right: none !important;
+  border-right: none !important;
+}
+
+body.dark .table-hover:not(.table-dark) tbody tr:hover .new-control.new-checkbox .new-control-indicator {
+  border: 1px solid #4361ee;
+}
+
+/*Style. 1*/
+body.dark .style-1 .user-name {
+  font-size: 15px;
+  color: #888ea8;
+}
+
+body.dark .style-1 .profile-img img {
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+}
+
+/*Style. 2*/
+body.dark .style-2 .new-control.new-checkbox .new-control-indicator {
+  top: 1px;
+}
+
+body.dark .style-2 .user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2a03f;
+}
+
+body.dark .style-2 img.profile-img {
+  width: 40px;
+  height: 40px;
+}
+
+/*Style. 3*/
+body.dark .style-3 .new-control.new-checkbox .new-control-indicator {
+  top: 1px;
+}
+
+body.dark .style-3 .user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2a03f;
+}
+
+body.dark .style-3 img.profile-img {
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+}
+
+body.dark .style-3 .table-controls {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+body.dark .style-3 .table-controls li {
+  list-style: none;
+  display: inline;
+}
+
+body.dark .style-3 .table-controls li svg {
+  cursor: pointer;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #bfc9d4;
+  stroke-width: 1.5;
+  width: 28px;
+  height: 28px;
+}
+
+body.dark .style-3.table-hover:not(.table-dark) tbody tr:hover .table-controls li svg {
+  color: #888ea8;
+}
+
+body.dark .style-3.table-hover:not(.table-dark) tbody tr:hover td:first-child {
+  color: #4361ee !important;
+}
+/*# sourceMappingURL=custom_dt_custom.css.map */

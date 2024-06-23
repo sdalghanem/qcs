@@ -1,0 +1,432 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+/*
+    ============================
+        Pagination container
+    =============================
+*/
+body.dark .paginating-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 0;
+}
+
+body.dark .paginating-container .prev svg, body.dark .paginating-container .next svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: text-bottom;
+}
+
+body.dark .paginating-container .pagination {
+  margin-bottom: 0;
+}
+
+body.dark .paginating-container li {
+  padding: 10px 0;
+  font-weight: 600;
+  color: #888ea8;
+  border-radius: 4px;
+}
+
+body.dark .paginating-container li a {
+  padding: 10px 15px;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .paginating-container li:not(:last-child) {
+  margin-left: 4px;
+}
+
+/*
+    Default Style
+*/
+body.dark .pagination-default li {
+  border: 2px solid #191e3a;
+}
+
+body.dark .pagination-default li:hover {
+  border: 2px solid #009688 !important;
+}
+
+body.dark .pagination-default li:hover a {
+  color: #009688;
+}
+
+body.dark .pagination-default li.active {
+  border: 2px solid #009688 !important;
+  color: #009688;
+}
+
+body.dark .pagination-default li a.active:hover, body.dark .pagination-default li.active a {
+  color: #009688;
+}
+
+body.dark .pagination-default .prev {
+  border: 2px solid #191e3a;
+}
+
+body.dark .pagination-default .prev:hover {
+  border: 2px solid #009688;
+}
+
+body.dark .pagination-default .prev:hover a, body.dark .pagination-default .prev:hover svg {
+  color: #009688;
+}
+
+body.dark .pagination-default .next {
+  border: 2px solid #191e3a;
+}
+
+body.dark .pagination-default .next:hover {
+  border: 2px solid #009688;
+}
+
+body.dark .pagination-default .next:hover a, body.dark .pagination-default .next:hover svg {
+  color: #009688;
+}
+
+/* 
+    Solid Style
+*/
+body.dark .pagination-solid li {
+  background-color: #191e3a;
+}
+
+body.dark .pagination-solid li:hover a {
+  color: #009688;
+}
+
+body.dark .pagination-solid li.active {
+  background-color: #009688 !important;
+  color: #fff;
+}
+
+body.dark .pagination-solid li a.active:hover, body.dark .pagination-solid li.active a {
+  color: #fff;
+}
+
+body.dark .pagination-solid .prev {
+  background-color: #191e3a;
+}
+
+body.dark .pagination-solid .prev:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-solid .prev:hover a, body.dark .pagination-solid .prev:hover svg {
+  color: #fff;
+}
+
+body.dark .pagination-solid .next {
+  background-color: #191e3a;
+}
+
+body.dark .pagination-solid .next:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-solid .next:hover a, body.dark .pagination-solid .next:hover svg {
+  color: #fff;
+}
+
+/*    
+    ===================
+        No Spacing
+    ===================
+*/
+body.dark .pagination-no_spacing {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 0;
+}
+
+body.dark .pagination-no_spacing .prev {
+  background-color: #191e3a;
+  border-radius: 50%;
+  padding: 10px 11px;
+  margin-left: 5px;
+}
+
+body.dark .pagination-no_spacing .prev svg {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+body.dark .pagination-no_spacing .prev:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-no_spacing .prev:hover svg {
+  color: #fff;
+}
+
+body.dark .pagination-no_spacing .next {
+  background-color: #191e3a;
+  border-radius: 50%;
+  padding: 10px 11px;
+  margin-right: 5px;
+}
+
+body.dark .pagination-no_spacing .next svg {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+body.dark .pagination-no_spacing .next:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-no_spacing .next:hover svg {
+  color: #fff;
+}
+
+body.dark .pagination-no_spacing .prev svg, body.dark .pagination-no_spacing .next svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: text-bottom;
+}
+
+body.dark .pagination-no_spacing .pagination {
+  margin-bottom: 0;
+}
+
+body.dark .pagination-no_spacing li {
+  background-color: #191e3a;
+  padding: 10px 0;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .pagination-no_spacing li:first-child {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+body.dark .pagination-no_spacing li:last-child {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+body.dark .pagination-no_spacing li a {
+  padding: 10px 15px;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .pagination-no_spacing li a.active {
+  background-color: #009688 !important;
+  border-radius: 6px;
+  color: #fff;
+}
+
+body.dark .pagination-no_spacing li a.active:hover {
+  color: #fff;
+}
+
+body.dark .pagination-no_spacing li a:hover {
+  color: #009688;
+}
+
+/*
+    =======================
+        Custom Pagination
+    =======================
+*/
+/*
+    Custom Solid
+*/
+body.dark .pagination-custom_solid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 0;
+}
+
+body.dark .pagination-custom_solid .prev {
+  background-color: #191e3a;
+  border-radius: 50%;
+  padding: 10px 11px;
+  margin-left: 25px;
+}
+
+body.dark .pagination-custom_solid .prev:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-custom_solid .prev:hover svg {
+  color: #fff;
+}
+
+body.dark .pagination-custom_solid .next {
+  background-color: #191e3a;
+  border-radius: 50%;
+  padding: 10px 11px;
+  margin-right: 25px;
+}
+
+body.dark .pagination-custom_solid .next:hover {
+  background-color: #009688;
+}
+
+body.dark .pagination-custom_solid .next:hover svg {
+  color: #fff;
+}
+
+body.dark .pagination-custom_solid .prev svg, body.dark .pagination-custom_solid .next svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: text-bottom;
+}
+
+body.dark .pagination-custom_solid .pagination {
+  margin-bottom: 0;
+}
+
+body.dark .pagination-custom_solid li {
+  background-color: #191e3a;
+  padding: 10px 0;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .pagination-custom_solid li:first-child {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+body.dark .pagination-custom_solid li:last-child {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+body.dark .pagination-custom_solid li a {
+  padding: 10px 15px;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .pagination-custom_solid li a.active {
+  background-color: #009688 !important;
+  border-radius: 6px;
+  color: #fff;
+}
+
+body.dark .pagination-custom_solid li a.active:hover {
+  color: #fff;
+}
+
+body.dark .pagination-custom_solid li a:hover {
+  color: #009688;
+}
+
+/*
+    Custom Outline
+*/
+body.dark .pagination-custom_outline {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 0;
+}
+
+body.dark .pagination-custom_outline .prev {
+  border: 2px solid #191e3a;
+  border-radius: 50%;
+  padding: 8px 11px;
+  margin-left: 25px;
+}
+
+body.dark .pagination-custom_outline .prev:hover {
+  border: 2px solid #009688;
+}
+
+body.dark .pagination-custom_outline .prev:hover svg {
+  color: #009688;
+}
+
+body.dark .pagination-custom_outline .next {
+  border: 2px solid #191e3a;
+  border-radius: 50%;
+  padding: 8px 11px;
+  margin-right: 25px;
+}
+
+body.dark .pagination-custom_outline .next:hover {
+  border: 2px solid #009688;
+}
+
+body.dark .pagination-custom_outline .next:hover svg {
+  color: #009688;
+}
+
+body.dark .pagination-custom_outline .prev svg, body.dark .pagination-custom_outline .next svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+body.dark .pagination-custom_outline .pagination {
+  margin-bottom: 0;
+}
+
+body.dark .pagination-custom_outline li {
+  padding: 10px 0;
+  font-weight: 600;
+  color: #888ea8;
+  border: 1px solid #191e3a;
+}
+
+body.dark .pagination-custom_outline li.active {
+  background-color: #191e3a;
+}
+
+body.dark .pagination-custom_outline li:first-child {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+body.dark .pagination-custom_outline li:last-child {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+body.dark .pagination-custom_outline li a {
+  padding: 10px 15px;
+  font-weight: 600;
+  color: #888ea8;
+}
+
+body.dark .pagination-custom_outline li a:hover {
+  color: #009688;
+}
+
+body.dark .pagination-custom_outline li.active a {
+  background-color: #191e3a;
+  border: 2px solid #009688 !important;
+  border-radius: 6px;
+  color: #009688;
+}
+/*# sourceMappingURL=custom-pagination.css.map */

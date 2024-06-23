@@ -1,0 +1,59 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+body.dark .widget .widget-content {
+  padding: 45px;
+  border-radius: 8px;
+}
+
+body.dark .contact-us-form .paper {
+  margin-top: 36px;
+  border-radius: 8px;
+}
+
+body.dark .contact-us-form .paper .contact-title {
+  margin-bottom: 44px;
+  border-bottom: 1px solid #3d5df3;
+  display: inline-block;
+}
+
+body.dark .contact-us-form .paper .widget-paper {
+  background-color: #191e3a;
+  padding: 30px 22px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+body.dark .contact-us-form .paper .widget-paper .icon {
+  margin-bottom: 10px;
+}
+
+body.dark .contact-us-form .paper .widget-paper .icon svg {
+  width: 50px;
+  height: 50px;
+  stroke-width: 1px;
+  color: #fff;
+}
+
+body.dark .contact-us-form .paper .widget-paper h5 {
+  font-weight: 500;
+}
+
+body.dark .contact-us-form .paper .widget-paper p {
+  font-size: 17px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575px) {
+  body.dark .widget .widget-content {
+    padding: 25px 25px;
+  }
+}
+/*# sourceMappingURL=contact_us.css.map */

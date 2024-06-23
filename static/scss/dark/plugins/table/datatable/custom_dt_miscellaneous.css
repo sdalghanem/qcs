@@ -1,0 +1,35 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+body.dark .widget-content-area {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  border: none !important;
+  border-radius: 6px;
+}
+
+body.dark .toggle-list {
+  margin: 21px 21px 0 21px;
+}
+
+/* HTML 5 */
+body.dark .dt-buttons .dt-button {
+  color: #fff !important;
+  background-color: #4361ee !important;
+  border-color: #4361ee;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+/* Multiple Tables */
+body.dark #DataTables_Table_1_wrapper {
+  margin-top: 70px;
+}
+/*# sourceMappingURL=custom_dt_miscellaneous.css.map */

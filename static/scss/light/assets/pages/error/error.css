@@ -1,0 +1,90 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+.theme-logo {
+  width: 62px;
+  height: 62px;
+}
+
+body:before {
+  display: none;
+}
+
+body.error {
+  color: #888ea8;
+  height: 100%;
+  font-size: 0.875rem;
+  background: #fafafa;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a8edea), to(#fed6e3));
+  background-image: linear-gradient(to bottom, #a8edea 0%, #fed6e3 100%);
+}
+
+body.error > .error-content {
+  min-height: 80vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.error .mini-text {
+  font-size: 33px;
+  font-weight: 700;
+  margin-bottom: 0;
+  color: #060818;
+}
+
+.error .img-cartoon {
+  width: 170px;
+  height: 170px;
+}
+
+.error .error-img {
+  max-width: 529px;
+  margin-bottom: 50px;
+  width: 100%;
+  width: 363px;
+}
+
+.error .error-number {
+  font-size: 170px;
+  color: #060818;
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  text-shadow: 0px 5px 4px rgba(31, 45, 61, 0.101961);
+  display: none;
+}
+
+.error .error-text {
+  font-size: 18px;
+  color: #3b3f5c;
+  font-weight: 600;
+}
+
+.error a.btn {
+  width: 134px;
+  padding: 6px;
+  font-size: 17px;
+  border: none;
+  letter-spacing: 2px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  display: block;
+  margin: 0 auto;
+}
+/*# sourceMappingURL=error.css.map */

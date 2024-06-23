@@ -1,0 +1,44 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+textarea {
+  resize: none;
+}
+
+.clipboard-input {
+  position: relative;
+}
+
+.clipboard-input .copy-icon {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.clipboard-input .copy-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.clipboard-input .copy-icon:hover svg {
+  color: #515365;
+}
+
+.clipboard.copy-txt {
+  background-color: #060818;
+}
+
+.clipboard.copy-txt .otp-pass span {
+  font-size: 24px;
+  font-weight: 600;
+  color: #009688;
+}
+/*# sourceMappingURL=custom-clipboard.css.map */

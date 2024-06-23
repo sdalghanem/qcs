@@ -1,0 +1,530 @@
+{% extends "index.html" %}
+{% load static %}
+{% block home %}
+<!-- 
+صفحة الاستعلامات
+- مكونات الفلتر
+-- نوع البحث 
+
+---اسم مسؤول
+----دروب داون لست لاسماء المسؤولين
+
+--- فرع
+---- اختيار الدوله
+----اختيار المنطقة 
+---- اختيار الحي
+---- اختيار الفرع
+
+--- رقم فرع - اسم فرع - اسم مسؤول - كلمة مفتاحية في بند
+
+-- تاريخ
+--------------------
+نتائج البحث 
+جدول يظهر فية البنود مع امكانية تعديل النتيجه من الأدمن
+-->
+<!-- BREADCRUMB -->
+<div class="page-meta">
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">لوحة التحكم</a></li>
+            <li class="breadcrumb-item active" aria-current="page">استعلام تقييم الفروع</li>
+        </ol>
+    </nav>
+</div>
+<!-- /BREADCRUMB -->
+
+
+<!-- مربع البحث-->
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 layout-spacing">
+        <div class="card p-4">
+          
+          
+            <div class="row" >
+
+ 
+                     <!--عرض جميع الادارات من قاعدة البيانات ة-->
+                <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example" id="department">
+                           <option value="0">الكل</option>
+                           {% if departments %}
+                                {% for department in departments %}
+                                <option value="{{department.id}}">{{department.description}}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>                   
+                    </div>
+                    <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example" id="section" style="display: none;">
+                            <option >اختر القسم </option>
+                          </select>                   
+                    </div> 
+                    <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example"  id="evalu" style="display: none;">
+                            <option disabled>التنفيذ</option>
+                            <option value="0">الكل</option>
+                            <option value="1">نعم</option>
+                            <option value="2">لا</option>
+                            <option value="3">مستبعد</option>
+                          </select>                   
+                    </div> 
+                    
+            </div>
+                       
+
+                <div class="row" >
+                    <!-- <label>البنود</label> -->
+                    {% csrf_token %}
+                    <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected disabled>اختر المسؤول</option>
+                            {% if managers %}
+                              {% for mng in managers %}
+                                <option value="{{mng.id}}">{{mng.user.first_name}} {{mng.user.last_name}}</option>
+                                {% endfor %}
+                            {% endif %}
+                          </select>                   
+                    </div>
+                    <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>اختر تقرير الجودة</option>
+                            <option value="1">تقرير 6/2023</option>
+                            <option value="1">تقرير 1/2024</option>
+                          </select>                   
+                    </div>
+                    <div class="col-lg-4 layout-spacing">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>التنفيذ</option>
+                            <option value="1">الكل</option>
+                            <option value="1">نعم</option>
+                            <option value="2">لا</option>
+                            <option value="3">مستبعد</option>
+                          </select>                   
+                    </div>  
+                </div>
+                <div class="col-lg-12 layout-spacing">
+                    <button class="btn btn-primary col-lg-2">ابحث</button> 
+                </div>
+
+         </div>  
+    </div>                
+</div>
+<!-- نهاية مربع البحث-->
+
+<!-- مربع النتايج-->
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 layout-spacing">
+        <div class="card p-4">
+            <h4>  
+            <p> محمد ناصر  <span>98%</span></p>
+            <label> الأقسام  :<span>التشغيل - الصيانة - الادارة</span></label><br>
+            <label> فرع:<span> عام </span></label>
+
+            </h4>
+           <!--start according-->
+                    <div class="widget-content widget-content-area p-2">
+                            <!---------------------------start loop items--------------------------------------------------->
+                            <div class="card mb-2">
+                                <div class="card-header badge-light-primary" id="headingOne1">
+                                    <section class="mb-0 mt-0">
+                                        <div role="menu" class="collapsed" data-bs-toggle="collapse" data-bs-target="#defaultAccordionOne1" aria-expanded="false" aria-controls="defaultAccordionOne">
+                                          <div class="icons">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                            <b>الادارة</b>      <span>93%</span>  
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                    
+                                <div id="defaultAccordionOne1" class="collapse" aria-labelledby="headingOne1" data-bs-parent="#toggleAccordion">
+                             <!---->
+                             <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead class="badge-light-success">
+                                        <th colspan="3" class="text-center "> الوثائق الحكومية</th>
+                                    </thead>           
+                                    <tbody>
+                                        <tr class="text-center">
+                                          <th>البند</th>
+                                          <th>التنفيذ</th>
+                                          <th>المرفقات</th>
+                                        </tr>
+                                        <tr> 
+                                            <td>وجود باركود مركز الاعمال الوطني</td>
+                                            <td class="text-center">
+                                                <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button> 
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr> 
+                                            <td>صلاحية السجل التجاري</td>
+                                            <td class="text-center">
+                                                <button class="badge badge-light-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">مستبعد</button>                             </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                
+                                        <tr> 
+                                            <td>شهادة ضريبة القيمة المضافة</td>
+                                            <td class="text-center">
+                                                <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>                             </td>
+                                            <td></td>
+                                        </tr>
+                
+                                        <tr> 
+                                            <td>صلاحية رخصة البلدية</td>
+                                            <td class="text-center">
+                                                <button class="badge badge-light-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">لا</button> 
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger mb-2 me-4" data-bs-toggle="modal" data-bs-target="#sliderModal">
+                                                    مرفقات
+                                                  </button> 
+                                            </td>
+                                        </tr>
+                
+                                        <tr> 
+                                            <td>صلاحية شهادة السلامة الدفاع المدني </td>
+                                            <td class="text-center">
+                                                <span class="badge badge-light-danger">لا</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger mb-2 me-4" data-bs-toggle="modal" data-bs-target="#sliderModal2">
+                                                    مرفقات
+                                                  </button> 
+                                            </td>
+                                        </tr>
+                
+                                        <tr> 
+                                            <td>صلاحية ترخيص مصدر اللحوم
+                                               
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="badge badge-light-success rotateInDownLeft" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>    
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                      
+                                    </tbody>
+                
+                                    
+                                </table>
+                             </div>
+                            <!--end table  -->
+                                  </div>  <!--end defaultAccordionOne-->
+                            </div>
+                            <!----------------------------- نهايه الكرت-------------------------------------------------------->
+                            <!---->
+                         
+                            <!---->
+        
+                    </div>
+                    <!--toggleAccordion-->
+                    <div class="widget-content widget-content-area p-2">
+                        <!---------------------------start loop items--------------------------------------------------->
+                        <div class="card mb-2">
+                            <div class="card-header badge-light-primary" id="headingOne">
+                                <section class="mb-0 mt-0">
+                                    <div role="menu" class="collapsed" data-bs-toggle="collapse" data-bs-target="#defaultAccordionOne" aria-expanded="false" aria-controls="defaultAccordionOne">
+                                      <div class="icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        <b>التشغيل و الصيانة</b>      <span>84%</span>  
+                                    </div>
+                                    </div>
+                                </section>
+                            </div>
+                
+                        <div id="defaultAccordionOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#toggleAccordion">
+                                    <!---->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered">
+                                            <thead class="badge-light-success">
+                                                <th colspan="3" class="text-center "> التشغيل</th>
+                                            </thead>           
+                                            <tbody>
+                                                <tr class="text-center">
+                                                <th>البند</th>
+                                                <th>التنفيذ</th>
+                                                <th>المرفقات</th>
+                                                </tr>
+                                                <tr> 
+                                                    <td>توفر كمية لحوم بالفريزر</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button> 
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr> 
+                                                    <td>درجة حرارة الثلاجات</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">مستبعد</button>                             </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>انارة صاله الطعام للزبائن</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>                             </td>
+                                                    <td></td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>نظافة طاولات الطعام الغير مستخدمة</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">لا</button> 
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-danger mb-2 me-4" data-bs-toggle="modal" data-bs-target="#sliderModal3">
+                                                            مرفقات
+                                                        </button> 
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>توفر المشروبات الغازيه في ثلاجه المشروبات </td>
+                                                    <td class="text-center">
+                                                        <span class="badge badge-light-danger">لا</span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-danger mb-2 me-4" data-bs-toggle="modal" data-bs-target="#sliderModal4">
+                                                            مرفقات
+                                                        </button> 
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>التزام الطاقم باللبس الموحد
+                                                    
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success rotateInDownLeft" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>    
+                                                    </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+                                            
+                                            </tbody>
+                        
+                                            
+                                            </table>
+                                    </div>
+                                    <!--end table  -->
+                                    <!---->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered">
+                                            <thead class="badge-light-success">
+                                                <th colspan="3" class="text-center "> الصيانة</th>
+                                            </thead>           
+                                            <tbody>
+                                                <tr class="text-center">
+                                                <th>البند</th>
+                                                <th>التنفيذ</th>
+                                                <th>المرفقات</th>
+                                                </tr>
+                                                <tr> 
+                                                    <td>اضائة طاولة استقبال الطلبات</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button> 
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr> 
+                                                    <td>سلامة ارضية مدخل المطعم</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">مستبعد</button>                             </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>نظافة طاولة الكاونتر</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>                             </td>
+                                                    <td></td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>توفر وعمل جهاز الكاشير</td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button> 
+                                                    </td>
+                                                    <td class="text-center">
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>توفر وعمل اجهزه طلبات التطبيقات </td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button> 
+                                                    </td>
+                                                    <td class="text-center">
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr> 
+                                                    <td>عمل لوحة المطعم الخارجية
+                                                    
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button class="badge badge-light-success rotateInDownLeft" data-bs-toggle="modal" data-bs-target="#exampleModal">نعم</button>    
+                                                    </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+                                            
+                                            </tbody>
+                        
+                                            
+                                            </table>
+                                    </div>
+                                    <!--end table  -->
+                        </div>  <!--end defaultAccordionOne-->
+                    </div>
+                 
+    
+                </div>
+                <!--toggleAccordion-->
+           <!--end according-->
+         </div>  
+    </div>                
+</div>
+<!-- نهاية النتائح-->
+
+<!-- yes no form-->
+<!-- Modal -->
+<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تغيير التقييم</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  <svg> ... </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12 ">
+                    <select class="form-select text-center col-3" aria-label="Default select example">
+                    <option value="1">نعم</option>
+                    <option value="0">لا</option>
+                    <option value="1">مستبعد</option>
+                </select>            
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> اغلاق</button>
+                <button type="button" class="btn btn-primary">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="basicModalLabel" role="document">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+
+              <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{% static '/src/assets/img/certerror1.jpeg'%}" alt="Third slide">
+                        
+                    </div>
+                </div>
+
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="sliderModal2" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="basicModalLabel" role="document">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+
+              <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{% static '/src/assets/img/certerror2.jpg'%}" alt="Third slide">
+                        
+                    </div>
+                </div>
+
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="sliderModal3" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="basicModalLabel" role="document">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+
+              <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{% static '/src/assets/img/table.jpeg'%}" alt="Third slide">
+                        
+                    </div>
+                </div>
+
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="sliderModal4" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="basicModalLabel" role="document">
+      <div class="modal-content">
+          <div class="modal-body p-0">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+
+              <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{% static '/src/assets/img/frig.jpeg'%}" alt="Third slide">
+                        
+                    </div>
+                </div>
+
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+<!-- Modal -->
+
+ <script src="{% static 'appjs/clients/departments_dependent.js'%}"></script> 
+
+{% endblock %}

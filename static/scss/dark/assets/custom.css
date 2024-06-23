@@ -1,0 +1,43 @@
+/**
+*
+* ========================================================================================
+*
+*   @CUSTOM STYLESHEET - This stylesheet should be used for custom customization 
+*
+* ========================================================================================
+*
+*/
+body.dark {
+  /* ScrollBar Position */
+  /* c-custom-dropdown */
+  /* gcontainer */
+}
+
+body.dark #sidebar .ps__rail-y {
+  right: 0 !important;
+}
+
+body.dark .c-custom-dropdown button {
+  background: none;
+  border: none;
+  padding: 0 5px;
+}
+
+body.dark .c-custom-dropdown button svg {
+  color: #fff;
+}
+
+body.dark .c-custom-dropdown .dropdown-menu a.dropdown-item:hover {
+  color: #2196f3;
+}
+
+body.dark .glightbox-container .gcontainer .gnext.gbtn {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+body.dark .glightbox-container .gcontainer .gprev.gbtn {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+/*# sourceMappingURL=custom.css.map */

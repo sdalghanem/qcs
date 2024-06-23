@@ -1,0 +1,48 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+div#load_screen {
+  background: #ecefff;
+  opacity: 1;
+  position: fixed;
+  z-index: 999999;
+  top: 0px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+}
+
+div#load_screen .loader {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100vh;
+}
+
+div#load_screen .loader-content {
+  left: 0;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+div#load_screen .loader-content .spinner-grow {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.spinner-grow {
+  color: #304aca;
+}
+/*# sourceMappingURL=loader.css.map */

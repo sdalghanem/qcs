@@ -1,0 +1,14 @@
+{
+    "version": 3,
+    "mappings": "AGAA;;;;EAIE;ACJF;;;;EAIE;AJHF,AAAA,QAAQ,CAAC;EACP,MAAM,EAAE,IAAI;CACb;;AAED,AAAA,gBAAgB,CAAC;EACf,QAAQ,EAAE,QAAQ;CAiBnB;;AAlBD,AAGE,gBAHc,CAGd,UAAU,CAAC;EACT,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,IAAI;EACT,IAAI,EAAE,IAAI;EACV,MAAM,EAAE,OAAO;CAUhB;;AAjBH,AASI,gBATY,CAGd,UAAU,CAMR,GAAG,CAAC;EACF,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;CACb;;AAZL,AAcI,gBAdY,CAGd,UAAU,AAWP,MAAM,CAAC,GAAG,CAAC;EACV,KAAK,EAAE,OAAO;CACf;;AAIL,AAAA,UAAU,AAAA,SAAS,CAAC;EAClB,gBAAgB,EAAE,OAAO;CAO1B;;AARD,AAGE,UAHQ,AAAA,SAAS,CAGjB,SAAS,CAAC,IAAI,CAAC;EACb,SAAS,EAAE,IAAI;EACf,WAAW,EAAE,GAAG;EAChB,KAAK,EAAE,OAAO;CACf",
+    "sources": [
+        "custom-clipboard.scss",
+        "../../base/_base.scss",
+        "../../base/_color_variables.scss",
+        "../../base/_functions.scss",
+        "../../base/_mixins.scss",
+        "../../base/_utilities.scss"
+    ],
+    "names": [],
+    "file": "custom-clipboard.css"
+}

@@ -1,0 +1,72 @@
+body.dark .ts-wrapper .ts-control {
+  border: 1px solid #1b2e4b;
+  border-radius: 6px;
+  background: #1b2e4b;
+  color: #fff;
+}
+
+body.dark .ts-wrapper .ts-control input {
+  color: #fff;
+}
+
+body.dark .ts-wrapper .ts-control input::-webkit-input-placeholder {
+  color: #bfc9d4;
+}
+
+body.dark .ts-wrapper .ts-control input:-ms-input-placeholder {
+  color: #bfc9d4;
+}
+
+body.dark .ts-wrapper .ts-control input::-ms-input-placeholder {
+  color: #bfc9d4;
+}
+
+body.dark .ts-wrapper .ts-control input::placeholder {
+  color: #bfc9d4;
+}
+
+body.dark .ts-wrapper .ts-dropdown {
+  background: #1b2e4b;
+  border: none;
+  color: #e0e6ed;
+}
+
+body.dark .ts-wrapper .ts-dropdown .active {
+  background-color: #0e1726;
+  color: #fff;
+}
+
+body.dark .ts-wrapper .ts-dropdown .active.create {
+  color: #fff;
+}
+
+body.dark .ts-wrapper .ts-dropdown .active.create strong {
+  font-weight: 500;
+  color: #00ab55;
+}
+
+body.dark .ts-wrapper .ts-dropdown .no-results {
+  color: #e0e6ed;
+}
+
+body.dark .ts-wrapper.multi .ts-control .item {
+  background: #060818;
+  border: 0 solid #dee2e6;
+  color: #e0e6ed;
+  margin: 0 6px 3px 0;
+  padding: 4px 7px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+body.dark .ts-wrapper.multi .ts-control .item.active {
+  background-color: #515365;
+}
+
+body.dark .ts-wrapper.focus .ts-control {
+  border-color: #3b3f5c;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  background: #1b2e4b;
+}
+/*# sourceMappingURL=custom-tomSelect.css.map */

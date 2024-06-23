@@ -1,0 +1,58 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+.swal2-popup {
+  background-color: #fff !important;
+}
+
+.swal2-title {
+  color: #3b3f5c;
+}
+
+.swal2-html-container {
+  color: #e95f2b;
+}
+
+.swal2-styled.swal2-default-outline:focus, .swal2-styled.swal2-confirm:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: #ddf5f0;
+}
+
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+  background-color: #00ab55;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #fbeced;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+  background-color: #e7515a;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #fcf5e9;
+  color: #e2a03f;
+}
+
+.swal2-icon.swal2-info {
+  border-color: #e6f4ff;
+  color: #2196f3;
+}
+
+.swal2-icon.swal2-question {
+  border-color: #f2eafa;
+  color: #805dca;
+}
+/*# sourceMappingURL=custom-sweetalert.css.map */

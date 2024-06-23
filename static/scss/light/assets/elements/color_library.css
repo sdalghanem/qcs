@@ -1,0 +1,70 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+.widget {
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+/*---------Palette Box--------*/
+.color-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+.color-box .cl-example {
+  width: 80px;
+  height: 80px;
+  margin-left: 20px;
+  border-radius: 6px;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  margin-top: -10px;
+  margin-right: -10px;
+  margin-bottom: -10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.color-box:hover .cl-example {
+  -webkit-transform: scale(1.09);
+  transform: scale(1.09);
+}
+
+.color-box .cl-info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.color-box .cl-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #888ea8;
+}
+
+.color-box .cl-info span {
+  font-size: 14px;
+  color: #888ea8;
+  font-weight: 600;
+}
+/*# sourceMappingURL=color_library.css.map */

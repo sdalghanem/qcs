@@ -1,0 +1,57 @@
+{% extends "index.html" %}
+{% load static %}
+{% block home %}
+
+<!-- BREADCRUMB -->
+<div class="page-meta">
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">شركة   ماكدونالدز</a></li>
+            <!-- <li class="breadcrumb-item " aria-current="page"><a href="#">الرياض</a></li>
+            <li class="breadcrumb-item active" aria-current="page">حي السلام</li> -->
+        </ol>
+    </nav>
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="row layout-top-spacing">
+
+    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+        <div class="widget-content widget-content-area br-8">
+            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
+                <thead>
+                    
+                    <tr> 
+                        <th>No.</th>
+                        <th>تاريخ</th>
+                        <th>درجة التقييم</th>
+                        <th>تفاصيل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% if row %}
+                        {% for r in row %}
+                        <td>{{forloop.counter}}</td>
+                        <td>{{r.reportDate}}</td>
+                        <td>{{r.rate}}%</td>
+                        <td> <a href="{% url 'show_report' r.id %}" class="btn btn-primary">عرض التقرير</a> </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">لايوجد تقارير</td>
+                    </tr>
+                    
+                    {% endif %}
+
+                    
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

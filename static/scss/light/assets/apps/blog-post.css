@@ -1,0 +1,204 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+.single-post-content {
+  background-color: #fff;
+  border-radius: 20px;
+  border: 1px solid #e0e6ed;
+  padding: 32px;
+}
+
+.featured-image {
+  position: relative;
+  background: lightblue url("../../../img/lightbox-2.jpeg") no-repeat fixed center;
+  height: 650px;
+  background-position: center;
+  background-size: cover;
+  background-attachment: inherit;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.featured-image .featured-image-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  background-color: rgba(22, 28, 36, 0.72);
+}
+
+.featured-image .post-header {
+  max-width: 1152px;
+  margin: 0 auto;
+}
+
+.featured-image .post-info {
+  position: relative;
+  height: 100%;
+}
+
+.featured-image .post-title {
+  padding: 48px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  max-width: 1152px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+}
+
+.featured-image .post-title h1 {
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #e0e6ed;
+}
+
+.featured-image .post-meta-info {
+  padding: 48px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  max-width: 1152px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+}
+
+.featured-image .post-meta-info .media img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 12px;
+}
+
+.featured-image .post-meta-info .media .media-body {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.featured-image .post-meta-info .media .media-body h5 {
+  color: #fff;
+}
+
+.featured-image .post-meta-info .media .media-body p {
+  color: #e0e6ed;
+}
+
+.featured-image .post-meta-info .btn-share {
+  padding: 7.5px 9px;
+}
+
+.post-content {
+  margin: 0 auto;
+  padding: 48px 0;
+  padding-bottom: 0;
+}
+
+.post-content p {
+  font-size: 15px;
+  font-weight: 100;
+  color: #3b3f5c;
+}
+
+.post-content img {
+  border-radius: 8px;
+}
+
+.post-content .full-width {
+  width: 100%;
+}
+
+.post-info {
+  padding-top: 15px;
+}
+
+.post-info .comment-count {
+  font-size: 17px;
+  font-weight: 100;
+  vertical-align: super;
+  color: #888ea8;
+  letter-spacing: 2px;
+}
+
+.post-comments .media {
+  position: relative;
+}
+
+.post-comments .media.primary-comment {
+  border-bottom: 1px solid #e0e6ed;
+}
+
+.post-comments .media.primary-comment:hover .btn-reply {
+  display: block;
+}
+
+.post-comments .media img {
+  border-radius: 15px;
+  border: none;
+}
+
+.post-comments .media .media-heading {
+  color: #3b3f5c;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.post-comments .media .media-info {
+  color: #888ea8;
+}
+
+.post-comments .media .media-body .media-text {
+  color: #515365;
+  font-size: 15px;
+}
+
+.post-comments .media .btn-reply {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .featured-image {
+    height: 350px;
+  }
+  .featured-image .post-title, .featured-image .post-meta-info {
+    padding: 24px 26px;
+  }
+  .post-content, .post-info {
+    padding: 24px 26px;
+  }
+  .post-content {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .post-comments .media:not(.primary-comment) {
+    margin-right: -73px;
+  }
+}
+
+@media (max-width: 575px) {
+  .post-comments .media {
+    display: block;
+  }
+  .post-comments .media:not(.primary-comment) {
+    margin-right: auto;
+  }
+  .post-comments .media .media-body {
+    margin-top: 25px;
+  }
+}
+/*# sourceMappingURL=blog-post.css.map */

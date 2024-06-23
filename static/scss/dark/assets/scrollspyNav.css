@@ -1,0 +1,138 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+body.dark .sidenav {
+  position: fixed;
+  left: -30px;
+  top: 139px;
+  display: none;
+  width: 236px;
+  width: 168px;
+}
+
+body.dark .sidenav .sidenav-header:after {
+  display: none;
+}
+
+body.dark .sidenav .sidenav-header p {
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 20px;
+  background: #4361ee;
+  text-align: center;
+  border-radius: 5px;
+  padding: 4px;
+  letter-spacing: 1px;
+  background-image: -webkit-gradient(linear, right top, left top, from(#4361ee), to(#805dca));
+  background-image: linear-gradient(to left, #4361ee 0%, #805dca 100%);
+}
+
+body.dark .sidenav .sidenav-content {
+  background-color: transparent;
+  display: block;
+  border: none;
+}
+
+body.dark .sidenav .sidenav-content a {
+  display: block;
+  padding: 3px 0px;
+  color: #bfc9d4;
+  font-size: 13px;
+  padding: 3px 25px;
+  position: relative;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+body.dark .sidenav .sidenav-content a.active:before {
+  background: #008eff;
+  width: 8px;
+  height: 8px;
+}
+
+body.dark .sidenav .sidenav-content a.active:hover:before {
+  background: #008eff;
+}
+
+body.dark .sidenav .sidenav-content a:before {
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  background: #181e2e;
+  content: "";
+  right: -8px;
+  border-radius: 50%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+body.dark .sidenav .sidenav-content a:hover:before {
+  background: #0c272b;
+}
+
+body.dark #content > .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 24px;
+  max-width: none;
+}
+
+body.dark.layout-boxed #content > .container {
+  max-width: 1488px;
+}
+
+body.dark .layout-boxed #content > .footer-wrapper {
+  max-width: 1488px;
+}
+
+body.dark #content > .container > .container {
+  padding: 0;
+  max-width: 64% !important;
+  margin-right: 0;
+  padding: 0 0 !important;
+}
+
+body.dark .footer-wrapper {
+  padding: 10px 24px 10px 24px;
+  margin: auto;
+}
+
+@media (max-width: 575px) {
+  body.dark .sidenav .sidenav-content a {
+    padding: 4px 7px;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 1399px) {
+  body.dark .sidenav {
+    display: none !important;
+  }
+  body.dark #content > .container > .container {
+    max-width: 100% !important;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 991px) {
+  body.dark #content > .container {
+    padding: 0 16px;
+  }
+  body.dark .footer-wrapper {
+    padding: 10px 16px 10px 16px;
+  }
+}
+/*# sourceMappingURL=scrollspyNav.css.map */

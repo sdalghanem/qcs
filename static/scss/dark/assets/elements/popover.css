@@ -1,0 +1,169 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+body.dark .popovers-section h6 {
+  color: #3b3f5c;
+  font-size: 0.875rem;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
+body.dark .popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #060818;
+  border: 1px solid #060818;
+  border-radius: 4px;
+}
+
+body.dark .popover .popover-header {
+  border-radius: 0;
+  background-color: #060818;
+  color: #bfc9d4;
+}
+
+body.dark .popover .popover-body {
+  background-color: #060818;
+  color: #bfc9d4;
+  padding: .5rem .75rem;
+}
+
+/*
+	Popovers
+*/
+body.dark .popover-primary, body.dark .popover-success, body.dark .popover-info, body.dark .popover-danger, body.dark .popover-warning, body.dark .popover-secondary, body.dark .popover-dark {
+  border-color: #060818;
+}
+
+/* 		popover Arrow 	*/
+body.dark .bs-popover-top.popover .popover-arrow:after, body.dark .bs-popover-top.popover .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .bs-popover-bottom.popover .popover-arrow:after, body.dark .bs-popover-bottom.popover .popover-arrow:before {
+  border-bottom-color: #060818;
+}
+
+body.dark .bs-popover-end.popover .popover-arrow:after, body.dark .bs-popover-end.popover .popover-arrow:before {
+  border-left-color: #060818;
+}
+
+body.dark .bs-popover-start.popover .popover-arrow:after, body.dark .bs-popover-start.popover .popover-arrow:before {
+  border-right-color: #060818;
+}
+
+body.dark .popover-primary .popover-arrow:after, body.dark .popover-primary .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-success .popover-arrow:after, body.dark .popover-success .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-info .popover-arrow:after, body.dark .popover-info .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-danger .popover-arrow:after, body.dark .popover-danger .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-warning .popover-arrow:after, body.dark .popover-warning .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-secondary .popover-arrow:after, body.dark .popover-secondary .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+body.dark .popover-dark .popover-arrow:after, body.dark .popover-dark .popover-arrow:before {
+  border-top-color: #060818;
+}
+
+/* 		popover Header 		*/
+body.dark .popover-primary .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #4361ee;
+}
+
+body.dark .popover-success .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #00ab55;
+}
+
+body.dark .popover-info .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #2196f3;
+}
+
+body.dark .popover-danger .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #e7515a;
+}
+
+body.dark .popover-warning .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #e2a03f;
+}
+
+body.dark .popover-secondary .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #805dca;
+}
+
+body.dark .popover-dark .popover-header {
+  background-color: #060818;
+  border: none;
+  color: #3b3f5c;
+}
+
+/*  	Popover Body 	*/
+body.dark .popover-primary .popover-body {
+  background-color: #060818;
+  color: #4361ee;
+}
+
+body.dark .popover-success .popover-body {
+  background-color: #060818;
+  color: #00ab55;
+}
+
+body.dark .popover-info .popover-body {
+  background-color: #060818;
+  color: #2196f3;
+}
+
+body.dark .popover-danger .popover-body {
+  background-color: #060818;
+  color: #e7515a;
+}
+
+body.dark .popover-warning .popover-body {
+  background-color: #060818;
+  color: #e2a03f;
+}
+
+body.dark .popover-secondary .popover-body {
+  background-color: #060818;
+  color: #805dca;
+}
+
+body.dark .popover-dark .popover-body {
+  background-color: #060818;
+  color: #3b3f5c;
+}
+/*# sourceMappingURL=popover.css.map */

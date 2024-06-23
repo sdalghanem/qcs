@@ -1,0 +1,14 @@
+{
+    "version": 3,
+    "mappings": "AGAA;;;;EAIE;ACJF;;;;EAIE;AJHF,AAAA,mBAAmB,CAAC;EAClB,OAAO,EAAE,IAAI;EACb,MAAM,EAAE,iBAAiB;EACzB,aAAa,EAAE,GAAG;CACnB;;AAED,AAAA,qBAAqB,CAAC;EACpB,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,iBAAiB;EACzB,aAAa,EAAE,GAAG;EAClB,UAAU,EAAE,IAAI;EAChB,MAAM,EAAE,MAAM;CAgCf;;AArCD,AAOE,qBAPmB,CAOnB,iBAAiB,CAAC;EAChB,OAAO,EAAE,IAAI;EACb,aAAa,EAAE,iBAAiB;CAMjC;;AAfH,AAWI,qBAXiB,CAOnB,iBAAiB,CAIf,CAAC,CAAC;EACA,SAAS,EAAE,IAAI;EACf,aAAa,EAAE,CAAC;CACjB;;AAdL,AAiBE,qBAjBmB,CAiBnB,iBAAiB,CAAC;EAChB,OAAO,EAAE,IAAI;EACb,gBAAgB,EAAE,OAAO;CAiB1B;;AApCH,AAqBI,qBArBiB,CAiBnB,iBAAiB,CAIf,EAAE,CAAC;EACD,SAAS,EAAE,IAAI;EACf,aAAa,EAAE,CAAC;CACjB;;AAxBL,AA0BI,qBA1BiB,CAiBnB,iBAAiB,CASf,CAAC,CAAC;EACA,WAAW,EAAE,GAAG;EAChB,SAAS,EAAE,IAAI;EACf,KAAK,EE3BD,OAAO;CF4BZ;;AA9BL,AAgCI,qBAhCiB,CAiBnB,iBAAiB,CAef,iBAAiB,CAAC;EAChB,UAAU,EAAE,IAAI;EAChB,UAAU,EAAE,MAAM;CACnB;;AAIL,MAAM,EAAE,SAAS,EAAE,KAAK;EACtB,AAAA,qBAAqB,CAAC;IACpB,KAAK,EAAE,IAAI;GACZ",
+    "sources": [
+        "custom-typography.scss",
+        "../../base/_base.scss",
+        "../../base/_color_variables.scss",
+        "../../base/_functions.scss",
+        "../../base/_mixins.scss",
+        "../../base/_utilities.scss"
+    ],
+    "names": [],
+    "file": "custom-typography.css"
+}

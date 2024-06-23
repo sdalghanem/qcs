@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="flag-icons-us">
+    <rect class="cls-1" width="512" height="512"/>
+    <image width="1200" height="1051" transform="translate(22.67 88.46) scale(.39 .34)" xlink:href="../rtl/src/assets/img/money-bag.png"/>
+  </g>
+</svg>

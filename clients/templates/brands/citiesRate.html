@@ -1,0 +1,177 @@
+{% extends "index.html" %}
+{% load static %}
+{% block home %}
+
+<!-- BREADCRUMB -->
+<div class="page-meta">
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">شركة   ماكدونالدز</a></li>
+            <!-- <li class="breadcrumb-item " aria-current="page"><a href="#">الرياض</a></li>
+            <li class="breadcrumb-item active" aria-current="page">حي السلام</li> -->
+        </ol>
+    </nav>
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="row layout-top-spacing">
+
+    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+        <div class="widget-content widget-content-area br-8">
+            <!-- js chart -->
+            <div class="w-chart-render-one">
+                <div id="chart"></div>
+            </div>
+         <!--end js chart -->
+
+            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
+                <thead>
+                    
+                    <tr>
+                        <th>No.</th>
+                        <th>المدينة</th>
+                        <th>المسؤول</th>
+                        <th>التقييم</th>
+                        <th>تفاصيل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if cityMangers %}
+                        {% for m in cityMangers %}
+                        <tr>
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td>{{m.cityName}}</td>
+                            <td>{{m.mngName}}</td>
+                            <td>{{m.rate}} %
+                              <div class="progress br-30">
+                                  <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{m.rate}}%" aria-valuenow="{{m.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div></td>
+                            <td> <a href="{% url 'districts_rate' m.id %}" class="btn btn-primary">عرض</a> </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                    
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+<!-- Include ApexCharts JavaScript file -->
+<script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
+<script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
+<script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script>
+<!-- Your JavaScript code to create and render the chart -->
+
+<script>
+pero=JSON.parse('{{perlist}}');
+var jsonString ='{{citieslist}}';
+
+// هذي الفنكشن تاخذ لستة المناطق سترينج وتحولها لنص قابل للجيسون 
+function decodeHtmlEntities(str) {
+            var txt = document.createElement('textarea');
+            txt.innerHTML = str;
+            return txt.value;
+        }
+var decodedJsonString = decodeHtmlEntities(jsonString);
+try {
+      // تفك الجيسون وتحوله لبنص قابل للقرائة
+      var jsonObject = JSON.parse(decodedJsonString);
+      console.log(jsonObject);
+      // Output: ["الشرقية", "الرياض"]
+  } catch (e) {
+      console.error("Invalid JSON string", e);
+  }
+////////////////////////////////
+draw_res(pero , jsonObject)
+
+function draw_res(pero , jsonObject) {
+
+        var options = {
+         series: [{
+         name: 'الامتثال لمعايير الجودة',
+         data: pero ,
+         
+       }],
+         chart: {
+         height: 350,
+         type: 'bar',
+       },
+       plotOptions: {
+         bar: {
+           borderRadius: 10,
+           dataLabels: {
+             position: 'top', // top, center, bottom
+           },
+         }
+       },
+       dataLabels: {
+         enabled: true,
+         formatter: function (val) {
+           return val + "%";
+         },
+         offsetY: -20,
+         style: {
+           fontSize: '12px',
+           colors: ["#304758"]
+         }
+       },
+       
+       xaxis: {
+         categories: jsonObject ,
+         position: 'buttom',
+         axisBorder: {
+           show: false
+         },
+         axisTicks: {
+           show: false
+         },
+         crosshairs: {
+           fill: {
+             type: 'gradient',
+             gradient: {
+               colorFrom: '#D8E3F0',
+               colorTo: '#BED1E6',
+               stops: [0, 100],
+               opacityFrom: 0.4,
+               opacityTo: 0.5,
+             }
+           }
+         },
+         tooltip: {
+           enabled: true,
+         }
+       },
+       yaxis: {
+         axisBorder: {
+           show: false
+         },
+         axisTicks: {
+           show: false,
+         },
+         labels: {
+           show: false,
+           formatter: function (val) {
+             return val + "%";
+           }
+         }
+       
+       },
+       title: {
+         
+         floating: true,
+         offsetY: 330,
+         align: 'center',
+         style: {
+           color: '#444'
+         }
+       }
+       };
+
+       var chart = new ApexCharts(document.querySelector("#chart"), options);
+       chart.render();
+    }
+</script>
+{% endblock %}

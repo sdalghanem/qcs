@@ -1,0 +1,151 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+/*
+    Tab Section
+*/
+body.dark .faq .faq-layouting .fq-tab-section {
+  background: transparent;
+  padding-top: 65px;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section h2 {
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 45px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #bfc9d4;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section h2 span {
+  color: #009688;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card {
+  border: 1px solid #1b2e4b;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: #1b2e4b;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header > div {
+  padding: 15px 19px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #009688;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header > div[aria-expanded="true"] {
+  border-bottom: none;
+  background: #152143;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div .faq-q-title {
+  overflow: hidden;
+  font-size: 14px;
+  color: #888ea8;
+  font-weight: 600;
+  letter-spacing: 1px;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div[aria-expanded="true"] .faq-q-title {
+  color: #009688;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div .icons {
+  display: inline-block;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div .icons svg {
+  color: #888ea8;
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div[aria-expanded="true"] .icons svg {
+  color: #009688;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card.show .card-header .icons svg {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div svg.feather-thumbs-up {
+  cursor: pointer;
+  vertical-align: bottom;
+  margin-left: 10px;
+  width: 18px;
+  color: #888ea8;
+  fill: rgba(0, 23, 55, 0.08);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card:hover .card-header div svg.feather-thumbs-up {
+  color: #009688;
+  fill: rgba(27, 85, 226, 0.239216);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div[aria-expanded="true"] svg.feather-thumbs-up {
+  color: #009688;
+  fill: rgba(27, 85, 226, 0.239216);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div span.faq-like-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #888ea8;
+  fill: rgba(0, 23, 55, 0.08);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card:hover .card-header div span.faq-like-count, body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div[aria-expanded="true"] span.faq-like-count {
+  color: #009688;
+  fill: rgba(27, 85, 226, 0.239216);
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-body {
+  padding: 19px 30px;
+}
+
+body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-body p {
+  font-size: 13px;
+  line-height: 23px;
+  letter-spacing: 1px;
+  color: #bfc9d4;
+}
+
+/*
+    Media Query
+*/
+@media (max-width: 575px) {
+  body.dark .faq .faq-layouting .fq-tab-section {
+    padding: 35px 25px;
+  }
+  body.dark .faq .faq-layouting .fq-tab-section .accordion .card .card-header div svg.feather-code {
+    display: none;
+  }
+}
+/*# sourceMappingURL=faq.css.map */

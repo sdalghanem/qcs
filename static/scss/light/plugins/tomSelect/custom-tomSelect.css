@@ -1,0 +1,25 @@
+.ts-wrapper .ts-control {
+  border: 1px solid #bfc9d4;
+  border-radius: 6px;
+}
+
+.ts-wrapper.multi .ts-control .item {
+  background: #eceffe;
+  border: 0 solid #dee2e6;
+  color: #3b3f5c;
+  margin: 0 6px 3px 0;
+  padding: 4px 7px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.ts-wrapper.multi .ts-control .item.active {
+  background-color: #304aca;
+}
+
+.ts-wrapper.focus .ts-control {
+  border-color: #4361ee;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+/*# sourceMappingURL=custom-tomSelect.css.map */

@@ -1,0 +1,19 @@
+/*
+	===============================
+			@Import	Function
+	===============================
+*/
+/*
+	===============================
+			@Import	Mixins
+	===============================
+*/
+#demo_vertical::-ms-clear, #demo_vertical2::-ms-clear {
+  display: none;
+}
+
+input#demo_vertical, input#demo_vertical2 {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+/*# sourceMappingURL=custom-jquery.bootstrap-touchspin.min.css.map */
