@@ -18,7 +18,7 @@ def index(request):
     print('تشغيييييل')
     print(brandsList)
     data = {
-        'brands' : brandsList,
+        'menubrands' : brandsList,
     }
     return render(request , 'dashboard.html' , data)
 
@@ -52,16 +52,6 @@ def queries(request):
           }
     return render(request , 'queries.html' , data)
 
-# Create your views here.
-def officials_queries(request):
-    managers = Managers.objects.filter(company_id = 1)
-    departments = Department.objects.filter(company_id = 1)
-    data = {
-        'managers' : managers,
-                    'departments' : departments,
-
-        }
-    return render(request , 'officials_queries.html' , data) 
 
 # Create your views here.
 def contactus(request):

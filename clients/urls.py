@@ -3,13 +3,14 @@ from . import views
 from . import officials
 from . import api
 from . import brands_view
+from . import departments_view
 urlpatterns = [
 # صفحة عملاء سرا الرئيسية +
 path('' , views.index , name='home'),
 path('login' , views.login_backend , name='login'),
 path('forget_password' , views.forget_password , name='forget_password'), 
 #brands_view العلامات التجارية
-path('regions_rate' , brands_view.regions_rate , name='regions_rate'),
+path('regions_rate/<str:id>' , brands_view.regions_rate , name='regions_rate'),
 path('cities_rate/<str:id>' , brands_view.cities_rate , name='cities_rate'),
 path('districts_rate/<str:id>' , brands_view.districts_rate , name='districts_rate'),
 path('branchs_rate/<str:id>' , brands_view.branchs_rate , name='branchs_rate'),
@@ -17,9 +18,13 @@ path('reports_list/<str:id>' , brands_view.reports_list , name='reports_list'),
 path('show_report/<str:id>' , brands_view.show_report , name='show_report'),
 # هذي الصفحة تحتاجها لتقييم الادارات
 path('report' , views.report , name='report'),
+#departments_view الادارات
+path('departments_rate' , departments_view.departments_rate , name='departments_rate'),  
+path('sections_rate/<str:id>' , departments_view.sections_rate , name='sections_rate'), 
+path('terms_rate/<str:id>' , departments_view.terms_rate , name='terms_rate'),
+# home
 path('profile' , views.profile , name='profile'),
 path('queries' , views.queries , name='queries'), 
-path('officials_queries' , views.officials_queries , name='officials_queries'), 
 path('contactus' , views.contactus , name='contactus'), 
 path('pagefaq' , views.pagefaq , name='pagefaq'),
 # المسؤولين

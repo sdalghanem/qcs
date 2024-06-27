@@ -50,6 +50,8 @@ class Term_score(models.Model):
     score = models.CharField(max_length=100 , verbose_name ='الدرجة')
     note = models.CharField(max_length=100 , verbose_name ='الملاحظة' , null= True)
     img = models.FileField(upload_to='customer/terms/Company/brand', verbose_name ='المخالفة' , null= True)
+    quarter = models.CharField(max_length=100 , verbose_name ='الربع' , null= True)
+    year = models.CharField(max_length=100 , verbose_name ='السنه' , null= True)
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
 
     class Meta:

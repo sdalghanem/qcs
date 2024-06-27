@@ -5,11 +5,11 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 import json
 
 # Create your views here.
-def regions_rate(request):
+def regions_rate(request , id):
     regioninfo =[]
     perlist=[]
     regionlist =[]
-    mngs = Brand_regionManager.objects.filter(Brand_id = 1 )
+    mngs = Brand_regionManager.objects.filter(Brand_id = id )
     #final_score = Score_history.objects.filter(report_order_id=specific_id_value).latest('registerDate')
 
     for mng in mngs:
