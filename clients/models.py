@@ -63,6 +63,7 @@ class Managers(models.Model):
     mobile = models.CharField(max_length=100 , verbose_name ='رقم الجوال')
     gm_manager = models.BooleanField(default=0)
     task_traker = models.BooleanField(default=0)
+    position = models.CharField(max_length=100 , verbose_name ='المنصب', null=True)
     class Meta:
         verbose_name_plural = "المدراء"
 

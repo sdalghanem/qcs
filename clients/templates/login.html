@@ -67,43 +67,49 @@
                                     <p>اكتب الايميل و  كلمة المرور للدخول</p>
                                     
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">الايميل</label>
-                                        <input type="email" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="mb-4">
-                                        <label class="form-label">كلمة المرور</label>
-                                        <input type="password" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="mb-3">
-                                        <div class="form-check form-check-primary form-check-inline">
-                                            <input class="form-check-input me-3" type="checkbox" id="form-check-default">
-                                            <label class="form-check-label" for="form-check-default">
-                                                تذكرني
-                                            </label>
+                                <!--form start -->
+                                <form action="{% url 'login'%}" method="POST">
+                                {% csrf_token %}
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">الايميل</label>
+                                            <input type="text" class="form-control" name="username">
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <div class="mb-4">
-                                        <button class="btn btn-secondary w-100">دخول</button>
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label">كلمة المرور</label>
+                                            <input type="password" class="form-control" name="password">
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <div class="form-check form-check-primary form-check-inline">
+                                                <input class="form-check-input me-3" type="checkbox" id="form-check-default">
+                                                <label class="form-check-label" for="form-check-default">
+                                                    تذكرني
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <button class="btn btn-secondary w-100" type="submit">دخول</button>
+                                        </div>
+                                    </div>
+                                    
                                 
-                               
 
-                                <div class="col-12">
-                                    <div class="text-center">
-                                        <p class="mb-0">نسيت كلمة المرور ? <a href="#" class="text-warning">اضغط هنا</a></p>
+                                    <div class="col-12">
+                                        <div class="text-center">
+                                            <p class="mb-0">نسيت كلمة المرور ? <a href="#" class="text-warning">اضغط هنا</a></p>
+                                        </div>
                                     </div>
-                                </div>
-                                
+                                </form>
+                                <!--form end -->
+   
                             </div>
                             
                         </div>

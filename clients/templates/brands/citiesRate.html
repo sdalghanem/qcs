@@ -46,7 +46,7 @@
                               <div class="progress br-30">
                                   <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{m.rate}}%" aria-valuenow="{{m.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
                               </div></td>
-                            <td> <a href="{% url 'districts_rate' m.id %}" class="btn btn-primary">عرض</a> </td>
+                            <td> <a href="{% url 'districts_rate' m.id m.brand_id %}" class="btn btn-primary">عرض</a> </td>
                         </tr>
                         {% endfor %}
                     {% endif %}

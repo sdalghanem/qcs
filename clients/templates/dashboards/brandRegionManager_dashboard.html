@@ -1,0 +1,435 @@
+{% extends "index.html" %}
+{% load static %}
+
+<!--تمرير اسم المدير للملف الممتد index-->
+{% block mngName1 %} 
+ {{mngName}}
+{%endblock %}
+
+{% block mngName2 %} 
+ {{mngName}}
+{%endblock %} 
+<!--تمرير منصب المنطقة للملف الممتد index-->
+{% block mngPostion1 %} 
+ {{mngPostion}}
+{%endblock %}
+
+{% block mngPostion2 %} 
+ {{mngPostion}}
+{%endblock %}
+
+<!--قائمة البراندات-->
+{% block menubr %}
+
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.brandid  %}"> {{b.brandName}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+{% block home %}
+
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-card-five">
+                <div class="widget-content">
+                    <div class="account-box">
+
+                        <div class="info-box">
+                            <div class="icon">
+                                <span>
+                                    <img src="{% static '/src/assets/img/clients/mac.png '%}" alt="money-bag">
+                                </span>
+                            </div>
+
+                            <div class="balance-info">
+                                <h6>نسبة الإلتزام بمعايير الجودة {{mngName}}</h6>
+                                <p class="text-white badge-primary text-center">% 86</p>
+                                <p>لجميع المناطق</p>
+                            </div>
+                        </div>
+
+                        <div class="card-bottom-section">
+                            <a href="javascript:void(0);" class="">تفاصيل أكثر</a>
+                            <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+        <!---->
+        <!---->
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-card-five">
+                <div class="widget-content">
+                    <div class="account-box">
+
+                        <div class="info-box">
+                            <div class="icon">
+                                <span>
+                                    <img src="{% static '/src/assets/img/like.png '%}" alt="money-bag">
+                                </span>
+                            </div>
+
+                            <div class="balance-info">
+                                <h6>قطاع التشغيل</h6>
+                                <p class="text-white badge-success text-center">% 98</p>
+                                <p>منطقة الباحة</p>
+                            </div>
+                        </div>
+
+                        <div class="card-bottom-section">
+                            <a href="javascript:void(0);" class="">تفاصيل أكثر</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+        <!---->
+        <!---->
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-card-five">
+                <div class="widget-content">
+                    <div class="account-box">
+
+                        <div class="info-box">
+                            <div class="icon">
+                                <span>
+                                    <img src="{% static '/src/assets/img/dislike.png '%}" alt="money-bag">
+                                </span>
+                            </div>
+
+                            <div class="balance-info">
+                                <h6>قطاع الصيانة</h6>
+                                <p class="text-white bg-danger text-center">% 63</p>
+                                <p>منطقة القصيم</p>
+                            </div>
+                        </div>
+
+                        <div class="card-bottom-section">
+                            <a href="javascript:void(0);" class="">تفاصيل أكثر</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+        <!----------------------------------------------------------------->
+
+        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-activity-five">
+
+                <div class="widget-heading">
+                    <h5 class="">احدث العمليات</h5>
+
+                    <div class="task-action">
+                        <div class="btn-group c-custom-dropdown dropend" role="group">
+                            <button id="btndefault" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                            </button>
+                            
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="btndefault">
+                                <a class="dropdown-item" href="javascript:void(0);">مشاهدة الكل</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-content">
+
+                    <div class="w-shadow-top"></div>
+
+                    <div class="mt-container mx-auto">
+                        <div class="timeline-line">
+                            
+                            <div class="item-timeline timeline-new">
+                                <div class="t-dot">
+                                    <div class="t-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                                </div>
+                                <div class="t-content">
+                                    <div class="t-uppercontent">
+                                        <h5>تقييم فرع حائل <a href="javscript:void(0);"><span>[كلاود تيم]</span></a></h5>
+                                    </div>
+                                    <p>07 May, 2022</p>
+                                </div>
+                            </div>
+
+                            <div class="item-timeline timeline-new">
+                                <div class="t-dot">
+                                    <div class="t-success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
+                                </div>
+                                <div class="t-content">
+                                    <div class="t-uppercontent">
+                                        <h5>جولة تفتيشيه لفرع الاحساء حي الخالدية <a href="javascript:void(0);">HR</a> and <a href="javascript:void(0);">Admin</a></h5>
+                                    </div>
+                                    <p>06 May, 2022</p>
+                                </div>
+                            </div>
+
+                            <div class="item-timeline timeline-new">
+                                <div class="t-dot">
+                                    <div class="t-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                </div>
+                                <div class="t-content">
+                                    <div class="t-uppercontent">
+                                        <h5>طلب نسخه من تقرير جولة تفتيشية</h5>
+                                    </div>
+                                    <p>01 May, 2022</p>
+                                </div>
+                            </div>
+
+                            <div class="item-timeline timeline-new">
+                                <div class="t-dot">
+                                    <div class="t-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                </div>
+                                <div class="t-content">
+                                    <div class="t-uppercontent">
+                                        <h5>تبقى 3 جولات تفتيشية حساب شركتكم <a href="javscript:void(0);"><span>[Backup Files EOD]</span></a></h5>
+                                    </div>
+                                    <p>30 Apr, 2022</p>
+                                </div>
+                            </div>
+
+                            <div class="item-timeline timeline-new">
+                                <div class="t-dot">
+                                    <div class="t-warning"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg></div>
+                                </div>
+                                <div class="t-content">
+                                    <div class="t-uppercontent">
+                                        <h5>اعمال صيانة للنظام <a href="javascript:void(0);">Sara</a></h5>
+                                        <span class=""></span>
+                                    </div>
+                                    <p>25 Apr, 2022</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+              </div><!--end widget-->
+
+            </div>
+        </div>
+
+<!---->
+<div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+    <div class="widget widget-six">
+        <!-- <div class="">
+            <div class="task-action">
+
+                <div class="btn-group c-custom-dropdown dropend" role="group">
+                    <button id="statistics" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </button>
+                    
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="statistics">
+                        <a class="dropdown-item" href="#">تفاصيل أكثر</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div> -->
+        <div class="w-chart-render-one">
+          <div id="chart"></div>
+      </div>
+    </div>
+    
+</div>
+
+
+
+          
+   <!---->
+   <!---->
+  <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+    <div class="widget widget-six">
+        <div class="widget-heading">
+            <h6 class="">تقييم معايير الجودة لفروع منطقة الرياض</h6>
+            <div class="task-action">
+
+                <div class="btn-group c-custom-dropdown dropend" role="group">
+                    <button id="statistics" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </button>
+                    
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="statistics">
+                        <a class="dropdown-item" href="#">منطقة الرياض</a>
+                        <a class="dropdown-item" href="#">منطقة القصيم</a>
+                        <a class="dropdown-item" href="#">منطقة حائل</a>
+                        <a class="dropdown-item" href="#">منطقة تبوك</a>
+                        <a class="dropdown-item" href="#">منطقة الشرقية</a>
+                        <a class="dropdown-item" href="#">منطقة الحدود الشمالية</a>
+                        <a class="dropdown-item" href="#">منطقة نجران</a>
+                        <a class="dropdown-item" href="#">منطقة جازان</a>
+                        <a class="dropdown-item" href="#">منطقة عسير</a>
+                        <a class="dropdown-item" href="#">منطقة مكة المكرمة</a>
+                        <a class="dropdown-item" href="#">منطقة المدينة المنورة</a>
+                        <a class="dropdown-item" href="#">منطقة الباحة</a>
+                        <a class="dropdown-item" href="#">منطقة الجوف</a>
+                       
+
+
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="w-chart-render-one">
+          <div id="chart3"></div>
+      </div>
+    </div>
+    
+</div>
+
+
+
+          
+   <!---->
+    <!---->
+  <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+      <div class="widget widget-six">
+          <div class="widget-heading">
+              <h6 class="">امتثال القطاعات لمعايير الجودة</h6>
+
+          </div>
+          <div class="w-chart-render-one">
+            <div id="chart2"></div>
+        </div>
+      </div>
+      
+  </div>
+
+
+
+            
+     <!---->
+
+
+
+
+     
+    <!-- Include ApexCharts JavaScript file -->
+    <script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
+    <script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
+    <script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script>
+    <!-- Your JavaScript code to create and render the chart -->
+    <script>
+                 
+        var options = {
+          series: [{
+          name: 'الامتثال لمعايير الجودة',
+          data: [90, 96, 96, 93, 86, 99, 65, 78, 71, 83, 87, 94, 88],
+          
+        }],
+          chart: {
+          height: 350,
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val) {
+            return val + "%";
+          },
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+          }
+        },
+        
+        xaxis: {
+          categories: [" جازان", " نجران", " عسير", "الباحة", "مكة", "المدينة", "تبوك", "الجوف", "حائل", "القصيم", "الرياض", "الحدود الشمالية" , "المنطقة الشرقية"],
+          position: 'buttom',
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          crosshairs: {
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+          }
+        },
+        yaxis: {
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            show: false,
+            formatter: function (val) {
+              return val + "%";
+            }
+          }
+        
+        },
+        title: {
+          text: 'تقييم معايير الجودة للمناطق لسنة 2024',
+          floating: true,
+          offsetY: 330,
+          align: 'center',
+          style: {
+            color: '#444'
+          }
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      
+        
+      
+    </script>
+    <script>
+          
+          var options = {
+            series: [95, 70 , 43 , 85 , 69],
+            labels: ['الصيانة', ' التشغيل'  ,'الموارد البشرية', ' النظافة'  , 'المحاسبة'],
+            chart: {
+            type: 'pie',
+        },
+        
+        };
+       var chart2 = new ApexCharts(document.querySelector("#chart2"), options);
+        chart2.render();
+
+    </script>
+
+    <script>
+          var options = {
+            series: [95, 70, 76, 53, 99],
+            labels: ['c1032 حي الملقا', 'c1052 حي النسيم', 'c1052 حي قرطبة', 'c1032 حي الزهور' , 'c1002 حي الروضة'],
+            chart: {
+            type: 'pie',
+        },
+        
+        };
+
+        var chart4 = new ApexCharts(document.querySelector("#chart3"), options);
+        chart4.render();
+    </script>
+{%endblock%}

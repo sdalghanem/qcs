@@ -11,10 +11,16 @@ def regions_rate(request , id):
     regionlist =[]
     mngs = Brand_regionManager.objects.filter(Brand_id = id )
     #final_score = Score_history.objects.filter(report_order_id=specific_id_value).latest('registerDate')
-
-    for mng in mngs:
+    brandName = ''
+    brandLogo = ''
+    for mng in mngs: 
+        # اسم البرانج و اللوجو استخراج
+        brandName = mng.Brand_id.description
+        brandLogo = str(mng.Brand_id.logo)
+        print(brandLogo)
+        print(brandName)
         ############################################
-        final_score = branchs_resault(mng.region_id)
+        final_score = branchs_resault(mng.region_id , mng.Brand_id)
         total = 0
         score_list = []
         for fs in final_score:
@@ -22,7 +28,10 @@ def regions_rate(request , id):
         for sl in score_list:
             total += sl
         #print(len(score_list))
-        percentage = int((total / len(score_list)) )
+        if len(score_list) == 0 :
+            percentage = 0
+        else :
+             percentage = int((total / len(score_list)) )
         #############################################
         #number +=1
         row = {
@@ -30,6 +39,7 @@ def regions_rate(request , id):
             'region' : mng.region_id.name,
             'rate': percentage,
             'id' : mng.region_id.id , # id  المنطقة
+            'brand_id' : mng.Brand_id.id
         }
         perlist.append(percentage)
         regionlist.append(mng.region_id.name )
@@ -41,6 +51,8 @@ def regions_rate(request , id):
         'row': sorted_data,
         'perlist':perlist ,
         'regionlist':json.dumps(regionlist) ,
+        'brandName' :brandName ,
+        'brandLogo' :brandLogo ,
     }
    
     print(regionlist)
@@ -48,7 +60,8 @@ def regions_rate(request , id):
 
 
 # فنكشن لتقييم المدن
-def cities_rate(request , id):
+def cities_rate(request , id ,brand_id):
+    #id = region id
     # اول شي تجيب المدن اللي بوسط المنطقة
     cities = City.objects.filter(region_id = id)
     cityInfo = []
@@ -57,10 +70,10 @@ def cities_rate(request , id):
     citieslist=[]
     for c in cities:
         # ثاني شي تجيب اسامي المدراء
-        if Brand_cityManager.objects.filter(Brand_id = 1 , city_id = c.id).exists():
-            mngs = Brand_cityManager.objects.filter(Brand_id = 1 , city_id = c.id)
+        if Brand_cityManager.objects.filter(Brand_id = brand_id , city_id = c.id).exists():
+            mngs = Brand_cityManager.objects.filter(Brand_id = brand_id , city_id = c.id) #  اصلاح رقم اي دي العلامه التجارية
             for m in mngs:
-                final_score = branchs_city_resault(c.id)
+                final_score = branchs_city_resault(m.city_id.id , m.Brand_id.id)
                 total = 0
                 score_list = []
                 for fs in final_score:
@@ -68,13 +81,17 @@ def cities_rate(request , id):
                 for sl in score_list:
                     total += sl
                 #print(len(score_list))
-                percentage = int((total / len(score_list)) )
-                print(percentage)
+                if len(score_list) == 0 :
+                    percentage = 0
+                else :
+                    percentage = int((total / len(score_list)) )
+                
                 cityRow = {
                             'cityName' : m.city_id.name , 
                             'mngName':m.manager_id.user.first_name + ' ' + m.manager_id.user.last_name,
                             'rate': percentage,
                             'id': m.city_id.id,
+                            'brand_id': m.Brand_id.id,
                            }
                 cityInfo.append(cityRow)
                 sorted_data = sorted(cityInfo, key=lambda x: x['rate'], reverse=True)
@@ -95,15 +112,15 @@ def cities_rate(request , id):
     return render(request , 'brands/citiesRate.html' , data) 
 
 # باقي تطلع النتايج
-def districts_rate(request , id):
+def districts_rate(request , id , brand_id):
     distlist=[]
     perlist=[]
     disrow=[]
     districts = District.objects.filter(city_id = id)
    
     for d in districts:
-        final_score = branchs_dist_resault(d.id)
-        #print(final_score)
+        final_score = branchs_dist_resault(d.id , brand_id)
+        print(len(final_score))
         total = 0
         score_list = []
         for fs in final_score:
@@ -112,22 +129,25 @@ def districts_rate(request , id):
             total += sl
         #print(len(score_list))
         if len(score_list) == 0 :
-            percentage = 0
+            row = {
+            
+            }
         else :
-             percentage = int((total / len(score_list)) )
+            percentage = int((total / len(score_list)) )
 
         #############################################
-        row = {
-            'districtName' : d.name ,
-            'rate' : percentage ,
-            'id' : d.id,
-        }
-        distlist.append(row)
-        perlist.append(percentage)
-        disrow.append(d.name)
-        
-        sorted_data = sorted(distlist, key=lambda x: x['rate'], reverse=True)
-    print(perlist)
+            row = {
+                'districtName' : d.name ,
+                'rate' : percentage ,
+                'id' : d.id,
+                'brand_id' : brand_id,
+            }
+            distlist.append(row)
+            perlist.append(percentage)
+            disrow.append(d.name)
+            
+            sorted_data = sorted(distlist, key=lambda x: x['rate'], reverse=True)
+    print(distlist)
     #print(distlist)
     data={
         'distInfo' : sorted_data,
@@ -138,9 +158,10 @@ def districts_rate(request , id):
 
 
 # فنكشن تفتح صفحه تقييم الفروع 
-def branchs_rate(request , id):
+def branchs_rate(request , id , brand_id):
+    # id  تبع الحي
     branchsInfo = []
-    branchs = Branch.objects.filter(district_id = id)
+    branchs = Branch.objects.filter(district_id = id , brand_id = brand_id)
     for br in branchs:
         final_score = branchs_percentage(br.id)
         total = 0
@@ -219,7 +240,6 @@ def show_report(request , id):
                     'id': score.term_id.id,
                     'img' : str(score.img) ,
                     'class': custom ,
-                    
                     }
         term_result.append(row)
         print(term_result)
@@ -237,16 +257,19 @@ def show_report(request , id):
     
 ######################################################################
 ######################################################################
+################                                    ##################
 ######################################################################
 ######################################################################
-# هذي الفنكشن تطلع الفروع اللي بالمناطق
-def region_branches(region_id):
+
+
+
+def region_branches(region_id , brand_id):
     branchs_ids = []
     cities = City.objects.filter(region_id = region_id)
     for city in cities :
        districts = District.objects.filter(city_id = city.id)
        for district in districts :
-            branches = Branch.objects.filter(district_id = district.id , brand_id = 1)
+            branches = Branch.objects.filter(district_id = district.id , brand_id = brand_id)# اصلاح رقم الايدي لليوزر
             for branch in branches:
                 row = {
                     'brancheID' : branch.id
@@ -255,8 +278,8 @@ def region_branches(region_id):
     return branchs_ids
 
 # هذي الفنكشن تطلع نتائج الفروع اللي بالمناطق
-def branchs_resault(region_id):
-    branches = region_branches(region_id)
+def branchs_resault(region_id , brand_id):
+    branches = region_branches(region_id , brand_id)
     #print(type(branches))
     repo =[]
     for br in branches:
@@ -272,13 +295,14 @@ def branchs_resault(region_id):
 
 
 # هذي الفنكشن تطلع الفروع اللي بالمدن
-def city_branches(city_id):
+def city_branches(city_id , brand_id):
     branchs_ids = []
     cities = City.objects.filter(id = city_id)
     for city in cities :
        districts = District.objects.filter(city_id = city.id)
        for district in districts :
-            branches = Branch.objects.filter(district_id = district.id , brand_id = 1)
+            branches = Branch.objects.filter(district_id = district.id , brand_id = brand_id)
+            print(branches)
             for branch in branches:
                 row = {
                     'brancheID' : branch.id
@@ -286,8 +310,8 @@ def city_branches(city_id):
                 branchs_ids.append(row)
     return branchs_ids
 
-def branchs_city_resault(city_id):
-    branches = city_branches(city_id)
+def branchs_city_resault(city_id , brand_id):
+    branches = city_branches(city_id , brand_id)
     #print(type(branches))
     repo =[]
     for br in branches:
@@ -301,12 +325,12 @@ def branchs_city_resault(city_id):
                 repo.append(row)          
     return repo
 
-#
-def district_branches(dist_id):
+################################3
+def district_branches(dist_id , brand_id):
     branchs_ids = []
     districts = District.objects.filter(id = dist_id)
     for district in districts :
-        branches = Branch.objects.filter(district_id = district.id , brand_id = 1)
+        branches = Branch.objects.filter(district_id = district.id , brand_id = brand_id)
         for branch in branches:
             row = {
                 'brancheID' : branch.id
@@ -314,8 +338,8 @@ def district_branches(dist_id):
             branchs_ids.append(row)
     return branchs_ids
 
-def branchs_dist_resault(dist_id):
-    branches = district_branches(dist_id)
+def branchs_dist_resault(dist_id , brand_id):
+    branches = district_branches(dist_id , brand_id)
     #print(type(branches))
     repo =[]
     for br in branches:

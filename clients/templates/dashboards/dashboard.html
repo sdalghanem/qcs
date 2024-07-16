@@ -1,9 +1,37 @@
 {% extends "index.html" %}
 {% load static %}
+
+<!--تمرير اسم المدير للملف الممتد index-->
+{% block mngName1 %} 
+ {{mngName}}
+{%endblock %}
+
+{% block mngName2 %} 
+ {{mngName}}
+{%endblock %} 
+<!--تمرير منصب المدير للملف الممتد index-->
+{% block mngPostion1 %} 
+ {{mngPostion}}
+{%endblock %}
+
+{% block mngPostion2 %} 
+ {{mngPostion}}
+{%endblock %}
+<!--قائمة البراندات-->
+{% block menubr %}
+
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.brandid  %}"> {{b.brandName}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
 {% block home %}
 
-
-    
         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-card-five">
                 <div class="widget-content">
@@ -12,12 +40,14 @@
                         <div class="info-box">
                             <div class="icon">
                                 <span>
-                                    <img src="{% static '/src/assets/img/clients/mac.png '%}" alt="money-bag">
+
+                                    <img src="../media/{{companyLogo}}" alt="money-bag" width="100%">
                                 </span>
                             </div>
-
+ 
                             <div class="balance-info">
-                                <h6>نسبة الإلتزام بمعايير الجودة</h6>
+                              
+                                <h6> الالتزام بمعايير الجودة</h6>
                                 <p class="text-white badge-primary text-center">% 86</p>
                                 <p>لجميع المناطق</p>
                             </div>

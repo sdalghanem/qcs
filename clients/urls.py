@@ -4,16 +4,24 @@ from . import officials
 from . import api
 from . import brands_view
 from . import departments_view
+from . import dashboard_view
 urlpatterns = [
 # صفحة عملاء سرا الرئيسية +
-path('' , views.index , name='home'),
+# path('' , views.index , name='home'),
 path('login' , views.login_backend , name='login'),
 path('forget_password' , views.forget_password , name='forget_password'), 
+# لوحة التحكم  
+path('gm_dashboard' , dashboard_view.gm_dashboard , name='gm_dashboard'), 
+path('brandManager_dashboard' , dashboard_view.brandManager_dashboard , name='brandManager_dashboard'), 
+path('brandRegionManager_dashboard' , dashboard_view.brandRegionManager_dashboard , name='brandRegionManager_dashboard'), 
+path('brandCityManager_dashboard' , dashboard_view.brandCityManager_dashboard , name='brandCityManager_dashboard'), 
+path('brach_Manager_dashboard' , dashboard_view.brach_Manager_dashboard , name='brach_Manager_dashboard'), 
+
 #brands_view العلامات التجارية
 path('regions_rate/<str:id>' , brands_view.regions_rate , name='regions_rate'),
-path('cities_rate/<str:id>' , brands_view.cities_rate , name='cities_rate'),
-path('districts_rate/<str:id>' , brands_view.districts_rate , name='districts_rate'),
-path('branchs_rate/<str:id>' , brands_view.branchs_rate , name='branchs_rate'),
+path('cities_rate/<str:id>/<str:brand_id>' , brands_view.cities_rate , name='cities_rate'),
+path('districts_rate/<str:id>/<str:brand_id>' , brands_view.districts_rate , name='districts_rate'),
+path('branchs_rate/<str:id>/<str:brand_id>' , brands_view.branchs_rate , name='branchs_rate'),
 path('reports_list/<str:id>' , brands_view.reports_list , name='reports_list'), 
 path('show_report/<str:id>' , brands_view.show_report , name='show_report'),
 # هذي الصفحة تحتاجها لتقييم الادارات
