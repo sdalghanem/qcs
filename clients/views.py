@@ -70,25 +70,39 @@ def login_backend(request):
             # اذا المدير العام 1 يعني مدير عام شركة
             if mngCompany.gm_manager == 1 :
                 return redirect('gm_dashboard') # يحول على الرابط اللي اسمه هوم 
-          
+          # مدير عام براند محدد
             elif mngCompany.position == '1' :
                 brand = Brand.objects.get(gm_manager_id = mngCompany.id)
                 request.session['brandName'] = brand.description
+                request.session['brand_id'] = brand.id
+                request.session['brandLogo'] = str(brand.logo)
                 return redirect('brandManager_dashboard')
+            # مدير  براند منطقة محددة
             elif mngCompany.position == '2' :
                 brandRegion = Brand_regionManager.objects.get(manager_id = mngCompany.id)
                 request.session['brandName'] = brandRegion.Brand_id.description
+                request.session['brand_id'] = brandRegion.Brand_id.id
+                request.session['brandLogo'] = str(brandRegion.Brand_id.logo)
                 request.session['regionName'] = brandRegion.region_id.name
+                request.session['region_id'] = brandRegion.region_id.id
+
                 return redirect('brandRegionManager_dashboard')
+            # مدير  براند مدينة محددة
             elif mngCompany.position == '3' :
                 brand_city = Brand_cityManager.objects.get(manager_id = mngCompany.id)
                 request.session['brandName'] = brand_city.Brand_id.description
+                request.session['brand_id'] = brand_city.Brand_id.id
+                request.session['brandLogo'] = str(brand_city.Brand_id.logo)
                 request.session['cityName'] = brand_city.city_id.name
+                request.session['city_id'] = brand_city.city_id.id
                 return redirect('brandCityManager_dashboard') 
+            # مدير فرع محدد
             elif mngCompany.position == '4' : 
                 branch = Branch.objects.get(manager_id = mngCompany.id)
                 request.session['brandName'] = branch.brand_id.description
                 request.session['branchName'] = branch.description
+                request.session['brandLogo'] = str(branch.brand_id.logo)
+                request.session['branch_id'] = branch.id
                 return redirect('brach_Manager_dashboard') 
             # اذا مدير عام 0 يعني تدخل في تشييك البوزشن
             # اذا البزوشين 1 يعني مدير براند

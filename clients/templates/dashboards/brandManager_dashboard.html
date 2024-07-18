@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "index_brands.html" %}
 {% load static %}
 
 <!--تمرير اسم المدير للملف الممتد index-->
@@ -17,15 +17,25 @@
 {% block mngPostion2 %} 
  {{mngPostion}}
 {%endblock %}
+
+
+<!--بلوك اندكس لصورة البروفايل-->
+{% block profile_img %}
+<img src="../media/{{brandLogo}}" alt="avatar" class="rounded-circle">
+{%endblock %}
+
+{% block profile_img2 %}
+<img src="../media/{{brandLogo}}" alt="avatar" class="rounded-circle">
+{%endblock %}
 <!--قائمة البراندات-->
 {% block menubr %}
-
-    {% if menubrands %}
-        {% for b in menubrands %}
+<!--في حال بغى يكون شخص واحد ماسك اكثر من براند تسوي فور لوب على اسايي البراندات و الايديات-->
+    {% if brand_id %}
+        
             <li>
-                <a href="{% url 'regions_rate' b.brandid  %}"> {{b.brandName}}</a>
+                <a href="{% url 'regions_rate' brand_id  %}"> {{brandName}}</a>
             </li>
-        {% endfor %}
+      
     {% endif %}
 
 {% endblock %}
@@ -40,12 +50,12 @@
                         <div class="info-box">
                             <div class="icon">
                                 <span>
-                                    <img src="{% static '/src/assets/img/clients/mac.png '%}" alt="money-bag">
+                                    <img src="../media/{{brandLogo}}" alt="money-bag">
                                 </span>
                             </div>
 
                             <div class="balance-info">
-                                <h6>نسبة الإلتزام بمعايير الجودة {{mngName}}</h6>
+                                <h6>نسبة الإلتزام بمعايير الجودة </h6>
                                 <p class="text-white badge-primary text-center">% 86</p>
                                 <p>لجميع المناطق</p>
                             </div>

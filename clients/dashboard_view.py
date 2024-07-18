@@ -35,52 +35,48 @@ def gm_dashboard(request):
     else:
         return render(request , 'login.html')
     
-def brandManager_dashboard(request):
+def brandManager_dashboard(request ):
     data = {
-        'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-        'mngPostion' :'مدير ' + ' ' + request.session['brandName']
+        'mngName' : f" {request.session['firestName']}  {request.session['lastName']}" ,
+        'mngPostion' :f" مدير  {request.session['brandName']}" ,
+        'brand_id' : request.session['brand_id'],
+        'brandName': request.session['brandName'],
+        'brandLogo': request.session['brandLogo'],
     }
     return render(request , 'dashboards/brandManager_dashboard.html' , data)
-    # if request.user.is_authenticated:
-    #     brands = Brand.objects.filter(company_id = request.session['company_id'])
-    #     brandsList = []
-    #     for b in brands:
-    #         brandName = b.description
-    #         brandid = b.id
-    #         row = {
-    #             'brandName' : brandName ,
-    #             'brandid' : brandid,
-    #         }
-    #         brandsList.append(row)
-    #     #print('تشغيييييل')
-    #     #print(brandsList)
-    #     data = {
-    #         'menubrands' : brandsList,
-    #         'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-    #         'mngPostion' : 'مدير عام'
-    #     }
-    #     return render(request , 'dashboard.html' , data)
-    # else:
-    #     return render(request , 'login.html')
+    
 
 def brandRegionManager_dashboard(request):
     data = {
-            'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-            'mngPostion' :'مدير ' + ' ' + request.session['brandName'] + ' ' + request.session['regionName']
+        'mngName' : f" {request.session['firestName']}  {request.session['lastName']}" ,
+        'mngPostion' :f" مدير  {request.session['brandName']} { request.session['regionName']}" ,
+        'brand_id' : request.session['brand_id'],
+        'brandName': request.session['brandName'],
+        'brandLogo': request.session['brandLogo'],
+        'regionName': request.session['regionName'] ,
+        'region_id': request.session['region_id'] ,
             }
     return render(request , 'dashboards/brandRegionManager_dashboard.html' , data)
 
 def brandCityManager_dashboard(request):
     data = {
-            'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-            'mngPostion' :'  مدير مدينة ' + ' ' + request.session['brandName'] + ' ' + request.session['cityName']
-           
+            'mngName' : f" {request.session['firestName']}  {request.session['lastName']}" ,
+            'mngPostion' :f" مدير  {request.session['brandName']} { request.session['cityName']}" ,
+            'brand_id' : request.session['brand_id'],
+            'brandName': request.session['brandName'],
+            'brandLogo': request.session['brandLogo'],
+            'cityName': request.session['cityName'] ,
+            'city_id': request.session['city_id'] ,     
             }
     return render(request , 'dashboards/brandCityManager_dashboard.html' , data) 
 
 def brach_Manager_dashboard(request):
     data = {
             'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-            'mngPostion' :'  مدير فرع ' + ' ' + request.session['branchName'] 
+            'mngPostion' :'  مدير فرع ' + ' ' + request.session['branchName'] ,
+            'brandName': request.session['brandName'],
+            'brandLogo': request.session['brandLogo'],
+            'branch_id' : request.session['branch_id'],
+            'branchName' : request.session['branchName']
             }
     return render(request , 'dashboards/brach_Manager_dashboard.html' , data)
