@@ -64,7 +64,7 @@ def login_backend(request):
             mngCompany = Managers.objects.get(user = userInfo)
             request.session['company_id'] = mngCompany.company_id.id
             request.session['companylogo'] = str(mngCompany.company_id.logo)
-            #request.session['companyName'] = mngCompany.company_id.description
+            request.session['companyName'] = mngCompany.company_id.description
             print(mngCompany.position)
             # المنصب بناء على الارقام
             # اذا المدير العام 1 يعني مدير عام شركة
@@ -104,12 +104,19 @@ def login_backend(request):
                 request.session['brandLogo'] = str(branch.brand_id.logo)
                 request.session['branch_id'] = branch.id
                 return redirect('brach_Manager_dashboard') 
+            # مدير ادارة
+            elif mngCompany.position == '5' :
+                # id department - company name - company logo - mng name - mng postions
+                dept = Department.objects.get(manager_id = mngCompany.id)
+                request.session['deptName'] = dept.description
+                request.session['dept_id'] = dept.id
+                return redirect('dept_Manager_dashboard')  
             # اذا مدير عام 0 يعني تدخل في تشييك البوزشن
             # اذا البزوشين 1 يعني مدير براند
             # يعني مدير براند منطقة 2
             # 3 يعني مدير براند مدينة
             # 4 يعني مدير فرع
-
+            # 5 مدير ادارة
             # ابي اعرف شركته و منصبة
             
         else:

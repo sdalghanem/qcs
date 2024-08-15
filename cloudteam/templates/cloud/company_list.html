@@ -8,33 +8,35 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-center">
-                    <h4>قائمة الشركات</h4>
+                    <h4 alt="اضافة شركة">قائمة الشركات <a href="{% url 'add_new_company' %}" class="badge outline-badge-success " > + </a> </h4>
+                    
                 </div>
             </div>
         </div>
         <div class="row">
+            {% for r in rows %}
             <div class="col-md-12">
-
+               
                 <div class="searchable-items">
                     <div class="items">
-                        <div class="user-profile">
-                            <img src="{% static '/src/assets/img/clients/perfctcoffee.png'%}" alt="avatar">
+                        <div class="user-profile" >  
+                            <img src="../../../{{r.logo}}" alt="avatar" >
                         </div>
                         <div class="user-name">
-                            <p class="">القهوة المثالية</p>
+                            <p class="">{{r.description}}</p>
                         </div>
-                        <div class="user-email">
-                            <p>alan@mail.com</p>
-                        </div>
+                      
                         <div class="user-status">
                             <span class="badge outline-badge-info">فعال</span>
                         </div>
                         <div class="action-btn">
-                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p>
+                          <a href="{% url 'add_new_brand' r.id %} ">  <span class="badge outline-badge-warning">العلامات التجارية</span></a>
+                            <!-- <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p> -->
                         </div>
                     </div>
-
-                    <div class="items">
+                </div>
+            {% endfor %}
+                    <!-- <div class="items">
                         <div class="user-profile">
                             <img src="{% static '/src/assets/img/clients/mac.png'%}" alt="avatar">
                         </div>
@@ -105,10 +107,10 @@
                         <div class="action-btn">
                             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p>
                         </div>
-                    </div> 
+                    </div>  -->
 
 
-                </div>
+                
 
             </div>
         </div>

@@ -1,0 +1,159 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+
+ 
+<!--الشعار و العلامة التجارية-->
+<div class="row">
+    <div class="col-5 text-center">
+        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="20%">      {{companyName}}    </h4>
+        
+        
+    </div>
+</div>
+<!------------------------>
+
+
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            إضافة حساب جديد
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+         <!--show-->
+         <div class="card">
+   
+
+            <div class="row card-body">
+                <div class="card-header  text-center">
+                   <h5>إضافة حساب جديد</h5> 
+                </div>
+                {{res}} 
+                <!-- تبيهات-->
+                <div class="col-lg-2 col-md-12">
+                    <div class="form-group mt-4">
+                        <label for="password">الصورة الشخصية</label>
+                        <input type="file" name="userimg" id="imageInput"  accept="image/*" onchange="previewImage(event)">
+                        <br>
+                        <img id="imagePreview" src="" alt="Image Preview" style="max-width: 300px; display: none;">
+                    
+                    </div>
+                </div> 
+        
+                <div class="col-lg-5 col-md-12 ">
+                    <form action="{% url 'users_managment' companyID %}" method="post" class="form">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="form-group mt-4 ">
+                                <label for="username ">اسم المستخدم</label>
+                                <input name="username" type="text" class="form-control mb-3" id="username"   dir="ltr">
+                            </div>
+                        </div>  
+                        <dvi class="row">
+                       
+                        <div class="col-md-6">
+                            <div class="form-group  ">
+                                <label for="first_name ">الاسم</label>
+                                <input name="first_name" type="text" class="form-control mb-3" id="first_name"   dir="ltr">
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="last_name ">العائلة</label>
+                                <input name="last_name" type="text" class="form-control mb-3" id="last_name"   dir="ltr">
+                            </div>
+                        </div>
+                    </dvi>
+                        <div class="col-md-12">
+                            <div class="form-group mt-2">
+                                <label for="email">البريد الالكتروني</label>
+                                <input name="email" type="email" class="form-control mb-3" id="email" placeholder="@"  >
+                            </div>
+                        </div>  
+                        
+                   
+        
+                       
+                        
+                        
+                  
+                </div><!--end col-->
+        
+                <div class="col-lg-5 col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group mt-4">
+                            <label for="password">كلمة المرور</label>
+                            <input name="password" type="password" class="form-control mb-3" id="password"   dir="ltr">
+                        </div>
+                    </div> 
+                        <div class="col-md-12">
+                            <div class="form-group mt-4 ">
+                                <label for="mobile">رقم الجوال</label>
+                                <input name="mobile" type="number" class="form-control mb-3" id="mobile" placeholder="05xxxxxxx"  dir="ltr">
+                            </div>
+                        </div>    
+                        
+                        <div class="col-md-12">
+                            <div class="form-group mt-2">
+                                <label for="position">المنصب</label>
+                                    <select class="form-select" aria-label="Default select example" id="position" name="position">
+                                        <option value="1">مدير عام</option>
+                                        <option value="2">مدير علامة تجارية</option>
+                                        <option value="3">مدير منطقة</option>
+                                        <option value="4">مدير مدينة</option>
+                                        <option value="5">مدير فرع</option>
+                                        <option value="6">مدير ادارة</option>
+                                        <option value="7">مدير قسم</option>
+                                  
+        
+                                    </select>         
+                            </div>
+                        </div>  
+                        
+                        
+        
+                      
+                        
+                        
+                  
+                </div><!--end col-->
+        
+        <div class="card-footer">
+         
+                <div class="form-group mt-2 mb-4 text-center">
+                    <button type="submit" class="btn btn-dark col-lg-2" >حفظ</button>
+                </div>
+            </form>
+           
+        </div>
+        
+               
+        
+        
+        </div><!--end row -->
+        
+         <!--end show -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!------------------------>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block'; // Show the image preview
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    </script>
+{% endblock %} 

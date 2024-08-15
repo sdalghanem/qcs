@@ -15,8 +15,8 @@ path('gm_dashboard' , dashboard_view.gm_dashboard , name='gm_dashboard'),
 path('brandManager_dashboard' , dashboard_view.brandManager_dashboard , name='brandManager_dashboard'), 
 path('brandRegionManager_dashboard' , dashboard_view.brandRegionManager_dashboard , name='brandRegionManager_dashboard'), 
 path('brandCityManager_dashboard' , dashboard_view.brandCityManager_dashboard , name='brandCityManager_dashboard'), 
-path('brach_Manager_dashboard' , dashboard_view.brach_Manager_dashboard , name='brach_Manager_dashboard'), 
-
+path('brach_Manager_dashboard' , dashboard_view.brach_Manager_dashboard , name='brach_Manager_dashboard'),  
+path('dept_Manager_dashboard' , dashboard_view.dept_Manager_dashboard , name='dept_Manager_dashboard'),
 #brands_view العلامات التجارية
 path('regions_rate/<str:id>' , brands_view.regions_rate , name='regions_rate'),
 path('cities_rate/<str:id>/<str:brand_id>' , brands_view.cities_rate , name='cities_rate'),

@@ -1,0 +1,123 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+
+ 
+<!--الشعار و العلامة التجارية-->
+<div class="row ">
+    <div class="col-5 text-center">
+        <h4><img src="../../../{{brandLogo}}" alt="avatar" width="20%">      {{brandName}}    </h4>
+        
+    </div>
+</div>
+<!------------------------>
+
+<!-- تقسيم الصفحة -->
+<div class="row"> 
+    <!--اضافة فرع جديد-->
+    <div class="card mb-5   col-xl-5 col-lg-5 col-md-5">
+        <form class="section general-info" method="post" action="#" enctype="multipart/form-data">
+            <div class="info">
+                <div class="row">
+                    <div class="col-lg-11 mx-auto">
+                        
+                        <!-- تبيهات-->
+                        {% csrf_token %}
+                            <div class="card-header mt-4 ">
+                                <label>إضافة فرع جديد <span class="bg-info">{{res}} </span></label>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="fullName">اسم الفرع</label>
+                                        <input name="brachName" type="text" class="form-control mb-3" id="fullName" placeholder="...." value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-2">
+                                <label for="fullName">الحي</label>
+                                <div class="col-lg-4 layout-spacing">
+                                    <select class="form-select" aria-label="Default select example" id="region">
+                                        <option value="">المنطقة</option>
+                                        
+                                        <option value="0">الكل</option><!--اذا تم اختيار الكل يتم اخفاء الخيار اللي بعده-->
+                                    <!-- عرض جميع المناطق من قاعدة البياناتة-->
+                                        {% if regions %}
+                                        {% for region in regions %}
+                                            <option value="{{region.id}}">{{region.name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+            
+                                    </select>                   
+                                </div>
+                                <div class="col-lg-4 layout-spacing"   >
+                                    <select class="form-select" aria-label="Default select example" style="display: none;"  id="city">
+                                        <option selected>المدينة</option>
+            
+                                    </select>                   
+                                </div>
+                                <div class="col-lg-4 layout-spacing"   >
+                                    <select class="form-select" name="district" aria-label="Default select example" style="display: none;"  id="district">
+                                        <option selected>الحي</option>
+                                    </select>                   
+                                </div>
+                            </div>
+                            <div class="col-md-12  card-footer ">
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-secondary">حفظ</button>
+                                </div>
+                            </div>                  
+                    </div>                                                                                       
+                </div>
+            </div>
+        </form>
+    </div>
+
+<!-- عرض العلامات التجارية-->
+    <div class="card mb-7   col-xl-7 col-lg-7 col-md-7 ">
+
+        <div class="searchable-container ">
+            <div class="card-header mt-4">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-center">
+                        <lable alt="اضافة شركة"> الفروع </lable>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-4">
+                {% for b in branchs %}
+                <div class="col-md-12">
+              
+                        <div class="items">
+                            <div class="user-profile" >  
+                                <img src="../../../{{brandLogo}}" alt="avatar" >
+                            </div>
+                            <div class="user-name">
+                                <p class=""> {{ b.description }}</p>
+                            </div>
+                        
+                            <div class="user-status">
+                                {% if b.manager_id %} <span class="badge outline-badge-info"> {{b.manager_id}} </span> {% else %} <span class="badge outline-badge-danger">إضافة مدير + </span> {% endif %}
+                            </div>
+                            <div class="action-btn">
+                            <a href="# ">  <span class="badge outline-badge-warning">العنوان</span></a>
+                                <!-- <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p> -->
+                            </div>
+                        </div>
+                    
+                {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- عرض العلامات التجارية-->
+</div><!-- نهاية تقسيم الصفحة-->
+<!------------------------>
+ 
+<!--  BEGIN CUSTOM SCRIPTS FILE  -->
+<script src="{% static 'appjs/clients/countries_dependent.js'%}"></script>
+<!--  END CUSTOM SCRIPTS FILE  -->
+{% endblock %}

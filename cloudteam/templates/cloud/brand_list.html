@@ -1,0 +1,116 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+
+ 
+           <!--الشعار و اسم الشركة-->
+          
+<div class="row ">
+    <div class="col-5 text-center">
+        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="20%">      {{companyName}}    </h4>
+        <a href="{%url 'users_managment' companyId %}" class="btn bg-dark mb-4">ادارة المستخدين</a>
+    </div>
+</div>
+
+<!------------------------>
+<div class="row">
+<!--اضافة علامة تجارية-->
+
+<div class="card mb-4   col-xl-4 col-lg-4 col-md-4 ">
+    <form class="section general-info pt-4" method="post" action="{% url 'add_new_brand' companyId %}" enctype="multipart/form-data">
+        <div class="info">
+            <div class="row">
+                <div class="col-lg-11 mx-auto">
+                    {{res}} 
+                    <!-- تبيهات-->
+                        {% csrf_token %}
+                            <div class="card-header text-center">
+                            <label>إضافة علامة تجارية</label>
+                            </div>
+
+                            <div class="row">
+                            <div class="col-md-12  pt-4">
+                                <div class="form-group">
+                                    <label for="fullName">اسم العلامة التجارية</label>
+                                    <input name="brandName" type="text" class="form-control mb-3" id="fullName" placeholder="....." value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
+                            <div class="form ">
+
+                                <div class="row">
+                                    <div class="col-md-12 pb-4">
+                                        <label for="fullName">الشعار</label>
+                                        <input type="file" name="brandLogo">
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="col-md-12 mt-1 card-footer">
+                                    <div class="form-group text-center">
+                                        <button type="submit" class="btn btn-secondary">حفظ</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+    </form>
+</div>           
+
+<!------------------------>
+
+
+<!-- عرض العلامات التجارية-->
+<div class="card mb-4  col-xl-8 col-lg-8 col-md-8  ">
+
+<div class="searchable-container  pt-4">
+
+    <div class="card-header text-center">
+        <div class="row">
+                <label> العلامات التجارية </label>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for b in brands %}
+        <div class="col-md-12 pt-4 pb-2">
+            
+                <div class="items">
+                    <div class="user-profile" >  
+                        <img src="../../../{{b.logo}}" alt="avatar" >
+                    </div>
+                    <div class="user-name">
+                        <p class=""> {{ b.description }}</p>
+                    </div>
+                
+                    <div class="user-status">
+                        {% if b.gm_manager_id %} <span class="badge outline-badge-info"> {{b.gm_manager_id}} </span> {% else %} <span class="badge outline-badge-danger">إضافة مدير + </span> {% endif %}
+                    </div>
+                    <div class="action-btn">
+                    <a href="{% url 'add_new_branch' b.id %}">  <span class="badge outline-badge-warning">الفروع</span></a>
+                        <!-- <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p> -->
+                    </div>
+                </div>
+            
+        {% endfor %}
+
+        </div>
+    </div>
+
+    </div><!---->
+</div>
+<!-- عرض العلامات التجارية-->
+
+
+</div> <!--end row-->
+        
+
+
+{% endblock %}

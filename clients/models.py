@@ -80,16 +80,6 @@ class Department(models.Model):
 
     def __str__(self):
         return self.description
-    
-class Section(models.Model):
-    manager_id = models.ForeignKey( Managers , verbose_name=("مدير القسم"),  null= True, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100 , verbose_name ='القسم')
-    department_id = models.ForeignKey( Department , verbose_name=("الإدارة"), on_delete=models.CASCADE)
-    class Meta:
-        verbose_name_plural = "الأقسام"
-
-    def __str__(self):
-        return self.description
 
 #الفروع و العلامات التجارية
 class Brand(models.Model):
@@ -102,6 +92,20 @@ class Brand(models.Model):
         verbose_name_plural = "العلامات التجارية"
     def __str__(self):
         return self.description 
+    
+# اضافة براند للقسم    
+class Section(models.Model):
+    #Brand_id = models.ForeignKey( Brand , verbose_name=("العلامة التجارية"), on_delete=models.CASCADE)
+    manager_id = models.ForeignKey( Managers , verbose_name=("مدير القسم"),  null= True, on_delete=models.CASCADE)
+    description = models.CharField(max_length=100 , verbose_name ='القسم')
+    department_id = models.ForeignKey( Department , verbose_name=("الإدارة"), on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = "الأقسام"
+
+    def __str__(self):
+        return self.description
+
+
     
 # مدير منطقة و مدينة
 class Brand_regionManager(models.Model):

@@ -3,7 +3,6 @@
 // عرض الدول و المدن و الفروع 
 
 // توضع في كل صفحة تحتاج فيها دروب داون لست 
-
 // دروب داون لست للمدن
 let region = document.getElementById("region")
 let city = document.getElementById("city")

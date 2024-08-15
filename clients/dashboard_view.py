@@ -80,3 +80,18 @@ def brach_Manager_dashboard(request):
             'branchName' : request.session['branchName']
             }
     return render(request , 'dashboards/brach_Manager_dashboard.html' , data)
+
+
+def dept_Manager_dashboard(request):
+    # id department - company name - company logo - mng name - mng postions
+    data = {
+            'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
+            'mngPostion' :'  مدير ادارة ' + ' ' + request.session['deptName'] ,
+            'companyName': request.session['companyName'],
+            'companylogo': request.session['companylogo'],
+            'deptName': request.session['deptName'],
+            'dept_id' : request.session['dept_id'],
+            }
+    print(data)
+    return render(request , 'dashboards/dept_Manager_dashboard.html' , data)
+
