@@ -14,14 +14,14 @@
 <!------------------------>
 
 
-<div class="accordion" id="accordionExample">
+<div class="accordion searchable-container" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="accordion-button bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
             إضافة حساب جديد
         </button>
       </h2>
-      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div id="collapseOne" class="accordion-collapse collapse collapsed" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
          <!--show-->
          <div class="card">
@@ -112,14 +112,7 @@
         
                                     </select>         
                             </div>
-                        </div>  
-                        
-                        
-        
-                      
-                        
-                        
-                  
+                        </div>                                                        
                 </div><!--end col-->
         
         <div class="card-footer">
@@ -129,22 +122,68 @@
                 </div>
             </form>
            
-        </div>
-        
-               
-        
-        
+        </div>       
         </div><!--end row -->
-        
+
          <!--end show -->
         </div>
       </div>
     </div>
   </div>
+</div>
+<!----------end add new form -------------->
+
+<div class=" searchable-container  pt-4">
+
+    <div class="card-header text-center">
+        <div class="row">
+                <label> المستخدمين </label>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for m in mngs %}
+        <div class=" col-lg-12 col-md-12 pt-2 ">
+            
+                <div class="items">
+                    <!-- <div class="user-profile" >  
+                        <img src="#" alt="avatar" >
+                    </div> -->
+                    <div class="user-name">
+                        <p class=""> {{ m.user }}</p>
+                    </div>
+                    <div class="user-name">
+                        <p class=""> {{ m.user.first_name }} {{ m.user.last_name }}</p>
+                    </div>
+                    <div class="user-name">
+                        <p class=""> {{ m.mobile }}</p>
+                    </div>
+                    <div class="user-name">
+                        <p class=""> {{ m.user.email }}</p>
+                    </div>
+                
+                    
+                   
+                </div>
+            
+        {% endfor %}
+
+        </div>
+    </div>
+
+</div><!---->
 
 
-<!------------------------>
 
+
+
+
+
+
+
+
+
+<!--سكريبت استعراض الصورة قبل الرفع-->
 <script>
     function previewImage(event) {
         var reader = new FileReader();

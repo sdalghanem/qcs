@@ -36,6 +36,8 @@ def add_new_brand(request , id):
      # id  الشركة
      companyName = Company.objects.get(id = id).description
      companyLogo = Company.objects.get(id = id).logo
+     mng_company =  Managers.objects.get(company_id_id = id , gm_manager = 1 ).user
+     print(mng_company)
      companyId = id
      brands = Brand.objects.filter(company_id_id = id)
      if request.method =='POST':
@@ -47,8 +49,10 @@ def add_new_brand(request , id):
                             'companyName': companyName ,
                               'companyLogo' : companyLogo ,
                               'res' : 'موجود مسبقاً', 
-                              'companyId' : companyId}
-                    return render(request , 'cloud/brand_list.html', data)
+                              'companyId' : companyId , 
+                              'mng_company' : mng_company , 
+                              }
+                    return render(request  , 'cloud/brand_list.html', data)
         else:
             fs = FileSystemStorage()
             filename = fs.save(uploaded_file.name , uploaded_file)
@@ -56,9 +60,9 @@ def add_new_brand(request , id):
             newbrand = Brand(company_id_id = id , description = brandName , logo =  uploaded_file_url , registerDate = '2011-11-11')
             newbrand.save()
            
-        return render(request , 'cloud/brand_list.html',{'brands' : brands , 'companyName': companyName , 'companyLogo' : companyLogo ,'res' : 'تم حفظ العلامة التجارية بنجاح', 'companyId' : companyId})
+        return render(request , 'cloud/brand_list.html',{'brands' : brands , 'companyName': companyName , 'companyLogo' : companyLogo ,'res' : 'تم حفظ العلامة التجارية بنجاح', 'companyId' : companyId , 'mng_company' : mng_company ,})
      else:
-        return render(request , 'cloud/brand_list.html',{'brands' : brands ,'companyName': companyName , 'companyLogo' : companyLogo , 'companyId' : companyId})
+        return render(request , 'cloud/brand_list.html',{'brands' : brands ,'companyName': companyName , 'companyLogo' : companyLogo , 'companyId' : companyId , 'mng_company' : mng_company ,})
      
 def add_new_branch(request , id):
      # id  العلامة التجارية
@@ -106,7 +110,7 @@ def users_managment(request , id):
         company = Company.objects.get(id = id)
         companyName = company.description
         companyLogo = company.logo
-        mngs = Managers.objects.all()
+        mngs = Managers.objects.filter(company_id = id)
         if  request.method =='POST':
             newUser = User()
             newUser.username = request.POST['username']

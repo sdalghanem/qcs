@@ -6,9 +6,20 @@
            <!--الشعار و اسم الشركة-->
           
 <div class="row ">
+   
     <div class="col-5 text-center">
         <h4><img src="../../../{{companyLogo}}" alt="avatar" width="20%">      {{companyName}}    </h4>
-        <a href="{%url 'users_managment' companyId %}" class="btn bg-dark mb-4">ادارة المستخدين</a>
+          <table class="table table-border">
+            <tr>
+                <td>مدير عام الشركة</td>
+                <td>{{ mng_company }} </td>
+            </tr>
+            
+          </table>
+
+        <a href="{%url 'users_managment' companyId %}" class="btn btn-dark mb-4">ادارة المستخدين</a>
+        <!-- <a href="{%url 'users_managment' companyId %}" class="btn btn-dark mb-4">تعيين مدير عام شركة</a> -->
+      
     </div>
 </div>
 
