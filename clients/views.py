@@ -67,8 +67,8 @@ def login_backend(request):
             request.session['companyName'] = mngCompany.company_id.description
             print(mngCompany.position)
             # المنصب بناء على الارقام
-            # اذا المدير العام 1 يعني مدير عام شركة
-            if mngCompany.gm_manager == 1 :
+            # اذا 0 يعني مدير عام شركة
+            if mngCompany.position == '0':
                 return redirect('gm_dashboard') # يحول على الرابط اللي اسمه هوم 
           # مدير عام براند محدد
             elif mngCompany.position == '1' :

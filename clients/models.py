@@ -61,8 +61,8 @@ class Managers(models.Model):
     user = models.ForeignKey( User, verbose_name=("اسم المستخدم"), on_delete=models.CASCADE)
     company_id = models.ForeignKey( Company , verbose_name=("الشركة"), on_delete=models.CASCADE)
     mobile = models.CharField(max_length=100 , verbose_name ='رقم الجوال')
-    gm_manager = models.BooleanField(default=0)
-    task_traker = models.BooleanField(default=0)
+    #gm_manager = models.BooleanField(default=0)
+    #task_traker = models.BooleanField(default=0)
     position = models.CharField(max_length=100 , verbose_name ='المنصب', null=True)
     class Meta:
         verbose_name_plural = "المدراء"
@@ -97,6 +97,7 @@ class Brand(models.Model):
 class Section(models.Model):
     #Brand_id = models.ForeignKey( Brand , verbose_name=("العلامة التجارية"), on_delete=models.CASCADE)
     manager_id = models.ForeignKey( Managers , verbose_name=("مدير القسم"),  null= True, on_delete=models.CASCADE)
+    Brand_id = models.ForeignKey( Brand , verbose_name=("العلامة التجارية"),null= True, on_delete=models.CASCADE)
     description = models.CharField(max_length=100 , verbose_name ='القسم')
     department_id = models.ForeignKey( Department , verbose_name=("الإدارة"), on_delete=models.CASCADE)
     class Meta:

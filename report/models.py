@@ -23,8 +23,8 @@ class Term(models.Model):
 
 class Term_responsible(models.Model):
     term_id = models.ForeignKey(Term, on_delete=models.CASCADE , verbose_name =' البند')
-    section_id = models.ForeignKey(Section, on_delete=models.CASCADE , verbose_name ='  القسم المسؤول')
-    zone_id = models.ForeignKey(Zone, on_delete=models.CASCADE , verbose_name =' المكان')
+    section_id = models.ForeignKey(Section, on_delete=models.CASCADE , verbose_name ='  القسم المسؤول' , null=True )
+    zone_id = models.ForeignKey(Zone, on_delete=models.CASCADE , verbose_name =' المكان' , null=True )
     class Meta:
         verbose_name_plural = "مسؤولين البنود"
     def __str__(self):

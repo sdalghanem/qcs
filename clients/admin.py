@@ -71,9 +71,9 @@ class Brand_cityManagerAdmin(admin.ModelAdmin):
     list_filter=( 'Brand_id', 'city_id' )
     search_fields=('manager_id','Brand_id')  
 
-# class managerAdmin(admin.ModelAdmin):
-#     list_display = ('manager_id'  , 'company_id' )
-
+class managerAdmin(admin.ModelAdmin):
+     list_display = ('user'  , 'company_id' )
+     list_filter=( 'company_id', 'position')
 
 admin.site.register(Country)
 admin.site.register(Region , RegionAdmin )
@@ -90,7 +90,7 @@ admin.site.register(Brand , BrandAdmin )
 admin.site.register(Branch , BranchAdmin )
 
 # المدراء
-admin.site.register(Managers )
+admin.site.register(Managers , managerAdmin )
 admin.site.register(Brand_regionManager , Brand_regionManagerAdmin)
 admin.site.register(Brand_cityManager , Brand_cityManagerAdmin )
 

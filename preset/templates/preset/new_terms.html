@@ -1,0 +1,105 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+<div class="row">
+    
+    <div class="col-lg-12">
+        <form action="" method="post">
+            {% csrf_token %}
+
+        <div class="container mt-5">
+            <h4>اضافة بنود  </h4>
+            <!-- <div class="input-group mb-3 mt-4">
+                <input type="text" class="form-control" id="secName" placeholder="ادخل اسم التصنيف ">
+            </div> -->
+            <div id="inputContainer" class="mb-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="inputField[]" placeholder="اكتب البند">
+                    <button class="btn btn-primary" type="button" onclick="addRow()">+</button>
+                </div>
+            </div>
+            <button class="btn btn-success" type="button" onclick="printValues()">حفظ </button>
+        </div>
+    </div>
+</form>
+</div>
+
+<script>
+    function addRow() {
+     // أنشئ عنصر جديد لنقل قائمة الإدخال باستخدام Bootstrap classes
+     let newRow = document.createElement('div');
+     newRow.className = 'input-group mb-3';
+ 
+     // أنشئ حقل إدخال جديد باستخدام Bootstrap classes
+     let newInput = document.createElement('input');
+     newInput.type = 'text';
+     newInput.name = 'inputField[]';
+     newInput.className = 'form-control';
+     newInput.placeholder = 'اكتب البند';
+ 
+     // أنشئ زر جديد لإضافة صف باستخدام Bootstrap classes
+     let newButton = document.createElement('button');
+     newButton.type = 'button';
+     newButton.className = 'btn btn-primary';
+     newButton.innerText = '+';
+     newButton.onclick = addRow;
+ 
+     // أضف حقل الإدخال والزّر إلى العنصر الجديد
+     newRow.appendChild(newInput);
+     newRow.appendChild(newButton);
+ 
+     // أضف العنصر الجديد إلى الحاوية
+     document.getElementById('inputContainer').appendChild(newRow);
+ }
+ 
+ function printValues() {
+     // احصل على جميع حقول الإدخال في القائمة
+     let inputs = document.getElementsByName('inputField[]');
+     // قم بالتكرار على جميع المدخلات وطباعتها
+     let row = []
+       inputs.forEach(input => {
+         console.log(input.value);
+         row.push(input.value)
+      
+     });
+
+    let terms = JSON.stringify(row)
+
+     let titleID = '{{titleID}}'
+     let pkid = '{{pkid}}'
+    //  //////////////////////////حفظ البنود/////////////////////////////////////
+     $.ajax({
+            type: 'post',
+            url:'/preset/add_new_terms',
+            async: true,
+            data:{
+            terms : terms , 
+            titleID : titleID, 
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+             console.log(data)
+             window.location = "{% url 'packege_details' 1234 %}".replace(/1234/, pkid.toString());
+
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+//////////////////////////////////////////////////////////////////
+
+ }
+
+
+ </script>
+ 
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ 
+   {% endblock %}

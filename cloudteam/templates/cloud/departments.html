@@ -1,0 +1,267 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+
+<div class="row ">
+   
+    <div class="col-12 text-raight">
+        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="10%">      {{companyName}}    </h4>
+    </div>
+   
+    
+</div>
+
+<div class="row mb-4 mt-2">
+    <div class="col-12">
+        <a href="#" class="btn btn-dark " data-toggle="modal" data-target="#add_department">إضافة ادارة + </a>
+    </div>
+</div>
+
+{% for r in  row %}
+
+
+<div class="col-lg-12 ">
+    <div class="searchable-container card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-center">
+                    <h4>{{r.deptName}}  <a href="#" class="badge  outline-badge-success " data-toggle="modal" data-target="#add_sec{{r.deptId}}">+</a>  
+                    <a href="#" class="badge  outline-badge-warning " data-toggle="modal" data-target="#edit_dept{{r.deptId}}" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </a></h4>     
+                       <span><b>مدير عام الإدارة</b> / {{r.deptMngr}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for  s in r.secifo %} 
+            <div class="col-md-12">
+                <div class="searchable-items">
+                    <div class="items">
+                        <div class="user-name">
+                            <p class="">{{s.description}}</p>
+                        </div>
+                        <div class="user-name">
+                            <p class=""><b>مدير القسم</b>/ {{s.manager_id}}</p>
+                        </div>
+                        <div class="user-name">
+                            <p class=""><b>العلامة التجارية</b>/ {{s.Brand_id}}</p>
+                        </div>
+                        <div class="">
+                           <a href="#" data-toggle="modal" data-target="#edit_sec{{s.id}}" class="badge  outline-badge-info "><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- Modal add department -->
+<div class="modal fade" id="add_department" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">اضافة ادارة +</h5>
+         
+        </div>
+        <div class="modal-body">
+         
+            <form class="section general-info " method="post" action="{% url 'add_new_dept' companyID %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <div class="form-group">
+                               
+                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم الادارة">                 
+                               
+                                <select class="form-control " name="mngr">
+                                    <option>اختر مدير الادارة</option>
+                                    {% if mngs %}
+                                        {% for m in mngs%}
+                                            <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                         </div>
+                    </div>
+        
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-primary" type="submit" >حفظ</button>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--end model -->
+
+  {% for r in  row %}
+  <!-- Modal add sections -->
+<div class="modal fade" id="add_sec{{r.deptId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">اضافة قسم +</h5>
+         
+        </div>
+        <div class="modal-body">
+         
+            <form class="section general-info " method="post" action="{% url 'add_new_sec' r.deptId %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <div class="form-group">
+                               
+                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم">                 
+                               
+                                <select class="form-control mb-2" name="mngr">
+                                    <option>اختر مدير الادارة</option>
+                                    {% if mngs %}
+                                        {% for m in mngs%}
+                                            <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+
+                                <select class="form-control" name="brand">
+                                    <option>اختر العلامة التجارية</option>
+                                    {% if brands %}
+                                        {% for b in brands%}
+                                            <option value="{{b.id}}"> {{b.description}} </option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+
+                            </div>
+                         </div>
+                    </div>
+                    
+        
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-primary" type="submit" >حفظ</button>
+                </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--end model -->
+  {% endfor %}
+
+
+
+
+
+
+<!-- Modal edit department informations  -->
+{% for r in  row %}
+
+<div class="modal fade" id="edit_dept{{r.deptId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"> تعديل بيانات ادارة </h5>
+        </div>
+        <div class="modal-body">
+            <form class="section general-info " method="post" action="{% url 'edit_departmentInfo' r.deptId %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12  ">
+                            <div class="form-group">
+                       
+                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم" value="{{r.deptName}}">                 
+                               
+                                <select class="form-control mb-2" name="mngr">
+                                    <!-- <option value="{{r.deptMngr.id}}">{{r.deptMngr}}</option> -->
+                                    {% if mngs %}
+                                        {% for m in mngs%}
+                                            <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <p> <b> مدير الادارة الحالي :</b> {{ r.deptMngr}} </p>
+                         </div>
+                    </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-primary" type="submit" >تحديث</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--end model -->
+  {% endfor %}
+
+
+
+
+  <!-- Modal edit sections informations  -->
+ 
+{% for r in  row %}
+{% for  s in r.secifo %} 
+<div class="modal fade" id="edit_sec{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"> تعديل بيانات قسم </h5>
+        </div>
+        <div class="modal-body">
+            <form class="section general-info " method="post" action="{% url 'edit_secInfo' s.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12  ">
+                        <div class="form-group">
+                           
+                                <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم" value="{{s.description}}">                 
+                           
+                            <select class="form-control mb-2" name="mngr">
+                                <option disabled>اختر مدير الادارة</option>
+                                {% if mngs %}
+                                    {% for m in mngs%}
+                                        <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                            <p> <b> مدير الادارة الحالي :</b> {{ s.manager_id}} </p>
+                           
+                        </div>
+                     </div>
+                </div>
+                
+    
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+      <button  class="btn btn-primary" type="submit" >حفظ</button>
+            </form>        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--end model -->
+  {% endfor %}
+  {% endfor %}
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+{% endblock %}
