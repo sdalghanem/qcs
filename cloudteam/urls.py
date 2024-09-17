@@ -21,6 +21,7 @@ path('add_new_sec/<str:id>' , views.add_new_sec , name='add_new_sec'),
 path('edit_departmentInfo/<str:id>' , views.edit_departmentInfo , name='edit_departmentInfo'),  
 
 path('edit_secInfo/<str:id>' , views.edit_secInfo , name='edit_secInfo'),  
- path('brand_terms/<str:id>' , views.brand_terms , name='brand_terms'),  
+path('brand_terms/<str:id>' , views.brand_terms , name='brand_terms'),  
+path('save_packege/' , views.save_packege , name='save_packege'),  
 
 ]

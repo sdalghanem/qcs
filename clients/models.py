@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from preset.models import *
 # ####
 # users info :
 # admin 1234
@@ -49,6 +50,7 @@ class District(models.Model):
 class Company(models.Model):
     description = models.CharField(max_length=100 , verbose_name ='اسم الشركة')
     logo = models.FileField(upload_to='customer/profile/Company/logo', null=True , verbose_name ='الشعار')
+    packege = models.ForeignKey("preset.Packege", on_delete=models.CASCADE , verbose_name =' المدينة' , null=True)
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
     class Meta:
         verbose_name_plural = "الشركات"

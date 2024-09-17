@@ -58,17 +58,15 @@
      // قم بالتكرار على جميع المدخلات وطباعتها
      let row = []
        inputs.forEach(input => {
-         console.log(input.value);
-         row.push(input.value)
-      
+       console.log(input.value);
+       row.push(input.value)
      });
 
     let terms = JSON.stringify(row)
-
-     let titleID = '{{titleID}}'
-     let pkid = '{{pkid}}'
-    //  //////////////////////////حفظ البنود/////////////////////////////////////
-     $.ajax({
+    let titleID = '{{titleID}}'
+    let pkid = '{{pkid}}'
+    ////////////////////////////حفظ البنود/////////////////////////////////////
+    $.ajax({
             type: 'post',
             url:'/preset/add_new_terms',
             async: true,
@@ -76,8 +74,7 @@
             terms : terms , 
             titleID : titleID, 
             csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        } ,
-        
+        } ,       
             success:function(data){ 
              console.log(data)
              window.location = "{% url 'packege_details' 1234 %}".replace(/1234/, pkid.toString());

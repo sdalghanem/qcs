@@ -2,9 +2,11 @@ from django.shortcuts import redirect, render
 from clients.models import * 
 # اضافه بروفايل شركة
 # اضافة براند
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.core.files.storage import FileSystemStorage
-
-
+from preset.models import *
+from report.models import *
+import json
 
 #عرض الشركات 
 def company_list(request):
@@ -281,8 +283,51 @@ def edit_secInfo(request , id):
 
 
 def brand_terms(request , id):
+    #id for brand
     brandName = Brand.objects.get(id = id)
+    company = Company.objects.get(id = brandName.company_id.id)
+    pcks = Packege.objects.all()
+    print(company.packege)
+    if  company.packege :
+        #print(packege_terms(company.packege.id))
+        terms = packege_terms(company.packege.id)
+    else:
+        terms = ''
+        
     data ={
         'brandName' : brandName ,
+        'pcks' : pcks ,
+        'brandId': id ,
+        'pckName' : company.packege,
+        'terms' : terms
     }
     return render(request , 'cloud/brand_terms.html' , data )
+
+#API
+def save_packege(request):
+    terms = json.loads(request.POST['row'])
+   
+    for t in terms :
+        newTerm = Term()
+        newTerm.description = t
+        newTerm.brand_id_id = request.POST['brandId']
+        newTerm.save()
+        #print(t)
+    pck = request.POST['pck']
+    brandId = request.POST['brandId']
+    brand = Brand.objects.get(id = brandId)
+    update = Company.objects.get(id = brand.company_id.id)
+    print(brand.company_id.id)
+    update.packege_id = pck
+    update.save()
+    return JsonResponse( {'data' : 'ok'} , safe=False)
+  
+def packege_terms(id):
+    #id for pck
+    row = []
+    title = Term_title.objects.filter(packege_id_id = id)
+    for tit in title :
+        pres = Preset_terms.objects.filter(term_title_id_id = tit.id)
+        for p in pres:
+            row.append(p.description)
+    return row

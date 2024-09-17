@@ -2,44 +2,100 @@
 {% load static %}
 {% block clients_home %}
 <div class="row ">
-   
     <div class="col-4 text-center">
-        <h4><img src="../../../{{brandName.logo}}" alt="avatar" width="20%">      {{brandName}}    </h4>
+        <h5><img src="../../../{{brandName.logo}}" alt="avatar" width="20%">      {{brandName}}<span > {% if pckName %}    |  {{pckName}} {% endif %}</h5>    </span>
+        
     </div>
-   
+</div>
+<div class="row mb-2 mt-2">
+    <div class="col-2">
+        <a href="#" class="btn btn-dark ">  بنود التفتيش</a> </td>
+    </div>
+    <div class="col-2">
+        <a href="#" class="btn btn-dark "> تخصيص الأماكن</a> </td>
+    </div>
+    <div class="col-2">
+        <a href="#" class="btn btn-dark "> تخصيص المسؤوليات</a> </td>
+    </div>
     
 </div>
-<div class="container mt-5">
-    <div class="input-group mb-3 mt-2">
-
-        <select class="form-control" name="package">
+<div class="container ">
+    <div class="input-group mb-4 mt-4">
+        {% csrf_token %}
+        <select class="form-control"  id="packege">
             <option>اضغط لاختيار الباقة</option>
-            <option>الباقة الاحترافية</option>
+            {% for p in pcks %}
+            <option value="{{p.id}}">{{p.description}}</option>
+            {% endfor %}
         </select>
-
+      
+        <button class="btn btn-success" type="button" onclick="save_packege()">تفعيل الباقة</button>
     </div>
-    <div class="input-group mb-3 mt-2">
-
-        <input type="text" class="form-control" name="القسم" placeholder="ادخل التصنيف">
-
-    </div>
-
-    <div id="inputContainer" class="mb-3">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" name="inputField[]" placeholder="اكتب البند">
-            <button class="btn btn-primary" type="button" onclick="addRow()">+</button>
+    <div  class="card">
+        <div class="card-body">
+            <!-- <div class=" input-group  mb-3 mt-2" >
+                <input type="text" class="form-control " name="inputField[]" placeholder="اكتب البند">
+                <button class="btn btn-primary" type="button" onclick="addRow()">+</button>
+            </div>
+            <div id="inputContainer"> -->
+                <!-- البنود الاضافيه تعرض هنا-->
+            <!-- </div>  
+            <button class="btn btn-primary mt-2" type="button" onclick="">إضافة</button>
+            <button class="btn btn-success mt-2" type="button" onclick="add_term()">حفظ بنود التفتيش </button>
+                <hr> -->
+            <div  class="mb-3">
+                {% for t in terms %}
+                <div class="input-group mb-3 mt-2">   
+                    <input type="text" class="form-control" name="terms[]" value="{{t}}"/>  
+                </div>
+                {% endfor %}       
+            </div>
         </div>
+
     </div>
-    <button class="btn btn-success" type="button" onclick="printValues()">طباعة المدخلات</button>
 </div>
-
-
-
 
 
 
 <script>
 
+
+function save_packege(){
+    let pck = document.getElementById('packege').value
+    let brandId = '{{brandId}}'
+    let inputs = document.getElementsByName('terms[]');
+    let row = []
+    inputs.forEach(input => {
+        row.push(input.value);
+    });
+    console.log(row)
+    let terms = JSON.stringify(row)
+///////////////////////////////حفظ الباقة/////////////////////////
+    $.ajax({
+            type: 'post',
+            url:'/cloudteam/save_packege/',
+            async: true,
+            data:{
+            pck : pck , 
+            brandId : brandId, 
+            row : terms ,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+                window.location = "{% url 'brand_terms' 1234 %}".replace(/1234/, brandId.toString());
+
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+//////////////////////////////////////////////////////////////////
+}
 
 // وظيفة لإزالة الصف
 function removeRow(button) {
@@ -47,38 +103,11 @@ function removeRow(button) {
 }
 
 
-   function addRow() {
-    // أنشئ عنصر جديد لنقل قائمة الإدخال باستخدام Bootstrap classes
-    let newRow = document.createElement('div');
-    newRow.className = 'input-group mb-3';
+   
 
-    // أنشئ حقل إدخال جديد باستخدام Bootstrap classes
-    let newInput = document.createElement('input');
-    newInput.type = 'text';
-    newInput.name = 'inputField[]';
-    newInput.className = 'form-control';
-    newInput.placeholder = 'اكتب البند';
-
-    // أنشئ زر جديد لإضافة صف باستخدام Bootstrap classes
-    let newButton = document.createElement('button');
-    newButton.type = 'button';
-    newButton.className = 'btn btn-primary';
-    newButton.innerText = '+';
-    newButton.onclick = addRow;
-
-    // أضف حقل الإدخال والزّر إلى العنصر الجديد
-    newRow.appendChild(newInput);
-    newRow.appendChild(newButton);
-
-    // أضف العنصر الجديد إلى الحاوية
-    document.getElementById('inputContainer').appendChild(newRow);
-}
-
-function printValues() {
+function save_term() {
     // احصل على جميع حقول الإدخال في القائمة
-    let inputs = document.getElementsByName('inputField[]');
-
-    // قم بالتكرار على جميع المدخلات وطباعتها
+    let inputs = document.getElementsByName('terms[]');
     inputs.forEach(input => {
         console.log(input.value);
     });
