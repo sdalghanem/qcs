@@ -3,24 +3,16 @@
 {% block clients_home %}
 <div class="row ">
     <div class="col-4 text-center">
-        <h5><img src="../../../{{brandName.logo}}" alt="avatar" width="20%">      {{brandName}}<span > {% if pckName %}    |  {{pckName}} {% endif %}</h5>    </span>
-        
+        <h5><img src="../../../{{brandName.logo}}" alt="avatar" width="10%">      {{brandName}}<span > {% if pckName %}    |  {{pckName}} {% endif %}</h5>    </span>
+        <a href="{% url 'brands_dashbord' companyId %}"  class="btn btn-sm btn-dark">  الرجوع للعلامات التجارية</a>
+        <a href="#" class="btn btn-sm btn-dark  " data-toggle="modal" data-target="#location"> أماكن التفتيش </a>
     </div>
 </div>
-<div class="row mb-2 mt-2">
-    <div class="col-2">
-        <a href="#" class="btn btn-dark ">  بنود التفتيش</a> </td>
-    </div>
-    <div class="col-2">
-        <a href="#" class="btn btn-dark "> تخصيص الأماكن</a> </td>
-    </div>
-    <div class="col-2">
-        <a href="#" class="btn btn-dark "> تخصيص المسؤوليات</a> </td>
-    </div>
-    
+<div class="row  mt-2">
+
 </div>
 <div class="container ">
-    <div class="input-group mb-4 mt-4">
+    <div class="input-group mt-4 mb-4 ">
         {% csrf_token %}
         <select class="form-control"  id="packege">
             <option>اضغط لاختيار الباقة</option>
@@ -44,32 +36,225 @@
             <button class="btn btn-success mt-2" type="button" onclick="add_term()">حفظ بنود التفتيش </button>
                 <hr> -->
             <div  class="mb-3">
-                {% for t in terms %}
+              
+                  
+                    <!-- <a href="#" class="badge badge-warning " data-toggle="modal" data-target="#exampleModalCenter{{t.id}}"> تخصيص القسم المسؤول</a>  -->
+                    <br>
+                    <div class="container mt-4">
+                        <table class="table table-striped">
+                            <tr>
+                            <th>بنود تفتيش تقرير الجودة</th>
+                            <th>الإدارات المسؤولة</th>
+                            <th>تحديد المكان</th>
+                        </tr>
+                      
+                        {% for trm in terms %}
+                        
+                        <tr>
+                            <td>{{trm.description }}</td>
+                            <td> <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#responiple{{trm.id}}"> + </a> </td>
+                            <td>zons <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#zone{{trm.id}}"> + </a></td>
+                        </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+                    
+                  
+              
+                <!-- {% for t in terms %}
                 <div class="input-group mb-3 mt-2">   
                     <input type="text" class="form-control" name="terms[]" value="{{t}}"/>  
                 </div>
-                {% endfor %}       
+                {% endfor %}        -->
             </div>
         </div>
 
     </div>
 </div>
 
+{% for t in terms %}
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter{{t.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">اضافة مسؤول لمجموعة بنود تفتيش</h5>
+                 
+                </div>
+                <div class="modal-body">
+                 
+                    <form class="section general-info pt-4" method="post" action="#" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12  pt-4">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 layout-spacing"   >
+                                            <select class="form-select" aria-label="Default select example" name="mngr">
+                                                {% for s in secs %}
+                                                <option value="{{s.id}}">{{s.description}}</option>
+                                                {% endfor %}
+                                            </select>                   
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+                           
+                </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+{% endfor %}
 
+{% for trm in terms %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="responiple{{trm.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">اضافة مسؤول </h5>
+                 
+                </div>
+                <div class="modal-body">
+                 
+                    <form class="section general-info pt-4" method="post" action="{% url 'insert_responsible'  brandId  trm.id%}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12  pt-4">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 layout-spacing"   >
+                                            <select class="form-select" aria-label="Default select example" name="secid">
+                                                {% for s in secs %}
+                                                <option value="{{s.id}}">{{s.description}}</option>
+                                                {% endfor %}
+                                            </select>                   
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+                           
+                </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+
+
+
+{% for trm in terms %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="zone{{trm.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">اضافة مكان </h5>
+                 
+                </div>
+                <div class="modal-body">
+                 
+                    <form class="section general-info pt-4" method="post" action="#" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12  pt-4">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 layout-spacing"   >
+                                            <select class="form-select" aria-label="Default select example" name="mngr">
+                                                {%if zones %}
+                                                {% for z in zones %}
+                                                <option value="{{z.id}}">{{z.name}}</option>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>                   
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+                           
+                </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+
+     <!-- Modal -->
+     <div class="modal fade" id="location" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">اضافة مكان تفتيش</h5>
+             
+            </div>
+            <div class="modal-body">
+             
+                <form class="section general-info pt-4" method="post" action="{% url 'add_newZone' brandId %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12  pt-4">
+                                <div class="form-group">
+                                    <div class="col-lg-12 layout-spacing"   >
+                                      <input type="text" class="form-control" name="name">          
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                        <table class="table table-striped">
+                            {%if zones %}
+                            {% for z in zones %}
+                            <tr>
+                                <td>{{z.name}} </td>
+                            </tr>
+                            
+                            {% endfor %}
+                            {% endif %}
+                        </table>
+                       
+            </div>
+            <div class="modal-footer">
+                <button  class="btn btn-primary" type="submit" >إضافة</button>    
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
 <script>
 
 
 function save_packege(){
-    let pck = document.getElementById('packege').value
+    let userConfirmed = confirm("سيتم تفعيل الباقه, هل انت متأكد ؟");
+    if (userConfirmed){
+        let pck = document.getElementById('packege').value
     let brandId = '{{brandId}}'
-    let inputs = document.getElementsByName('terms[]');
-    let row = []
-    inputs.forEach(input => {
-        row.push(input.value);
-    });
-    console.log(row)
-    let terms = JSON.stringify(row)
+    // let inputs = document.getElementsByName('terms[]');
+    // console.log()
+    // let row = [inputs]
+    // inputs.forEach(input => {
+    //     row.push(input.value);
+      
+    // });
+    // console.log('i am values down')
+    // console.log(row)
+    // let terms = JSON.stringify(row)
 ///////////////////////////////حفظ الباقة/////////////////////////
     $.ajax({
             type: 'post',
@@ -78,13 +263,13 @@ function save_packege(){
             data:{
             pck : pck , 
             brandId : brandId, 
-            row : terms ,
+            //row : terms ,
             csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
         } ,
         
             success:function(data){ 
                 window.location = "{% url 'brand_terms' 1234 %}".replace(/1234/, brandId.toString());
-
+                //alert("تم تفعيل الباقة بنجاح")
             },
             done:function(data){
                 console.log('done ->>' + data)
@@ -95,6 +280,10 @@ function save_packege(){
             }
     });
 //////////////////////////////////////////////////////////////////
+    }else{
+        alert(" تم الالغاء")
+    }
+   
 }
 
 // وظيفة لإزالة الصف

@@ -27,6 +27,7 @@ urlpatterns = [
     path('cloudteam/', include('cloudteam.urls')),
     path('clients/', include('clients.urls')),
     path('preset/', include('preset.urls')),
+    path('report/', include('report.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

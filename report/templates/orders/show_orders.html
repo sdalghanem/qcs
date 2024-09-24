@@ -1,0 +1,67 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+<div class="row"></div>
+    <div class="col-4">
+        <a href="#" class="btn btn-sm btn-dark">+ اضافة طلب جديد</a>
+        <a href="#" class="btn btn-sm btn-dark">الطلبات المنتهية</a>
+
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="card">
+    <div class="col-12 card-body">
+        <table class="table table-striped">
+            <tr>
+                <thead class="bg-dark">
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>الفرع</th>
+                        <th>العلامة التجارية</th>
+                        <th>الشركة</th>
+                        <th>المفتش</th>
+                        <th>تاريخ الطلب</th>
+                        <th>حالة الطلب</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HC-22012</td>
+                        <td>192</td>
+                        <td>كنتاكي</td>
+                        <td>الشركة العالمية للأغذية</td>
+                        <td>عمر محمود</td>
+                        <td>12-05-2024</td>
+                        <td>جديد</td> 
+                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
+                    </tr>
+                    <tr>
+                        <td>HC-22012</td>
+                        <td>220</td>
+                        <td>هارديز</td>
+                        <td>الشركة العالمية للأغذية</td>
+                        <td>عمر محمود</td>
+                        <td>03-02-2024</td>
+                        <td>غير مكتمل</td> 
+                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
+                    </tr>
+                    <tr>
+                        <td>HC-22012</td>
+                        <td>336</td>
+                        <td>هارديز</td>
+                        <td>الشركة العالمية للأغذية</td>
+                        <td>عمر محمود</td>
+                        <td>09-08-2024</td>
+                        <td>مكتمل</td> 
+                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
+                    </tr>
+
+                </tbody>
+            </tr>
+        </table>
+    </div>
+
+</div></div>
+{% endblock %}

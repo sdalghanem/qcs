@@ -7,7 +7,7 @@ class ZoneAdmin(admin.ModelAdmin):
     list_filter=('brand_id__description' ,)
 
 class TermAdmin(admin.ModelAdmin):
-    list_display = ('description'  , 'brand_id' )
+    list_display = ('description'  , 'brand_id' , 'cancel' )
     list_filter=('brand_id__description' ,)
 
 class Term_responsibleAdmin(admin.ModelAdmin):

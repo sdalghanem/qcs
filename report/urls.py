@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
 # صفحة عملاء سرا الرئيسية +
-path('add_term/<str:id>' , views.add_term , name='add_term'),
 
-]
+path('show_orders' , views.show_orders , name='show_orders'),
+path('add_newZone/<str:id>' , views.add_newZone , name='add_newZone'),
+path('insert_responsible/<str:brandid>/<str:termid>' , views.insert_responsible , name='insert_responsible'),
+
+] 

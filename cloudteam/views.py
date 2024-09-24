@@ -285,12 +285,15 @@ def edit_secInfo(request , id):
 def brand_terms(request , id):
     #id for brand
     brandName = Brand.objects.get(id = id)
+    zones = Zone.objects.filter(brand_id = id)
     company = Company.objects.get(id = brandName.company_id.id)
     pcks = Packege.objects.all()
+    secs = Section.objects.filter(Brand_id = id)
     print(company.packege)
     if  company.packege :
         #print(packege_terms(company.packege.id))
-        terms = packege_terms(company.packege.id)
+       # terms = packege_terms(company.packege.id)
+       terms = Term.objects.filter(brand_id = id , cancel = 0)
     else:
         terms = ''
         
@@ -299,35 +302,63 @@ def brand_terms(request , id):
         'pcks' : pcks ,
         'brandId': id ,
         'pckName' : company.packege,
-        'terms' : terms
+        'terms' : terms ,
+        'secs' : secs ,
+        'companyId' :company.id ,
+        'zones': zones
     }
     return render(request , 'cloud/brand_terms.html' , data )
 
 #API
 def save_packege(request):
-    terms = json.loads(request.POST['row'])
-   
-    for t in terms :
-        newTerm = Term()
-        newTerm.description = t
-        newTerm.brand_id_id = request.POST['brandId']
-        newTerm.save()
-        #print(t)
+    # اضافه البنود بناء على تفعيل الباقة للشركة
+    # اذا كان البند موجود فقط نقول بتحويل الكنسل الى 0
+    # اذا كان البند غير موجود نقول بحفظه
+    # اذا كان البند الموجود من غير الباقه المفعله نقوم بتحويل الكنسل الى 1
+
     pck = request.POST['pck']
     brandId = request.POST['brandId']
     brand = Brand.objects.get(id = brandId)
     update = Company.objects.get(id = brand.company_id.id)
-    print(brand.company_id.id)
+    
     update.packege_id = pck
     update.save()
+    #print(packege_terms(update.packege.id))
+    # حفظ البنود بناء على الباقة
+    preset = packege_terms(update.packege.id)
+    # تحول جميع البنود الى ملغيه 
+    if Term.objects.filter(brand_id_id = brandId).exists:
+        cancel = Term.objects.filter(brand_id_id = brandId)
+        for c in cancel:
+            c.cancel = 1
+            c.save()
+    for p in preset :
+        for t in p['terms']:
+            new = Term()
+            new.description = t['term']
+            new.brand_id_id =brandId
+            new.cancel = 0
+            new.save()
+            #print(t['term'])
     return JsonResponse( {'data' : 'ok'} , safe=False)
   
 def packege_terms(id):
     #id for pck
-    row = []
+    allterm = []
     title = Term_title.objects.filter(packege_id_id = id)
     for tit in title :
+        row = []
         pres = Preset_terms.objects.filter(term_title_id_id = tit.id)
         for p in pres:
-            row.append(p.description)
-    return row
+            row.append({ 'term' : p.description , 'id': p.id})
+        allterm.append({'title' : tit.section , 'terms': row}) 
+    return allterm
+
+
+
+
+
+#######################################inspectors#########################################
+
+def show_inspectors(requests):
+    return render(requests , 'inspectors/show_inspectors.html')
