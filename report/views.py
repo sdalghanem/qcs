@@ -26,27 +26,39 @@ def add_newZone(request , id):
 
 def insert_responsible(request , brandid , termid):
     #id for term
-    term = Term.objects.get(id = termid)
-    if Term_responsible.objects.filter(term_id = term).exists():
-        print("موجود")
-        update = Term_responsible.objects.get(term_id = term)
-        print(update)
-        update.section_id_id = request.POST['secid']
-        print(update.section_id_id)
-        print(request.POST['secid'])
-        update.save()
-        print("تم الحفظ")
-        return redirect('brand_terms' , id = brandid)
-    else:
-        print("مش موجود")
-        new = Term_responsible()
-        new.term_id_id = termid
-        new.section_id_id = request.POST['secid']
-        new.save()
-        print("حفظ جديد")
-        return redirect('brand_terms' , id = brandid)
+    # term = Term.objects.get(id = termid)
+    new = Term_responsible()
+    new.term_id_id = termid
+    new.section_id_id = request.POST['secid']
+    new.zone_id_id = request.POST['zoneid']
+    new.save()
+    print("حفظ جديد")
+    return redirect('brand_terms' , id = brandid)
     
 
     
+def show_responsible(request,id):
+    #id for term
+    row = []
+    term = Term.objects.get(id = id)
+    print(term.description)
+    respons = Term_responsible.objects.filter(term_id_id = id)
+    for r in respons:
+        row.append({'secName' : r.section_id.description,
+                     'zoneName' : r.zone_id.name,
+                     'resId' : r.id,
+                     })
+    data = {'term_desc' : term.description,
+            'respons' : row ,
+            'brandId' : term.brand_id.id}
+    return render(request , 'orders/show_termsResponsibles.html' , data)
+
+
+def delete_responsible(request , id):
+    #id term responsible
+    term = Term_responsible.objects.get(id = id)
+    term.delete()
+    return redirect('show_responsible' , id = term.term_id.id )
+
 
 

@@ -44,8 +44,9 @@
                         <table class="table table-striped">
                             <tr>
                             <th>بنود تفتيش تقرير الجودة</th>
-                            <th>الإدارات المسؤولة</th>
-                            <th>تحديد المكان</th>
+                            <th>المسؤوليات</th>
+                            <th>التفاصيل</th>
+                            
                         </tr>
                       
                         {% for trm in terms %}
@@ -53,7 +54,7 @@
                         <tr>
                             <td>{{trm.description }}</td>
                             <td> <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#responiple{{trm.id}}"> + </a> </td>
-                            <td>zons <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#zone{{trm.id}}"> + </a></td>
+                            <td> <a href="{% url 'show_responsible' trm.id %}" class="badge badge-primary "> عرض </a></td>
                         </tr>
                         {% endfor %}
                         </table>
@@ -133,6 +134,22 @@
                                                 {% for s in secs %}
                                                 <option value="{{s.id}}">{{s.description}}</option>
                                                 {% endfor %}
+                                            </select>                   
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12  pt-4">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 layout-spacing"   >
+                                            <select class="form-select" aria-label="Default select example" name="zoneid">
+                                                {%if zones %}
+                                                {% for z in zones %}
+                                                <option value="{{z.id}}">{{z.name}}</option>
+                                                {% endfor %}
+                                                {% endif %}
                                             </select>                   
                                         </div>
                                     </div>

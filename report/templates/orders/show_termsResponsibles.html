@@ -1,0 +1,40 @@
+{% extends "theme/index.html" %}
+{% load static %}
+{% block clients_home %}
+<div class="row">
+    <div class="col-12">
+        <a href="{% url 'brand_terms' brandId %}" class="btn btn-sm btn-dark">< الرجوع للبنود</a>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th colspan="3" class="text-center">
+                <h2>{{term_desc}} </h2>
+            </th>
+        </tr>
+        
+    </thead>
+    <tbody>
+        <tr class="text-center">
+            <th>القسم المسؤول</th>
+            <th>المكان </th>
+            <th>حذف</th>
+        </tr>
+        {% for r in respons%}
+        <tr class="text-center">
+            <td>{{r.secName}}</td>
+            <td>{{r.zoneName}}</td>
+            <td> <a href="{% url 'delete_responsible' r.resId%}" class="btn btn-sm btn-danger"> X </a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+
+
+
+
+{% endblock %}
