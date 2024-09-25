@@ -1,9 +1,27 @@
 {% extends "theme/index.html" %}
 {% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
 {% block clients_home %}
 <div class="row">
-    <div class="col-4">
-        <a href="#" class="btn btn-sm btn-dark">+ اضافة مفتش جديد</a>
+    <div class="col-4"> 
+        <!-- <a href="#" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#addNew">+ اضافة مفتش جديد</a> -->
+        <a href="{% url 'new_inspectors_form' %}" class="btn btn-sm btn-dark" >+ اضافة مفتش جديد</a>
+        {{img}}
     </div>
 </div>
 
@@ -14,37 +32,69 @@
             <tr>
                 <thead class="bg-dark">
                     <tr>
-                        <th>المفتش</th>
+                        <th>اسم المستخدم</th>
+                        <th>اسم الموظف</th>
                         <th>التقارير</th>
-                        <th>النظام</th>
+                        <th>اعدادات</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for e in emps %}
                     <tr>
-                        <td>اسعد عمر قلي</td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> اعدادات الحساب</td>
+                        <td>{{e.user}}</td>
+                        <td>{{e.user.first_name}} {{e.user.last_name}}</td>
+                        <td><a href="" class="btn btn-sm btn-dark"> عرض</a></td>
+                        <td><a href="{% url 'edit_Inspectors' e.id %}" class="btn btn-sm btn-primary"> تعديل</td>
                     </tr>
-                    <tr>
-                        <td>محمد مسعود</td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> اعدادات الحساب</td>
-                    </tr>
-                    <tr>
-                        <td>ناصر محمد</td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> اعدادات الحساب</td>
-                    </tr>
-                    <tr>
-                        <td>مصطفى سعد</td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                        <td><a href="#" class="btn btn-sm btn-primary"> اعدادات الحساب</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </tr>
         </table>
     </div>
 
-</div></div>
+    </div>
+</div>
+
+   <!-- Modal -->
+   <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">اضافة مدير علامة تجارية</h5>
+         
+        </div>
+        <div class="modal-body">
+         
+            <form class="section general-info pt-4" method="post" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12  pt-4">
+                            <div class="form-group">
+                                <div class="col-lg-4 layout-spacing"   >
+                                    <select class="form-select" aria-label="Default select example" name="mngr">
+                                        {% for m in mngs %}
+                                        <option value="{{m.id}}">{{m.user}}</option>
+                                        {% endfor %}
+                                    </select>                   
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                    <button  class="btn btn-primary" type="submit" >حفظ</button>
+                </form>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
 {% endblock %}

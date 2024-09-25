@@ -11,7 +11,11 @@ def get_dept_score_by_secID(id):
     return term
 
 def show_orders(request):
-    return render(request , 'orders/show_orders.html')
+    orders = Report_order.objects.all()
+    data = {
+        'orders' : orders
+    }
+    return render(request , 'orders/show_orders.html' , data)
 
 ########zone ####################
 

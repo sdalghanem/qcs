@@ -24,6 +24,8 @@ path('brand_terms/<str:id>' , views.brand_terms , name='brand_terms'),
 path('save_packege/' , views.save_packege , name='save_packege'),  
 
 # cloud team pages .
-path('' , views.show_inspectors , name='show inspectors'),
-
+path('login_admin' , views.login_admin , name='login_admin'), 
+path('show_inspectors' , views.show_inspectors , name='show_inspectors'), 
+path('new_inspectors_form' , views.new_inspectors_form , name='new_inspectors_form'),
+path('edit_Inspectors/<str:id>' , views.edit_Inspectors , name='edit_Inspectors'), 
 ]

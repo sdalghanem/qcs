@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from preset.models import *
 from report.models import *
 import json
+from django.contrib.auth import authenticate , login as auth_login , logout
 
 #عرض الشركات 
 def company_list(request):
@@ -360,5 +361,85 @@ def packege_terms(id):
 
 #######################################inspectors#########################################
 
-def show_inspectors(requests):
-    return render(requests , 'inspectors/show_inspectors.html')
+def show_inspectors(request):
+    emps = Employee.objects.all()
+    data ={
+        'emps': emps,
+        'username':  request.session['username'] ,
+        'img': request.session['img']
+    }
+    return render(request , 'inspectors/show_inspectors.html' , data)
+
+def new_inspectors_form(request):
+    if  request.method =='POST':
+            newUser = User()
+            newUser.username = request.POST['username']
+            newUser.first_name = request.POST['first_name']
+            newUser.last_name = request.POST['last_name']
+            newUser.email = request.POST['email']
+            newUser.set_password(request.POST['password'])
+            newUser.save()
+
+            newEmp = Employee()
+            newEmp.user_id = newUser.id 
+            newEmp.mobile = request.POST['mobile']
+            newEmp.supervisor = 0
+            newEmp.manager = 0
+            #
+            uploaded_file =  request.FILES['profile_img']
+            fs = FileSystemStorage()
+            filename = fs.save(uploaded_file.name , uploaded_file)
+            uploaded_file_url = fs.url(filename)
+            #
+            newEmp.profile_img = uploaded_file_url
+            newEmp.save()
+            data ={
+                'res' : 'تم حفظ الموظف بنجاح'
+            }
+            return render(request , 'inspectors/addNewInspectors.html' , data)
+    return render(request , 'inspectors/addNewInspectors.html')
+
+
+def edit_Inspectors(request , id):
+        #id for employee
+        emp = Employee.objects.get(id = id)
+        user = User.objects.get(id = emp.user.id)
+        data ={
+            'userinfo' :  user ,
+            'empinfo': emp ,
+        }
+        if  request.method =='POST':
+            email = request.POST['email']
+            mobile = request.POST['mobile']
+            psw= request.POST['password']
+            updatEmp = Employee.objects.get(id = id)
+            updateUser = User.objects.get(id = updatEmp.user.id)
+            updatEmp.mobile = mobile
+            updateUser.email = email
+            updateUser.set_password(psw)
+            updateUser.save()
+            updatEmp.save()
+            return redirect('/cloudteam/show_inspectors')
+        return render(request , 'inspectors/editInspectors.html' , data)
+
+def login_admin(request):
+    if  request.method =='POST':
+                mngUsername = request.POST['username']
+                mngPassword = request.POST['password']
+                result = authenticate(username = mngUsername , password = mngPassword)
+                print(result)
+                if result is not None:
+                    auth_login(request, result) 
+                    userInfo = User.objects.get(username = mngUsername)
+                    emp = Employee.objects.get(user_id = userInfo.id)
+                    # save data on session
+                    request.session['id'] = userInfo.id
+                    request.session['firestName'] = userInfo.first_name
+                    request.session['lastName'] = userInfo.last_name   
+                    request.session['username'] = userInfo.username
+                    request.session['img'] = str(emp.profile_img)
+                    return redirect('/cloudteam/show_inspectors')
+                else :
+                     return render(request , 'inspectors/login.html' , {'res' : 'كلمة المرور او اسم المستخدم غير صحيح'})
+                     
+    return render(request , 'inspectors/login.html')

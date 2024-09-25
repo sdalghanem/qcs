@@ -27,39 +27,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for o in orders %}
                     <tr>
-                        <td>HC-22012</td>
-                        <td>192</td>
-                        <td>كنتاكي</td>
-                        <td>الشركة العالمية للأغذية</td>
-                        <td>عمر محمود</td>
-                        <td>12-05-2024</td>
+                        <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
+                        <td>{{o.bransh_id.description}}</td>
+                        <td>{{o.bransh_id.brand_id.description}}</td>
+                        <td>{{o.bransh_id.brand_id.company_id.description}}</td>
+                        <td>{{o.employee_id}}</td>
+                        <td>{{o.registerDate}}</td>
                         <td>جديد</td> 
                         <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
                     </tr>
-                    <tr>
-                        <td>HC-22012</td>
-                        <td>220</td>
-                        <td>هارديز</td>
-                        <td>الشركة العالمية للأغذية</td>
-                        <td>عمر محمود</td>
-                        <td>03-02-2024</td>
-                        <td>غير مكتمل</td> 
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                    </tr>
-                    <tr>
-                        <td>HC-22012</td>
-                        <td>336</td>
-                        <td>هارديز</td>
-                        <td>الشركة العالمية للأغذية</td>
-                        <td>عمر محمود</td>
-                        <td>09-08-2024</td>
-                        <td>مكتمل</td> 
-                        <td><a href="#" class="btn btn-sm btn-primary"> عرض</a></td>
-                    </tr>
-
-                </tbody>
-            </tr>
+                    {% endfor %}
+                 
         </table>
     </div>
 
