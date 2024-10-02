@@ -1,0 +1,145 @@
+{% extends "theme/index.html" %}
+{% load static %}
+
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+{% block clients_home %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <a href="{% url 'show_orders' %}" class="btn btn-sm btn-dark"> < العودة إلى قائمة الطلبات</a>
+    </div>
+</div>
+<div class="row">
+   
+        <div class="card">
+            <div class="card-header">
+                <b>انشاء طلب تقرير جديد</b>
+            </div>
+            <div class="card-body">
+
+                <form class="form" action="#" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>الشركة</label>
+                        <select class="form-control" name="company" id="company">
+                            <option>اختر</option>
+                            {% for c in comppanies %}
+                                <option value="{{c.id}}">{{c.description}}</option>
+                            {% endfor %}
+                        </select>
+                    
+
+                    <div class="form-group mt-2">
+                        <select class="form-control" id="brand" style="display: none;">
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <select class="form-control" name="branch" id="branch" style="display: none;">
+
+                        </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>المفتش</label>
+                    <select name="employee" class="form-control">
+                        {% for e in emps%}
+                        <option value="{{e.id}}">{{e.user}}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-dark">  انشاء طلب </button>       
+              </div>
+
+                </form>
+            </div>
+        </div>
+   
+</div>
+
+<script>
+    let company = document.getElementById("company")
+    let brand = document.getElementById("brand")
+    let branch = document.getElementById("branch")
+    company.addEventListener('change', function() {
+        // alert(company.value)
+          brand.style.display = 'inline'; // Show the city dropdown
+          brand.innerHTML = " ";
+            $.ajax({
+            type: 'post',
+            url:'/report/get_brand',
+            async: true,
+            data:{
+            company_id   : company.value,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+             data.forEach((element) => {
+                console.log(element)
+                
+                 brand.innerHTML += `
+                 <option value="${element.id}">${element.name}</option>
+                 `;
+             });
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+    });
+    ///////////////////////////////////////////////////////////////
+    brand.addEventListener('change', function() {
+        // alert(company.value)
+        branch.style.display = 'inline'; // Show the city dropdown
+        branch.innerHTML = " ";
+            $.ajax({
+            type: 'post',
+            url:'/report/get_branch',
+            async: true,
+            data:{
+            brand_id   : brand.value,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+             data.forEach((element) => {
+                console.log(element)
+                
+                branch.innerHTML += `
+                 <option value="${element.id}">${element.name}</option>
+                 `;
+             });
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+    });
+
+</script>
+{% endblock %}

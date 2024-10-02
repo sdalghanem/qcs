@@ -37,13 +37,13 @@ class Report_order(models.Model):
     bransh_id = models.ForeignKey( Branch , on_delete=models.CASCADE , verbose_name =' الفرغ')
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE , verbose_name ='  المفتش')
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
-    status = models.CharField(max_length=100 , verbose_name ='الحالة')
+    status = models.CharField(max_length=100 , verbose_name ='الحالة', null=True , default= '0')
     class Meta:
         verbose_name_plural = 'طلب تقرير'
     def __str__(self):
         return self.bransh_id.description
 
-
+# تغيير السنه و الربع من جدول الدرجات الى جدول الطلبات للسهولة
 
 # تقييم البنود
 class Term_score(models.Model):

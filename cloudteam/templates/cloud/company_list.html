@@ -1,5 +1,23 @@
 {% extends "theme/index.html" %}
 {% load static %}
+
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+
 {% block clients_home %}
 
 <div class="col-lg-12 ">

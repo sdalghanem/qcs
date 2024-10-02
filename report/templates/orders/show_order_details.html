@@ -30,7 +30,6 @@
     <div class="card">
     <div class="col-12 card-body">
         <table class="table table-striped">
-            <tr>
                 <thead class="bg-dark">
                     <tr>
                         <th>رقم الطلب</th>
@@ -38,26 +37,49 @@
                         <th>العلامة التجارية</th>
                         <th>الشركة</th>
                         <th>المفتش</th>
-                        <th>تاريخ الطلب</th>
-                        <th>حالة الطلب</th>
-                        <th></th>
+                        <th>تاريخ</th>
+                        <th>الربع</th>
+                        <th>السنه</th>
+                        <th>الدرجة النهائية</th>
+
+
                     </tr>
                 </thead>
                 <tbody>
-                    {% for o in orders %}
                     <tr>
-                        <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
-                        <td>{{o.bransh_id.description}}</td>
-                        <td>{{o.bransh_id.brand_id.description}}</td>
-                        <td>{{o.bransh_id.brand_id.company_id.description}}</td>
-                        <td>{{o.employee_id}}</td>
-                        <td>{{o.registerDate}}</td>
-                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %}{% if o.status == '2' %} مكتمل{% endif %}</td> 
-                        <td><a href="{% url 'show_order_details' o.id %}" class="btn btn-sm btn-primary"> عرض</a></td>
+                        <td>HC-111</td>
+                        <td>991</td>
+                        <td>ماكدونلدز</td>
+                        <td>شركة الاغذية العالمية</td>
+                        <td>أحمد</td>
+                        <td>22/22/2024</td>
+                        <td>2024</td>
+                        <td>Q1</td>
+                        <td>98%</td>
+
                     </tr>
-                    {% endfor %}
-                 
+                </tbody>
         </table>
+        <table class="table table-striped">
+            <thead class="bg-dark">
+                <tr>
+                    <th>البند</th>
+                    <th>التقييم</th>
+                    <th>الملاحظات</th>
+                    <th>المرفقات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in terms %}
+                <tr>
+                    <td>{{t.term_id.description}}</td>
+                    <td>{{t.score}}</td>
+                    <td>{{t.note}}</td>
+                    <td><a href="#" class="btn btn-sm btn-dark">{{t.img}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
     </div>
 
 </div></div>

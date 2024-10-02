@@ -1,281 +1,52 @@
 {% extends "theme/index.html" %}
 {% load static %}
+
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
 {% block clients_home %}
 
- <div class="account-content">
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <h2>ملف شركة</h2>
-
-            <ul class="nav nav-pills" id="animateLine" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="animated-underline-home-tab" data-bs-toggle="tab" href="#animated-underline-home" role="tab" aria-controls="animated-underline-home" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> الشركة</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="animated-underline-profile-tab" data-bs-toggle="tab" href="#animated-underline-profile" role="tab" aria-controls="animated-underline-profile" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> العلامات التجارية</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="animated-underline-preferences-tab" data-bs-toggle="tab" href="#animated-underline-preferences" role="tab" aria-controls="animated-underline-preferences" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> الادارات</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="animated-underline-contact-tab" data-bs-toggle="tab" href="#animated-underline-contact" role="tab" aria-controls="animated-underline-contact" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> الفروع</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="animated-underline-preferences-tab" data-bs-toggle="tab" href="#animated-underline-preferences" role="tab" aria-controls="animated-underline-preferences" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> الموظفين</button>
-                </li>
-            </ul>
-        </div>
+ <div class="card">
+    
+        <div class="card-header">
+            <h4>إضافة شركة جديدة</h4>
+       
     </div>
 
-    <div class="tab-content" id="animateLineContent-4">
-        <div class="tab-pane fade show active" id="animated-underline-home" role="tabpanel" aria-labelledby="animated-underline-home-tab">
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
-                    <form class="section general-info" method="post" action="{% url 'add_new_company' %}" enctype="multipart/form-data">
-                        <div class="info">
-                            <div class="row">
-                                <div class="col-lg-11 mx-auto">
-                                    {{res}}
-                                    <div class="row">
-                                        <div class="col-xl-2 col-lg-12 col-md-4">
-                                            <div class="profile-image  mt-4 pe-md-4">
 
-                                                <!-- // The classic file input element we'll enhance
-                                                // to a file pond, we moved the configuration
-                                                // properties to JavaScript -->
-                                                {% csrf_token %}
-                                                <div class="img-uploader-content">
-                                                    <input type="file"
-                                                        name="companyLogo">
-                                                </div>
-                            
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
-                                            <div class="form">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="fullName">اسم الشركة</label>
-                                                            <input name="companyName" type="text" class="form-control mb-3" id="fullName" placeholder="Full Name" value="">
-                                                        </div>
-                                                    </div>
-
-                                                    
-
-                                                    <div class="col-md-12 mt-1">
-                                                        <div class="form-group text-end">
-                                                            <button type="submit" class="btn btn-secondary">Save</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+    <div class="card-body">
+                <!-- // The classic file input element we'll enhance
+                // to a file pond, we moved the configuration
+                // properties to JavaScript -->
+            <form class="section general-info" method="post" action="{% url 'add_new_company' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="img-uploader-content mb-4">
+                    <input type="file" name="companyLogo" required>
                 </div>
-
-              
-            </div>
-        </div>
-        <div class="tab-pane fade" id="animated-underline-profile" role="tabpanel" aria-labelledby="animated-underline-profile-tab">
-            <div class="row">
-              العلامات التجارية
-                
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="animated-underline-preferences" role="tabpanel" aria-labelledby="animated-underline-preferences-tab">
-            <div class="row">
-                <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Choose Theme</h6>
-                            <div class="d-sm-flex justify-content-around">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                      <img class="ms-3" width="100" height="68" alt="settings-dark" src="../src/assets/img/settings-light.svg">
-                                    </label>
-                                </div>
-                                
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        <img class="ms-3" width="100" height="68" alt="settings-light" src="../src/assets/img/settings-dark.svg">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="fullName">اسم الشركة</label>
+                    <input name="companyName" type="text" class="form-control mb-3"  placeholder="اسم الشركة" required>
                 </div>
-
-                <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Activity data</h6>
-                            <p>Download your Summary, Task and Payment History Data</p>
-                            <div class="form-group mt-4">
-                                <button class="btn btn-primary">Download Data</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-group ">
+                    <button type="submit" class="btn btn-dark">حفظ</button>
                 </div>
-                
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Public Profile</h6>
-                            <p>Your <span class="text-success">Profile</span> will be visible to anyone on the network.</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="publicProfile" checked>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Show my email</h6>
-                            <p>Your <span class="text-success">Email</span> will be visible to anyone on the network.</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="showMyEmail">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Enable keyboard shortcuts</h6>
-                            <p>When enabled, press <code class="text-success">ctrl</code> for help</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="EnableKeyboardShortcut">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Hide left navigation</h6>
-                            <p>Sidebar will be <span class="text-success">hidden</span> by default</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="hideLeftNavigation">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Advertisements</h6>
-                            <p>Display <span class="text-success">Ads</span> on your dashboard</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="advertisements">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Social Profile</h6>
-                            <p>Enable your <span class="text-success">social</span> profiles on this network</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="socialprofile" checked>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>                                    
-            </div>
-        </div>
-        <div class="tab-pane fade" id="animated-underline-contact" role="tabpanel" aria-labelledby="animated-underline-contact-tab">
-            <div class="alert alert-arrow-right alert-icon-right alert-light-warning alert-dismissible fade show mb-4" role="alert">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
-                <strong>Warning!</strong> Please proceed with caution. For any assistance - <a href="javascript:void(0);">Contact Us</a>
-            </div>
-            
-            <div class="row">
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Purge Cache</h6>
-                            <p>Remove the active resource from the cache without waiting for the predetermined cache expiry time.</p>
-                            <div class="form-group mt-4">
-                                <button class="btn btn-secondary btn-clear-purge">Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Deactivate Account</h6>
-                            <p>You will not be able to receive messages, notifications for up to 24 hours.</p>
-                            <div class="form-group mt-4">
-                                <div class="switch form-switch-custom switch-inline form-switch-success mt-1">
-                                    <input class="switch-input" type="checkbox" role="switch" id="socialformprofile-custom-switch-success">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                    <div class="section general-info">
-                        <div class="info">
-                            <h6 class="">Delete Account</h6>
-                            <p>Once you delete the account, there is no going back. Please be certain.</p>
-                            <div class="form-group mt-4">
-                                <button class="btn btn-danger btn-delete-account">Delete my account</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                
-            </div>
-        </div>
-    </div>
+            </form>
+    </div><!--end card body -->
+</div><!--end card  -->
     
 </div>
-
-
-<!--  BEGIN CUSTOM SCRIPTS FILE  -->
-<script src="../src/plugins/src/filepond/filepond.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginFileValidateType.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginImageExifOrientation.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginImagePreview.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginImageCrop.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginImageResize.min.js"></script>
-<script src="../src/plugins/src/filepond/FilePondPluginImageTransform.min.js"></script>
-<script src="../src/plugins/src/filepond/filepondPluginFileValidateSize.min.js"></script>
-<script src="../src/plugins/src/notification/snackbar/snackbar.min.js"></script>
-<script src="../src/plugins/src/sweetalerts2/sweetalerts2.min.js"></script>
-<script src="../src/assets/js/users/account-settings.js"></script>
-<!--  END CUSTOM SCRIPTS FILE  -->
+</div>
 {% endblock %}
