@@ -1,0 +1,60 @@
+{% extends "inspectors/employee/index.html" %}
+{% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+{% block clients_home %}
+
+
+    <div class="container my-4">    
+        <!-- Buttons -->
+        <!-- <div class="d-flex justify-content-center my-3">
+            <button class="btn btn-primary mx-2" onclick="showOrders('new')">الطلبات الجديدة</button>
+            <button class="btn btn-warning mx-2" onclick="showOrders('incomplete')">الطلبات الغير مكتملة</button>
+            <button class="btn btn-success mx-2" onclick="showOrders('completed')">الطلبات المكتملة</button>
+        </div> -->
+        <!-- Table -->
+        <table class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th>رقم الطلب</th>
+                    <th>حالة الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>التقييم</th>
+                    <th>تعديل</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+                <!-- Orders will be dynamically loaded here -->
+                 {% for o in orders %}
+                    <tr>
+                        <td>HC-AH-{{o.id}}</td>
+                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %} {% if o.status == '2' %} مكتمل{% endif %}</td>
+                        <td>{{o.registerDate}}</td>
+                        <td><a class="btn btn-sm btn-dark" href="{% url 'evaluate' o.id %}" >بدأ</a></td>
+                        <td><a class="btn btn-sm btn-dark">تعديل</a></td>
+                    </tr>
+                 {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+{% endblock %}

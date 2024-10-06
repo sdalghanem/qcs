@@ -1,0 +1,56 @@
+{% extends "inspectors/employee/index.html" %}
+{% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+{% block clients_home %}
+
+
+    <div class="container my-4">    
+        <!-- Buttons -->
+        <!-- <div class="d-flex justify-content-center my-3">
+            <button class="btn btn-primary mx-2" onclick="showOrders('new')">الطلبات الجديدة</button>
+            <button class="btn btn-warning mx-2" onclick="showOrders('incomplete')">الطلبات الغير مكتملة</button>
+            <button class="btn btn-success mx-2" onclick="showOrders('completed')">الطلبات المكتملة</button>
+        </div> -->
+        <!-- Table -->
+        <table class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th>المكان</th>
+                    <th>الحالة</th>
+                    <th>التقييم</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+                <!-- Orders will be dynamically loaded here -->
+                 {% for z in zones %}
+                    <tr>
+                        <td>{{z.name}}</td>
+                        <td></td>
+                        <td><a class="btn btn-sm btn-dark" href="#" >بدأ</a></td>
+                    </tr>
+                 {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views , company_view
+from . import views , company_view , inspector_view
 
 urlpatterns = [
 # بروفايل الشركة
@@ -33,4 +33,10 @@ path('logout_view' , views.logout_view , name='logout_view'),
 path('show_inspectors' , views.show_inspectors , name='show_inspectors'), 
 path('new_inspectors_form' , views.new_inspectors_form , name='new_inspectors_form'),
 path('edit_Inspectors/<str:id>' , views.edit_Inspectors , name='edit_Inspectors'), 
+#####################################################################
+############## الموظفين ##########################################
+##################################################################
+path('login_insp' , inspector_view.login_insp , name='login_insp'), 
+path('emp_orders' , inspector_view.emp_orders , name='emp_orders'),  
+path('evaluate/<str:id>' , inspector_view.evaluate , name='evaluate'),
 ] 
