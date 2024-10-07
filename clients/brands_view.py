@@ -117,7 +117,7 @@ def districts_rate(request , id , brand_id):
     perlist=[]
     disrow=[]
     districts = District.objects.filter(city_id = id)
-   
+    sorted_data = ''
     for d in districts:
         final_score = branchs_dist_resault(d.id , brand_id)
         print(len(final_score))

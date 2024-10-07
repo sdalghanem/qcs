@@ -38,10 +38,13 @@
         <tr>
             <td>{{ r.term }}</td>
             <td>
+                {% if r.status == ' '%}
                 <a href="#" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#evaluationModal{{ r.term_id }}" onclick="openEvaluationModal()">قيم</a>
+                {% else %}
+                {% endif %}
             </td>
-            <td id="result-{{ r.term }}">
-                <i class="result-icon"></i>
+            <td>
+                {{r.status}}
             </td>
         </tr>
         {% endfor %}

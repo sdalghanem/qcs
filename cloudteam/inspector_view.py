@@ -77,8 +77,12 @@ def get_evaluation_points(request, zone_id , orID):
     print(terms)
     row = []
     for t in terms :
-        row.append({'term' : t.term_id.description ,'term_id': t.term_id.id})
+        if Term_score.objects.filter(term_id = t.term_id.id).exists():
+          row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : 'تم التقييم'})
+        else:
+            row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : ' '})
     print(row)
+    
     data = {
     'username':  request.session['username'] ,
     'img': request.session['img'] ,
@@ -87,17 +91,23 @@ def get_evaluation_points(request, zone_id , orID):
       }
 
     if  request.method =='POST':
-          termid = request.POST['termid']
-          eva = request.POST['evaluation']
-          img = request.POST['img']
-          note = request.POST['note']
-          print(eva)
-          new = Term_score()
-          new.report_order_id = orID
-          new.term_id = termid
-          new.score = eva
-          new.img = img
-          return render (request , 'inspectors/employee/evaluate_terms.html' , data)
+            termid = request.POST['termid']
+            eva = request.POST['evaluation']
+            uploaded_file = request.FILES['img']
+            fs = FileSystemStorage()
+            filename = fs.save(uploaded_file.name , uploaded_file)
+            uploaded_file_url = fs.url(filename)
+            note = request.POST['note']
+
+            print(eva)
+            new = Term_score()
+            new.report_order_id_id = orID
+            new.term_id_id = termid
+            new.score = eva
+            new.img = uploaded_file_url
+            new.note = note
+            new.save()
+            return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
     else:
        
         return render (request , 'inspectors/employee/evaluate_terms.html' , data)

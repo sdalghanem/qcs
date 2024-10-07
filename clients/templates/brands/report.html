@@ -59,7 +59,10 @@
                             <td>{{r.description}}  </td>
                             <td> <button class='btn badge {{r.class}} '>{{r.score}} </button></td>
                             <td> {{r.note}} </td>
-                            <td> <button class='btn badge {{r.class}}' data-bs-toggle='modal' data-bs-target='#imgsliderModal'  onclick="view_term_img2('{{r.img}}')"> عرض</button> </td>
+                            <td> {% if  r.img %}
+                                <button class='btn badge {{r.class}}' data-bs-toggle='modal' data-bs-target='#imgsliderModal'  onclick="view_term_img2('{{r.img}}')"> عرض</button>
+                                {% endif %}
+                            </td>
                             <td> <button class='btn badge {{r.class}}' data-bs-toggle="modal" data-bs-target="#sliderModal"  onclick="get_responisbles({{r.id}})"> المسؤولين</button> </td>
                         </tr>
                         {% endfor  %}

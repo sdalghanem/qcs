@@ -145,7 +145,7 @@ function view_term_img2(x){
     img_model2 = document.getElementById("img_model2")
     console.log(x)
     img_model2.innerHTML = ` `;
-    img_model2.innerHTML += `<img class="d-block w-100" src="../../media/${x}" alt="Third slide"></img> `;
+    img_model2.innerHTML += `<img class="d-block w-100" src="../../../${x}" alt="Third slide"></img> `;
     
     
 }

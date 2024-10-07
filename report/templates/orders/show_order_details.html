@@ -75,7 +75,10 @@
                     <td>{{t.term_id.description}}</td>
                     <td>{{t.score}}</td>
                     <td>{{t.note}}</td>
-                    <td><a href="#" class="btn btn-sm btn-dark">{{t.img}}</a></td>
+                    <td> {% if t.img %}
+                        <a href="../../../{{t.img}}" class="btn btn-sm btn-dark">عرض</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
