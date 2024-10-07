@@ -55,9 +55,64 @@ def evaluate(request , id):
       order = Report_order.objects.get(id = id)
       brandid = order.bransh_id.brand_id
       zones = Zone.objects.filter(brand_id = brandid)
+      orNum = order.id 
+      orBrn = order.bransh_id.description
+      orDate = order.registerDate
       data ={
         'username':  request.session['username'] ,
         'img': request.session['img'] ,
-        'zones': zones
+        'zones': zones ,
+        'orNum': orNum,
+        'orBrn': orBrn,
+        'orDate' : orDate,
+        
       }
       return render(request , 'inspectors/employee/evaluate.html' , data) 
+
+def get_evaluation_points(request, zone_id , orID):
+    # افترض أن البنود الخاصة بكل منطقة مخزنة في قاعدة البيانات
+    # جلب البيانات بناءً على معرف المكان (zone_id)
+    terms = Term_responsible.objects.filter(zone_id = zone_id)
+    zoneName = Zone.objects.get(id = zone_id).name
+    print(terms)
+    row = []
+    for t in terms :
+        row.append({'term' : t.term_id.description ,'term_id': t.term_id.id})
+    print(row)
+    data = {
+    'username':  request.session['username'] ,
+    'img': request.session['img'] ,
+    'row' : row,
+    'zoneName': zoneName,
+      }
+
+    if  request.method =='POST':
+          termid = request.POST['termid']
+          eva = request.POST['evaluation']
+          img = request.POST['img']
+          note = request.POST['note']
+          print(eva)
+          new = Term_score()
+          new.report_order_id = orID
+          new.term_id = termid
+          new.score = eva
+          new.img = img
+          return render (request , 'inspectors/employee/evaluate_terms.html' , data)
+    else:
+       
+        return render (request , 'inspectors/employee/evaluate_terms.html' , data)
+        # هنا يمكنك إرجاع البيانات الحقيقية بناءً على معرف المكان
+        # return JsonResponse({"points": row} , safe=False )
+
+
+def save_evaluation(request):
+     termid = request.POST['termid']
+     eva = request.POST['evaluation']
+     img = request.POST['img']
+     note = request.POST['note']
+     print(eva)
+     #return JsonResponse({"res": 'ok'} , safe=False )
+     data = {
+        'username':  request.session['username'] ,
+        'img': request.session['img'] ,}
+     return render (request , 'inspectors/employee/evaluate_terms.html' , data)

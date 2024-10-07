@@ -39,4 +39,7 @@ path('edit_Inspectors/<str:id>' , views.edit_Inspectors , name='edit_Inspectors'
 path('login_insp' , inspector_view.login_insp , name='login_insp'), 
 path('emp_orders' , inspector_view.emp_orders , name='emp_orders'),  
 path('evaluate/<str:id>' , inspector_view.evaluate , name='evaluate'),
+ path('get_evaluation_points/<int:zone_id>/<int:orID>', inspector_view.get_evaluation_points, name='get_evaluation_points'), 
+ path('save_evaluation' , inspector_view.save_evaluation , name='save_evaluation'),  
+
 ] 
