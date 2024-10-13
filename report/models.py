@@ -64,6 +64,20 @@ class Term_score(models.Model):
 class Score_history(models.Model):
     report_order_id = models.ForeignKey( Report_order , on_delete=models.CASCADE , verbose_name =' طلب التقرير')
     total_score = models.CharField(max_length=100 , verbose_name ='الدرجة النهائية')
+    quarter = models.CharField(max_length=100 , verbose_name ='الربع' , null= True)
+    year = models.CharField(max_length=100 , verbose_name ='السنه' , null= True)
+    registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
+    class Meta:
+        verbose_name_plural = 'النتايج النهائية'
+    def __str__(self):
+        return self.report_order_id.bransh_id.description
+
+class Score_history_department(models.Model):
+    report_order_id = models.ForeignKey( Report_order , on_delete=models.CASCADE , verbose_name =' طلب التقرير')
+    section_id = models.ForeignKey(Section, on_delete=models.CASCADE , verbose_name ='  القسم ' , null=True )
+    total_score = models.CharField(max_length=100 , verbose_name ='الدرجة النهائية')
+    quarter = models.CharField(max_length=100 , verbose_name ='الربع' , null= True)
+    year = models.CharField(max_length=100 , verbose_name ='السنه' , null= True)
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
     class Meta:
         verbose_name_plural = 'النتايج النهائية'

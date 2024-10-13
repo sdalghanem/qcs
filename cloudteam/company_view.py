@@ -8,6 +8,7 @@ from preset.models import *
 from report.models import *
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
+from datetime import date
 
 #عرض الشركات 
 def company_list(request):
@@ -149,6 +150,95 @@ def add_new_brand(request , id):
     else:# if not auth
             return render(request , 'inspectors/login.html')
 
+def regions_city_managers(request , id):
+    # id for brand
+    # حفظ مدير جديد
+    if request.method =='POST':
+        print(Brand_regionManager.objects.filter(region_id_id = request.POST['region']  , Brand_id_id = id ).exists())
+        if Brand_regionManager.objects.filter(region_id_id = request.POST['region'] , Brand_id_id = id).exists():
+            return redirect('regions_city_managers', id = id  )
+        else:
+            new = Brand_regionManager()
+            new.manager_id_id = request.POST['mngr']
+            new.Brand_id_id = request.POST['brandID']
+            new.region_id_id = request.POST['region']
+            new.registerDate = date.today() 
+            new.save()
+            return redirect('regions_city_managers', id = id)
+    else:
+        # عرض صفحة ادارة المناطق للعلامة التجارية
+
+        regMngs = ''
+        brand = Brand.objects.get(id= id)
+        if Brand_regionManager.objects.filter(Brand_id_id = id).exists:
+            regMngs = Brand_regionManager.objects.filter(Brand_id_id = id)
+        regions = Region.objects.all()
+        mngrs = Managers.objects.filter(company_id_id = brand.company_id.id)
+        data ={
+            'username':  request.session['username'] ,
+            'img': request.session['img'] ,
+            'companyID' : brand.company_id.id ,
+            'brandName': brand.description ,
+            'regMngs' : regMngs ,
+            'regions' : regions,
+            'mngrs': mngrs,
+            'brandID': id ,
+        }
+        return render(request , 'cloud/region_city_mng.html' , data)
+
+def deleteRegionMngr(request , id):
+    # id for brand region manager
+    brandID = Brand_regionManager.objects.get(id = id).Brand_id.id
+    Brand_regionManager.objects.get(id = id).delete()
+    request.session['alert'] = 'تم الحذف'
+    return redirect('regions_city_managers' , id = brandID )
+
+
+def cities_managers(request , regionID , brandID):
+    # حفظ مدير جديد
+    if request.method =='POST':
+        if Brand_cityManager.objects.filter(city_id_id = request.POST['city'] , Brand_id_id = request.POST['brandID']).exists():
+            return redirect('cities_managers', regionID = regionID ,brandID = brandID )
+        else:
+            new = Brand_cityManager()
+            new.manager_id_id = request.POST['mngr']
+            new.Brand_id_id = request.POST['brandID']
+            new.city_id_id = request.POST['city']
+            new.registerDate = date.today() 
+            new.save()
+            return redirect('cities_managers', regionID = regionID ,brandID = brandID )
+    # عرض صفحة ادارة المناطق للعلامة التجارية
+    cityMngs = []
+    brand = Brand.objects.get(id = brandID)
+    city = City.objects.filter(region_id = regionID)
+    for c in city :
+        # if Brand_cityManager.objects.filter(Brand_id_id = brandID , city_id_id = c.id).exists.first():
+        #     Mngs = Brand_cityManager.objects.get(Brand_id_id = brandID , city_id_id = c.id)
+        #     cityMngs.append(Mngs)
+        city_manager = Brand_cityManager.objects.filter(Brand_id_id=brandID, city_id_id=c.id).first()
+        if city_manager:
+            cityMngs.append(city_manager)
+    cities = City.objects.filter( region_id = regionID)
+
+    mngrs = Managers.objects.filter(company_id_id = brand.company_id.id)
+    data ={
+        'username':  request.session['username'] ,
+        'img': request.session['img'] ,
+        'companyID' : brand.company_id.id ,
+        'brandName': brand.description ,
+        'cityMngs' : cityMngs ,
+        'cities' : cities,
+        'mngrs': mngrs,
+        'brandID': brandID ,
+        'regionID': regionID,
+    }
+    return render(request , 'cloud/cities_mng.html' , data)
+
+def deletecityMngr(request , id , regionID):
+    # id for brand region manager
+    brandID = Brand_cityManager.objects.get(id = id).Brand_id.id
+    Brand_cityManager.objects.get(id = id).delete()
+    return redirect('cities_managers' , brandID = brandID , regionID = regionID) 
 
 def add_new_branch(request , id):
      if request.user.is_authenticated:

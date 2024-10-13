@@ -31,6 +31,8 @@ def new_order(request):
             new.bransh_id_id = request.POST['branch']
             new.employee_id_id = request.POST['employee']
             new.registerDate = date.today()
+            new.year = request.POST['year']
+            new.quarter = request.POST['quarter']
             new.save()
             return redirect('show_orders')
         comppanies = Company.objects.all()
@@ -120,9 +122,17 @@ def delete_responsible(request , id):
 def show_order_details(request , id):
     # order id
     terms = Term_score.objects.filter(report_order_id = id)
+    orid = ''
+    for t in terms:
+        orid = t.report_order_id.id
+    orinfo = Report_order.objects.filter(id = orid)
+    if Score_history.objects.filter(report_order_id_id = orid).exists:
+        fainl_res = Score_history.objects.get(report_order_id_id = orid).total_score
     data = {
-         'username':  request.session['username'] ,
+        'username':  request.session['username'] ,
         'img': request.session['img'] ,
-        'terms':terms
+        'terms':terms ,
+        'orinfo': orinfo ,
+        'fainl_res': fainl_res
     }
     return render(request , 'orders/show_order_details.html' ,data)

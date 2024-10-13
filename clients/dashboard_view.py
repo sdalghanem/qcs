@@ -19,6 +19,7 @@ def gm_dashboard(request):
             row = {
                 'brandName' : brandName ,
                 'brandid' : brandid,
+                
             }
             brandsList.append(row)
         #print('تشغيييييل')
@@ -29,6 +30,7 @@ def gm_dashboard(request):
             'mngPostion' : 'مدير عام' ,
            # 'companyName' : request.session['companyName'],
             'companyLogo': request.session['companylogo'],
+            'brands' : brands,
 
         }
         return render(request , 'dashboards/dashboard.html' , data)

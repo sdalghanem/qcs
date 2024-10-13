@@ -2,13 +2,13 @@ from django.shortcuts import redirect, render
 from clients.models import * 
 # اضافه بروفايل شركة
 # اضافة براند
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse , HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from preset.models import *
 from report.models import *
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
-
+from datetime import date
 
 def login_insp(request):
 
@@ -88,17 +88,21 @@ def get_evaluation_points(request, zone_id , orID):
     'img': request.session['img'] ,
     'row' : row,
     'zoneName': zoneName,
+    'orID' : orID
       }
 
     if  request.method =='POST':
+        if  'img0' in request.FILES:
+            uploaded_file = request.FILES['img0']
+            fs = FileSystemStorage()
+            filename = fs.save(uploaded_file.name, uploaded_file)
+            uploaded_file_url = fs.url(filename)
+        else:
+            uploaded_file_url = ''  # إذا لم يكن هناك ملف مرفوع، يكون الرابط فارغًا
+   
             termid = request.POST['termid']
             eva = request.POST['evaluation']
-            uploaded_file = request.FILES['img']
-            fs = FileSystemStorage()
-            filename = fs.save(uploaded_file.name , uploaded_file)
-            uploaded_file_url = fs.url(filename)
             note = request.POST['note']
-
             print(eva)
             new = Term_score()
             new.report_order_id_id = orID
@@ -106,8 +110,10 @@ def get_evaluation_points(request, zone_id , orID):
             new.score = eva
             new.img = uploaded_file_url
             new.note = note
+            new.registerDate = date.today()
             new.save()
-            return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
+            # return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
+            return HttpResponseRedirect(request.get_full_path())
     else:
        
         return render (request , 'inspectors/employee/evaluate_terms.html' , data)

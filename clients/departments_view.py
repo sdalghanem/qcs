@@ -112,7 +112,7 @@ def terms_rate(request , id):
     return render(request , 'departments/termsRate.html' , data) 
 
 def get_result(term_id):
-    term_score = Term_score.objects.filter(term_id = term_id , quarter = 1 , year = 2024)
+    term_score = Term_score.objects.filter(term_id = term_id )
     scoreList = []
     yes = []
     no = []
@@ -165,7 +165,7 @@ def get_score(list):
    
     # تستقبل لسته التيرم الخاصه بالاداره
     for l in list:
-        tscores = Term_score.objects.filter(quarter = 1 , year = 2024 , term_id = l['termid'])
+        tscores = Term_score.objects.filter( term_id = l['termid'])
         for t in tscores:
             score = {
                 'score' : t.score ,

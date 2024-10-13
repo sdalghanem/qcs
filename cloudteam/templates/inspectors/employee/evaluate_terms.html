@@ -19,7 +19,7 @@
 {% block clients_home %}
 <div class="row"></div>
 <div class="col-12 mb-2">
-    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-sm btn-dark"> <  الرجوع لأماكن التقتيش  </a>
+    <a href="{% url 'evaluate' orID %}" class="btn btn-sm btn-dark"> <  الرجوع لأماكن التقتيش  </a>
 </div>
 
 <table class="table table-striped">
@@ -74,7 +74,7 @@
                     </div>
                     <div id="imageUploadSection{{ r.term_id }}" class="mb-3" style="display: none;">
                         <label for="imageUpload" class="form-label">رفع صورة</label>
-                        <input class="form-control" type="file" name="img" id="imageUpload{{ r.term_id }}" accept="image/*" capture="camera">
+                        <input class="form-control" type="file" name="img0" id="imageUpload{{ r.term_id }}" accept="image/*" capture="camera">
                     </div>
                     <div id="commentSection{{ r.term_id }}" class="mb-3" style="display: none;">
                         <label for="comment" class="form-label">ملاحظات</label>

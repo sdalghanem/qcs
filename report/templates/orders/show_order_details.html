@@ -41,23 +41,22 @@
                         <th>الربع</th>
                         <th>السنه</th>
                         <th>الدرجة النهائية</th>
-
-
                     </tr>
                 </thead>
                 <tbody>
+                    {% for o in orinfo %}
                     <tr>
-                        <td>HC-111</td>
-                        <td>991</td>
-                        <td>ماكدونلدز</td>
-                        <td>شركة الاغذية العالمية</td>
-                        <td>أحمد</td>
-                        <td>22/22/2024</td>
-                        <td>2024</td>
-                        <td>Q1</td>
-                        <td>98%</td>
-
+                        <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
+                        <td>{{o.bransh_id.description}}</td>
+                        <td>{{o.bransh_id.brand_id.description}}</td>
+                        <td>{{o.bransh_id.brand_id.company_id.description}}</td>
+                        <td>{{o.employee_id}}</td>
+                        <td>{{o.registerDate}}</td>
+                        <td>{{o.quarter}}</td>
+                        <td>{{o.year}}</td>
+                        <td>{{fainl_res}}%</td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
                     </tr>
+                    {% endfor %}
                 </tbody>
         </table>
         <table class="table table-striped">

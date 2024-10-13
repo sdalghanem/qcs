@@ -1,0 +1,44 @@
+{% extends "theme/index.html" %}
+{% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+{% block clients_home %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>المنطقة</th>
+            <th>المدن</th>
+        </tr>
+    </thead>
+    <tbody>
+       {% if regions %}
+        {% for r in regions %}
+        <tr>
+            <td>{{r.name}}</td>
+            <td><a class="btn btn-sm btn-dark" href="{% url 'show_city' r.id %}">المدن</a></td>
+            <td><a href="#" class="btn btn-sm btn-danger">حذف</a></td>
+        </tr>
+        {% endfor %}
+       {% else %}
+       <tr class="text-center">
+        <td colspan="4"> لايوجد</td>
+       </tr>
+       {% endif %}
+    </tbody>
+</table>
+
+{% endblock %}

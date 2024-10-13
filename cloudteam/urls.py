@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views , company_view , inspector_view
+from . import views , company_view , inspector_view , countries_views
 
 urlpatterns = [
 # بروفايل الشركة
@@ -22,8 +22,20 @@ path('edit_departmentInfo/<str:id>' , company_view.edit_departmentInfo , name='e
 
 path('edit_secInfo/<str:id>' , company_view.edit_secInfo , name='edit_secInfo'),  
 path('brand_terms/<str:id>' , company_view.brand_terms , name='brand_terms'), 
-
+path('regions_city_managers/<str:id>' , company_view.regions_city_managers , name='regions_city_managers'),
+path('deleteRegionMngr/<str:id>' , company_view.deleteRegionMngr , name='deleteRegionMngr'), 
+path('cities_managers/<str:regionID>/<str:brandID>' , company_view.cities_managers , name='cities_managers'), 
+path('deletecityMngr/<str:id>/<str:regionID>' , company_view.deletecityMngr , name='deletecityMngr'), 
+###############################################################
+##### العنواين
 ##############################################################
+
+path('show_country/' , countries_views.show_country , name='show_country'),  
+path('show_city/<str:id>' , countries_views.show_city , name='show_city'),  
+#path('show_district/<str:id>' , countries_views.show_district , name='show_district'),  
+
+
+################################################################
 path('save_packege/' , views.save_packege , name='save_packege'),  
 
 # cloud team pages .
@@ -40,6 +52,6 @@ path('login_insp' , inspector_view.login_insp , name='login_insp'),
 path('emp_orders' , inspector_view.emp_orders , name='emp_orders'),  
 path('evaluate/<str:id>' , inspector_view.evaluate , name='evaluate'),
  path('get_evaluation_points/<int:zone_id>/<int:orID>', inspector_view.get_evaluation_points, name='get_evaluation_points'), 
- path('save_evaluation' , inspector_view.save_evaluation , name='save_evaluation'),  
+ path('save_evaluation' , inspector_view.save_evaluation , name='save_evaluation'),   
 
 ] 
