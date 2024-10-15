@@ -120,19 +120,63 @@ def delete_responsible(request , id):
 
 
 def show_order_details(request , id):
-    # order id
-    terms = Term_score.objects.filter(report_order_id = id)
-    orid = ''
-    for t in terms:
-        orid = t.report_order_id.id
-    orinfo = Report_order.objects.filter(id = orid)
-    if Score_history.objects.filter(report_order_id_id = orid).exists:
-        fainl_res = Score_history.objects.get(report_order_id_id = orid).total_score
-    data = {
-        'username':  request.session['username'] ,
-        'img': request.session['img'] ,
-        'terms':terms ,
-        'orinfo': orinfo ,
-        'fainl_res': fainl_res
-    }
-    return render(request , 'orders/show_order_details.html' ,data)
+    # id -> order id
+    if request.user.is_authenticated:
+        if  Term_score.objects.filter(report_order_id_id = id).exists:
+                terms = Term_score.objects.filter(report_order_id_id = id)
+                orinfo = Report_order.objects.filter(id = id) # استخدمنا فلتر عشان تاخذ كل البيانات
+                if Score_history.objects.filter(report_order_id_id = id).exists():
+                    btnOn = '0'
+                else:
+                    btnOn = '1'
+                data = {
+                    'username':  request.session['username'] ,
+                    'img': request.session['img'] ,
+                    'terms':terms , # البنود المقيمة
+                    'orinfo': orinfo , # معلومات الطلب
+                    'fainl_res': calc_order(id) ,# النتيجه النهائية
+                     'btnOn' : btnOn , # اظهار زر الاعتماد
+                }
+                return render(request , 'orders/show_order_details.html' ,data)
+        else:
+              data = {
+                    'username':  request.session['username'] ,
+                    'img': request.session['img'] ,
+              }
+              return render(request , 'orders/show_order_details.html' ,data)
+    else:
+        return render(request , 'inspectors/login.html')
+
+
+def calc_order(id):
+    #id for order
+      # جلب جميع السجلات المرتبطة بالطلب المحدد
+    scores = Term_score.objects.filter(report_order_id_id=id)
+
+    # التحقق من وجود درجات
+    if not scores.exists():
+        return 0  # إذا لم تكن هناك درجات، أعد 0
+
+    # حساب مجموع الدرجات (والتي هي إما 0 أو 1)
+    total_score = sum(int(score.score) for score in scores)
+
+    # حساب عدد البنود (terms) وهو العدد الكلي للدرجات الممكنة
+    total_terms = scores.count()
+
+    # حساب النسبة المئوية وتحويلها إلى عدد صحيح
+    percentage = int((total_score / total_terms) * 100) if total_terms > 0 else 0
+
+    return percentage
+
+
+def submit_result(request , resault , orderid):
+    ord = Report_order.objects.get(id=orderid)
+    new = Score_history()
+    new.report_order_id_id = orderid
+    new.total_score = resault
+    new.quarter = ord.quarter
+    new.year = ord.year
+    new.registerDate = date.today()
+    new.save()
+    return redirect('show_order_details' , id=orderid)
+    

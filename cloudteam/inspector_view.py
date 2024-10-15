@@ -42,7 +42,7 @@ def login_insp(request):
 
 def emp_orders(request):
       orders = Report_order.objects.filter(employee_id_id = request.session['id'])
-      print(request.session['id'])
+      #print(request.session['id'])
       data ={
         'username':  request.session['username'] ,
         'img': request.session['img'] ,
@@ -58,6 +58,7 @@ def evaluate(request , id):
       orNum = order.id 
       orBrn = order.bransh_id.description
       orDate = order.registerDate
+      orStatus = order.status
       data ={
         'username':  request.session['username'] ,
         'img': request.session['img'] ,
@@ -65,7 +66,8 @@ def evaluate(request , id):
         'orNum': orNum,
         'orBrn': orBrn,
         'orDate' : orDate,
-        
+        'orStatus': orStatus , # حالة الطلب 
+        'orID': order.id
       }
       return render(request , 'inspectors/employee/evaluate.html' , data) 
 
@@ -77,12 +79,12 @@ def get_evaluation_points(request, zone_id , orID):
     print(terms)
     row = []
     for t in terms :
-        if Term_score.objects.filter(term_id = t.term_id.id).exists():
-          row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : 'تم التقييم'})
+        if Term_score.objects.filter(term_id_id = t.term_id.id , report_order_id_id = orID).exists():
+          score = Term_score.objects.get(term_id = t.term_id.id , report_order_id_id = orID).score
+          row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : '0' , 'score': score})
         else:
-            row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : ' '})
-    print(row)
-    
+            row.append({'term' : t.term_id.description ,'term_id': t.term_id.id })
+    print(row)  
     data = {
     'username':  request.session['username'] ,
     'img': request.session['img'] ,
@@ -100,20 +102,28 @@ def get_evaluation_points(request, zone_id , orID):
         else:
             uploaded_file_url = ''  # إذا لم يكن هناك ملف مرفوع، يكون الرابط فارغًا
    
-            termid = request.POST['termid']
-            eva = request.POST['evaluation']
-            note = request.POST['note']
-            print(eva)
-            new = Term_score()
-            new.report_order_id_id = orID
-            new.term_id_id = termid
-            new.score = eva
-            new.img = uploaded_file_url
-            new.note = note
-            new.registerDate = date.today()
-            new.save()
-            # return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
-            return HttpResponseRedirect(request.get_full_path())
+        termid = request.POST['termid']
+        eva = request.POST['evaluation']
+        note = request.POST['note']
+        print(eva)
+        new = Term_score()
+        new.report_order_id_id = orID
+        new.term_id_id = termid
+        new.score = eva
+        new.img = uploaded_file_url
+        new.note = note
+        new.registerDate = date.today()
+        new.save()
+        #  تغيير حالة الطلب من 0 الى 1 غير مكتمل
+        if Report_order.objects.filter(id = orID , status = '1').exists():
+        # return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
+          return HttpResponseRedirect(request.get_full_path())
+        else:
+           ord = Report_order.objects.get(id = orID)
+           ord.status = '1'
+           ord.save()
+           return HttpResponseRedirect(request.get_full_path())
+             
     else:
        
         return render (request , 'inspectors/employee/evaluate_terms.html' , data)
@@ -121,14 +131,8 @@ def get_evaluation_points(request, zone_id , orID):
         # return JsonResponse({"points": row} , safe=False )
 
 
-def save_evaluation(request):
-     termid = request.POST['termid']
-     eva = request.POST['evaluation']
-     img = request.POST['img']
-     note = request.POST['note']
-     print(eva)
-     #return JsonResponse({"res": 'ok'} , safe=False )
-     data = {
-        'username':  request.session['username'] ,
-        'img': request.session['img'] ,}
-     return render (request , 'inspectors/employee/evaluate_terms.html' , data)
+def save_evaluation(request , id):
+      ord = Report_order.objects.get(id = id)
+      ord.status = '2'
+      ord.save()
+      return redirect('evaluate' , id=id)

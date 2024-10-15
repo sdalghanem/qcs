@@ -22,7 +22,7 @@
     <div class="col-4">
         <a href="{% url 'new_order' %}" class="btn btn-sm btn-dark">+ اضافة طلب جديد</a>
         <a href="#" class="btn btn-sm btn-dark">الطلبات المنتهية</a>
-
+       
     </div>
 </div>
 
@@ -54,7 +54,11 @@
                         <td>{{o.registerDate}}</td>
                         <td>{{o.quarter}}</td>
                         <td>{{o.year}}</td>
-                        <td>{{fainl_res}}%</td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
+                        <td> {{fainl_res}}%  
+                            {% if btnOn == '1' and o.status == '2' %}
+                              <a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-success"> اعتماد </a>
+                            {% endif %}
+                            </td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -69,17 +73,25 @@
                 </tr>
             </thead>
             <tbody>
-                {% for t in terms %}
-                <tr>
-                    <td>{{t.term_id.description}}</td>
-                    <td>{{t.score}}</td>
-                    <td>{{t.note}}</td>
-                    <td> {% if t.img %}
-                        <a href="../../../{{t.img}}" class="btn btn-sm btn-dark">عرض</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
+                {% if terms %}
+                    {% for t in terms %}
+                    <tr>
+                        <td>{{t.term_id.description}}</td>
+                        <td>{{t.score}}</td>
+                        <td>{{t.note}}</td>
+                        <td> {% if t.img %}
+                            <a href="../../../{{t.img}}" class="btn btn-sm btn-dark">عرض</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                
+                    {% else %}
+                    <tr class="text-center">
+                        <td colspan="4">لايوجد</td>
+                    </tr>
+                {% endif %}
+                
             </tbody>
     </table>
     </div>

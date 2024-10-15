@@ -1,0 +1,85 @@
+{% extends "theme/index.html" %}
+{% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+<!----------------------------------------------------------------------------------->
+{% block clients_home %}
+<div class="row">
+    <div class="col-12 mb-2">
+        <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#add_region">+ إضافة منطقة   </button>
+
+    </div>
+</div>
+<p>{{res}}</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>المنطقة</th>
+            <th>المدن</th>
+        </tr>
+    </thead>
+    <tbody>
+       {% if regions %}
+        {% for r in regions %}
+        <tr>
+            <td>{{r.name}}</td>
+            <td><a class="btn btn-sm btn-dark" href="{% url 'show_city' r.id %}">المدن</a></td>
+            <td><a href="{% url 'delete_region' r.id %}" class="btn btn-sm btn-danger">حذف</a></td>
+        </tr>
+        {% endfor %}
+       {% else %}
+       <tr class="text-center">
+        <td colspan="4"> لايوجد</td>
+       </tr>
+       {% endif %}
+    </tbody>
+</table>
+
+<!----------------------------------------------------------------------------------------->
+<!-- Evaluation Modal -->
+
+<div class="modal fade" id="add_region" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اضافة منطقة جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" value="{{brandID}}" name="brandID" hidden />
+                    <div class="mb-3">
+                        <input type="text" name="region" class="form-control"  placeholder="اكتب اسم المنطقة"/>      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}

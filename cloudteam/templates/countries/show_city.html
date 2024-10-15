@@ -16,7 +16,17 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
+  <!----------------------------------------------------------------------->
 {% block clients_home %}
+<div class="row">
+    <div class="col-12 mb-2">
+        <a class="btn btn-sm btn-dark" href="{% url 'show_region' %}"> < الرجوع للمناطق  </a>
+        <a class="btn btn-sm btn-dark" data-toggle="modal" data-target="#add_city"> + إضافة مدينة  </a>
+
+    </div>
+</div>
+<p>{{res}}</p>
+
 <table class="table table-striped">
     <thead>
         <tr  class="text-center bg-dark">
@@ -32,9 +42,14 @@
        {% if cities %}
         {% for c in cities %}
         <tr>
-            <td>{{c.name}}</td>
-            <td><a class="btn btn-sm btn-dark" href="#" data-toggle="modal" data-target="#show_dist{{c.id}}">+</a></td>
-            <td><a href="#" class="btn btn-sm btn-danger">حذف</a></td>
+            <td>{{c.cName}}</td>
+            <td>
+                {% for d in c.cDist %}
+                    <span> {{d.name}} <a href="{% url 'delete_district' d.id %}" class="text-danger">X</a>  |</span> 
+                {% endfor %}
+                <a class="btn btn-sm btn-dark" href="#" data-toggle="modal" data-target="#show_dist{{c.cid}}">+</a>
+            </td>
+            <td><a href="{% url 'delete_city' c.cid %}" class="btn btn-sm btn-danger">حذف</a></td>
         </tr>
         {% endfor %}
        {% else %}
@@ -45,21 +60,45 @@
     </tbody>
 </table>
 
-
-
-<!-- Evaluation Modal -->
-{% for c in cities %}
-<div class="modal fade" id="show_dist{{c.id}}" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+<div class="modal fade" id="add_city" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">اضافة حي جديد لـ {{c.name}}</h5>
+                <h5 class="modal-title">اضافة مدينة جديدة لـ {{regionName}}   </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="#" enctype="multipart/form-data">
+                <form method="post" action="{% url 'add_city' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="text" value="{{c.id}}" name="brandID" hidden />
+                    <input type="text" value="{{regionID}}" name="regionID" hidden />
+                    <div class="mb-3">
+                        <input type="text" name="city" class="form-control" />
+                    </div>         
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--اضافة حي -->
+{% for c in cities %}
+<div class="modal fade" id="show_dist{{c.cid}}" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اضافة حي جديد لـ {{c.cName}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'add_district' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" value="{{c.cid}}" name="cid" hidden />
+                    <input type="text" value="{{regionID}}" name="regionID" hidden />
                     <div class="mb-3">
                         <input type="text" name="district" class="form-control" />
                     </div>         

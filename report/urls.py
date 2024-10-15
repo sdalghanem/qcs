@@ -13,5 +13,6 @@ path('new_order' , views.new_order , name='new_order'),
 path('get_brand' , views.get_brand , name='get_brand'),
 path('get_branch' , views.get_branch , name='get_branch'),
 path('show_order_details/<str:id>' , views.show_order_details , name='show_order_details'),
+path('submit_result/<str:resault>/<str:orderid>' , views.submit_result , name='submit_result'),
 
 ] 

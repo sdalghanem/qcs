@@ -30,9 +30,14 @@ path('deletecityMngr/<str:id>/<str:regionID>' , company_view.deletecityMngr , na
 ##### العنواين
 ##############################################################
 
-path('show_country/' , countries_views.show_country , name='show_country'),  
+path('show_region/' , countries_views.show_region , name='show_region'),  
+path('delete_region/<str:id>' , countries_views.delete_region , name='delete_region'),  
 path('show_city/<str:id>' , countries_views.show_city , name='show_city'),  
+path('add_city/' , countries_views.add_city , name='add_city'),  
+path('delete_city/<str:id>' , countries_views.delete_city , name='delete_city'),  
 #path('show_district/<str:id>' , countries_views.show_district , name='show_district'),  
+path('add_district/' , countries_views.add_district , name='add_district'),  
+path('delete_district/<str:id>' , countries_views.delete_district , name='delete_district'),  
 
 
 ################################################################
@@ -52,6 +57,6 @@ path('login_insp' , inspector_view.login_insp , name='login_insp'),
 path('emp_orders' , inspector_view.emp_orders , name='emp_orders'),  
 path('evaluate/<str:id>' , inspector_view.evaluate , name='evaluate'),
  path('get_evaluation_points/<int:zone_id>/<int:orID>', inspector_view.get_evaluation_points, name='get_evaluation_points'), 
- path('save_evaluation' , inspector_view.save_evaluation , name='save_evaluation'),   
+ path('save_evaluation/<str:id>' , inspector_view.save_evaluation , name='save_evaluation'),   
 
 ] 
