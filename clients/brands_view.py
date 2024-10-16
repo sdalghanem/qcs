@@ -353,9 +353,9 @@ def branchs_dist_resault(dist_id , brand_id):
                 repo.append(row)          
     return repo 
 
-def branchs_percentage(branch_id):
+def branchs_percentage(branch_id , y , q ):
     repo = []
-    report_orders = Report_order.objects.filter(bransh_id = branch_id)
+    report_orders = Report_order.objects.filter(bransh_id = branch_id , year=y , quarter=q)
     for ro in report_orders :
         score_his = Score_history.objects.filter(report_order_id = ro.id)
         for score in score_his:

@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
 from . import dashboard_view
-
+import datetime
 # صفحة دخول لوحة التحكم للمدير العام
 # def index(request):
 #     if request.user.is_authenticated:
@@ -68,8 +68,10 @@ def login_backend(request):
             print(mngCompany.position)
             # المنصب بناء على الارقام
             # اذا 0 يعني مدير عام شركة
+            current_year = datetime.datetime.now().year
+
             if mngCompany.position == '0':
-                return redirect('gm_dashboard') # يحول على الرابط اللي اسمه هوم 
+                return redirect('gm_dashboard' , y = current_year , q='q1') # يحول على الرابط اللي اسمه هوم 
           # مدير عام براند محدد
             elif mngCompany.position == '1' :
                 brand = Brand.objects.get(gm_manager_id = mngCompany.id)

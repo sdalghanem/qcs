@@ -18,6 +18,16 @@
  {{mngPostion}}
 {%endblock %}
 <!--قائمة البراندات-->
+
+<!--ًصورة المستخدم-->
+{% block profileImg %}
+<img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+{% block profileImg2 %}
+<img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+
+
 {% block menubr %}
 
     {% if menubrands %}
@@ -31,8 +41,44 @@
 {% endblock %}
 
 {% block home %}
+<div class="row mb-4">
+    <div class="col-6">
+        <h3>{{companyName}}</h3>
+</div>
+    <div class="col-6 ">
+        <form action="#" method="post" class="form">
+            {% csrf_token %}
+            <div class="row align-items-center">
+                <!-- حقل الربع -->
+                <div class="col-md-3">
+                    <select class="form-control form-control-sm" name="quarter">
+                        <option value="q1">الربع الأول</option>
+                        <option value="q2">الربع الثاني</option>
+                        <option value="q3">الربع الثالث</option>
+                        <option value="q4">الربع الرابع</option>
+                    </select>
+                </div>
 
-        {% for b in brands %}
+                <!-- حقل السنة (ديناميكي) -->
+                <div class="col-md-3">
+                    <select class="form-control form-control-sm" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- زر الإرسال -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
+                </div>
+            </div>
+        </form>
+    </div>
+   
+</div>
+
+        {% for b in menubrands %}
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-card-five text-center">
                 <div class="widget-content">
@@ -45,56 +91,52 @@
                                 </span>
                             </div>
                             
-                            <div class="balance-info text-center">                              
-                                <h6>  الربع الأول</h6>
-                                <p class="text-white badge-primary text-center">% 86</p>
+                            <div class="balance-info text-center">   
+                                {% if q == 'q1' %} 
+                                <h6>  الربع الأول {{y}}</h6>
+                                {% elif q == 'q2' %}  
+                                <h6>  الربع الثاني {{y}}</h6>
+                                {% elif q == 'q3' %}  
+                                <h6>  الربع الثالث {{y}}</h6>
+                                {% elif q == 'q4' %}  
+                                <h6>  الربع الرابع {{y}}</h6>
+                                {% endif %}
+                               
+                                {% if b.perc >= 90 %}
+                                <p class="text-white  badge-success  text-center">% {{b.perc}}</p>
+                                {% elif b.perc < 90 and b.perc > 80  %}
+                                <p class="text-white  badge-warning  text-center">% {{b.perc}}</p>
+                                {% elif b.perc < 80 %}
+                                <p class="text-white  badge-danger  text-center">% {{b.perc}}</p>
+                                {% endif %}
+                    
+                                
                                 <p>{{b.description}}</p>
-                                <select class="form-control mt-4">
-                                    <option>الربع الأول</option>
-                                    <option>الربع الثاني</option>
-                                    <option>الربع الثالث</option>
-                                    <option>الربع الرابع</option>
-                                </select>
+                              
                             </div>
                         </div>
                         <div class="card-bottom-section">
                             <a href="javascript:void(0);" class="">تفاصيل أكثر</a>
                             <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div>
                         </div>
+              
                     </div>
                 </div>
+              
+      
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>الربع الأول</th>
-                            <th>الربع الثاني</th>
-                            <th>الربع الثالث</th>
-                            <th>الربع الرابع</th>
+                            {% for dp in b.depts %}
+                                <th>{{ dp.departmentName }} </th>
+                            {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>88%</td>
-                            <td>91%</td>
-                            <td>96%</td>
-                            <td>96%</td>
-                        </tr>
-                    </tbody>
-                </table>
-               
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>الموارد البشرية ادارة</th>
-                            <th>الصيانه ادارة</th>
-                            <th>المشتريات ادارة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>88%</td>
-                            <td>91%</td>
-                            <td>96%</td>
+                            {% for dp in b.depts %}
+                                <td>{{ dp.percentage }}%</td>
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>
@@ -103,16 +145,16 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>الشرقية</th>
-                            <th>الوسطى</th>
-                            <th>الغربية</th>
+                            {% for reg in b.regionsRates %}
+                                <th>{{ reg.region_name }} </th>
+                            {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>88%</td>
-                            <td>91%</td>
-                            <td>96%</td>
+                            {% for reg in b.regionsRates %}
+                                <td>{{ reg.region_score }}%</td>
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>
@@ -121,16 +163,16 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>9001 فرع</th>
-                            <th>8001 فرع</th>
-                            <th>3002 فرع</th>
+                            {% for br in b.branchs %}
+                                <th>{{ br.branchName }} </th>
+                            {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>88%</td>
-                            <td>91%</td>
-                            <td>96%</td>
+                            {% for br in b.branchs %}
+                                <td>{{ br.rate }}%</td>
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>

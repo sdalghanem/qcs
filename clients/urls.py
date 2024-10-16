@@ -11,7 +11,7 @@ urlpatterns = [
 path('login' , views.login_backend , name='login'),
 path('forget_password' , views.forget_password , name='forget_password'), 
 # لوحة التحكم  
-path('gm_dashboard' , dashboard_view.gm_dashboard , name='gm_dashboard'), 
+path('gm_dashboard/<str:y>/<str:q>' , dashboard_view.gm_dashboard , name='gm_dashboard'), 
 path('brandManager_dashboard' , dashboard_view.brandManager_dashboard , name='brandManager_dashboard'), 
 path('brandRegionManager_dashboard' , dashboard_view.brandRegionManager_dashboard , name='brandRegionManager_dashboard'), 
 path('brandCityManager_dashboard' , dashboard_view.brandCityManager_dashboard , name='brandCityManager_dashboard'), 
