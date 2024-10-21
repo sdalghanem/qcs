@@ -1,42 +1,147 @@
 {% extends "index.html" %}
 {% load static %}
+
+{% block dashbordMenu %}
+<a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
+    <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+        <span>لوحة المعلومات</span>
+    </div>
+</a>
+{%endblock %}
+
+<!--تمرير اسم المدير للملف الممتد index-->
+{% block mngName1 %} 
+ {{mngName}}
+{%endblock %}
+
+{% block mngName2 %} 
+ {{mngName}}
+{%endblock %} 
+<!--تمرير منصب المدير للملف الممتد index-->
+{% block mngPostion1 %} 
+ {{mngPostion}}
+{%endblock %}
+
+{% block mngPostion2 %} 
+ {{mngPostion}}
+{%endblock %}
+<!--قائمة البراندات-->
+
+<!--ًصورة المستخدم-->
+{% block profileImg %}
+<img alt="avatar" src="../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+{% block profileImg2 %}
+<img alt="avatar" src="../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+
+
+{% block menubr %}
+
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.id y q %}"> {{b.description}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+
 {% block home %}
 
 
- <!-- BREADCRUMB -->
- <div class="page-meta">
-    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <!-- <li class="breadcrumb-item"><a href="#">شركة الرياض العربية للاغذية</a></li> -->
-            <li class="breadcrumb-item active" aria-current="page">
-             
-              <span>
-                  <img src="../../media/{{brandLogo}}" alt="money-bag" width="5%">
-              </span>
-              {{brandName}} 
-            </li>
-        </ol>
-    </nav>
+<div class="row mb-4 align-items-center">
+  <!-- Logo and Brand -->
+  
+  <div class="col-5">
+    <h3 class="mb-0">
+    <img src="../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
+    {{brandName}}
+</h3> 
+           
+
+  </div>
+  
+  <!-- Form -->
+  <div class="col-6">
+      <form action="#" method="post" class="form">
+          {% csrf_token %}
+          <div class="row align-items-center">
+              <!-- Quarter Field -->
+              <div class="col-md-4">
+                  <select class="form-control form-control-sm" name="quarter">
+                      <option value="q1">الربع الأول</option>
+                      <option value="q2">الربع الثاني</option>
+                      <option value="q3">الربع الثالث</option>
+                      <option value="q4">الربع الرابع</option>
+                  </select>
+              </div>
+
+              <!-- Year Field -->
+              <div class="col-md-4">
+                  <select class="form-control form-control-sm" name="year">
+                      {% for year in years %}
+                          <option value="{{ year }}">{{ year }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-md-4">
+                  <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
+              </div>
+          </div>
+      </form>
+  </div>
 </div>
+
 
 <!-- /BREADCRUMB -->
 <div class="row layout-spacing">
-    <div class="col-lg-12">
+
+
+<!-- عرض بيانات المنطقة-->
+<!-- <div class="col-lg-6 mt-2">
+  <div class="statbox widget box box-shadow">
+      <div class="widget-content widget-content-area">
+        <label>مدير العلامة التجارية</label>
+        <h4>{{brandMng}}</h4>
+        <div class="col-2 d-flex align-items-center">
+          <img src="../../../../{{brandLogo}}" style="width: 100px; height: auto;" alt="Logo"/>
+        </div>
+       </div>
+    </div>
+  </div>  -->
+
+  
+    <div class="col-lg-12 mt-2">
         <div class="statbox widget box box-shadow">
             <div class="widget-content widget-content-area">
+              <label>تقييم الفروع {{allRegionScore}} %</label>
                 <!-- js chart -->
-                
-
-               
                     <div class="w-chart-render-one " >
+                      {% if q == 'q1' %} 
+                      <h6>  الربع الأول {{y}}</h6>
+                      {% elif q == 'q2' %}  
+                      <h6>  الربع الثاني {{y}}</h6>
+                      {% elif q == 'q3' %}  
+                      <h6>  الربع الثالث {{y}}</h6>
+                      {% elif q == 'q4' %}  
+                      <h6>  الربع الرابع {{y}}</h6>
+                      {% endif %}
                         <div id="chart"></div>
                     </div>
                  <!--end js chart -->
-                 
+                 <!-- <p>مدير العلامة التجارية</p>
+                 <h4>{{brandMng}}</h4> -->
+   
                 <!--table start-->
                 <!-- <table class=" table table-striped dt-table-hover table-bordered" style="width:100%"> -->
-                    <table class="multi-table table table-striped  table-bordered" style="width:100%">
-                        <thead>
+                    <table class="table table-striped  " style="width:100%">
+                        <thead class="bg-dark">
                             <tr>
                             <th>الترتيب</th>
                             <th>المنطقة</th>
@@ -52,50 +157,75 @@
                                 
                                 <td class="text-center">{{forloop.counter}}</td>
                                 <td>{{one.region}}</td>
-                                <td>{{one.name}}</td>
+                                 <td>{{one.name}}</td> 
                                 <td>
                                     {{one.rate}} %
-                                    <div class="progress br-30">
+                                    <!-- <div class="progress br-30">
                                         <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{one.rate}}%" aria-valuenow="{{one.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    </div> -->
                                 </td>
-                                <td><a href="{% url 'cities_rate' one.id one.brand_id %}"><button class="btn btn-primary">عرض</button></a> </td>
+                                <td><a href="{% url 'cities_rate' one.id one.brand_id  y q %}"><button class="btn btn-primary">عرض</button></a> </td>
                             </tr>
                             {% endfor%}
                             {%endif%}
                         </tbody>
-                    <!-- <thead>
-                        
-                        <tr>
-                            <th>رقم الفرع</th>
-                            <th>المنطقة</th>
-                            <th>المدينة</th>
-                            <th>الحي</th>
-                            <th>آخر تقييم</th>
-                            <th>تفاصيل</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>C1002</td>
-                            <td>الرياض</td>
-                            <td>الرياض</td>
-                            <td>الملقا</td>
-                            <td>90%
-                                <div class="progress br-30">
-                                    <div class="progress-bar br-30 bg-success" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class="text-center"><a href="#"><button class="btn btn-primary">عرض</button></a>  </td>
-                        </tr>
-                      
-                          
-                    </tbody> -->
+          
                 </table>
-                
-                <!-- table end-->
+  </div>      
+</div>        
+    </div>     <!-- table end-->
   
 
+  
+
+
+    {% for c in cities%}
+    <div class="col-lg-4 mt-2">
+      <div class="statbox widget box box-shadow">
+          <div class="widget-content widget-content-area">
+           
+              <p>فروع {{c.regionName}} </p>
+     
+              <div class="card-bottom-section">
+                <a href="{% url 'cities_rate' c.regid c.brand_id y q %}" class="btn btn-sm btn-dark mb-2">تفاصيل أكثر</a>
+                <!-- <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div> -->
+            </div>
+
+              <table class="table table-striped  " style="width:100%">
+                <thead class="bg-dark">
+                    <tr>
+                    <th>الترتيب</th>
+                    <th>المدينة</th>
+                    <th>التقييم</th>
+                  
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                    {% for city in c.cities %}
+                    
+                    <tr>
+                        
+                        <td class="text-center">{{forloop.counter}}</td>
+                        <td>{{city.cityName}}</td>
+                        <td>
+                          {{city.rate}} %
+                        </td>
+                        
+                    </tr>
+                    {% endfor%}
+                 
+                </tbody>
+  
+        </table>
+           
+            
+      </div>      
+    </div>        
+  </div> 
+{% endfor %}
+
+</div> <!--end row -->
 <!-- Include ApexCharts JavaScript file -->
 <script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
 <script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
@@ -114,8 +244,9 @@
  ****/
 //let rego = JSON.parse(document.getElementById('rego').value);
 
-pero=JSON.parse('{{perlist}}');
-var jsonString ='{{regionlist}}';
+// pero=JSON.parse('{{chlist}}');
+ var jsonString ='{{chlist}}';
+
 
 // هذي الفنكشن تاخذ لستة المناطق سترينج وتحولها لنص قابل للجيسون 
 function decodeHtmlEntities(str) {
@@ -132,95 +263,144 @@ try {
   } catch (e) {
       console.error("Invalid JSON string", e);
   }
+
+
+draw_res(decodedJsonString);
+
 ////////////////////////////////
-draw_res(pero , jsonObject);
+function draw_res(chlist) {
+    console.log("Received chlist:", chlist);
 
-function draw_res(pero , jsonObject) {
-
-        var options = {
-         series: [{
-         name: 'الامتثال لمعايير الجودة',
-         data: pero ,
-         
-       }],
-         chart: {
-         height: 350,
-         type: 'bar',
-       },
-       plotOptions: {
-         bar: {
-           borderRadius: 10,
-           dataLabels: {
-             position: 'top', // top, center, bottom
-           },
-         }
-       },
-       dataLabels: {
-         enabled: true,
-         formatter: function (val) {
-           return val + "%";
-         },
-         offsetY: -20,
-         style: {
-           fontSize: '12px',
-           colors: ["#304758"]
-         }
-       },
-       
-       xaxis: {
-         categories: jsonObject ,
-         position: 'buttom',
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false
-         },
-         crosshairs: {
-           fill: {
-             type: 'gradient',
-             gradient: {
-               colorFrom: '#D8E3F0',
-               colorTo: '#BED1E6',
-               stops: [0, 100],
-               opacityFrom: 0.4,
-               opacityTo: 0.5,
-             }
-           }
-         },
-         tooltip: {
-           enabled: true,
-         }
-       },
-       yaxis: {
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false,
-         },
-         labels: {
-           show: false,
-           formatter: function (val) {
-             return val + "%";
-           }
-         }
-       
-       },
-       title: {
-         
-         floating: true,
-         offsetY: 330,
-         align: 'center',
-         style: {
-           color: '#444'
-         }
-       }
-       };
-
-       var chart = new ApexCharts(document.querySelector("#chart"), options);
-       chart.render();
+    // تحويل المدخلات إلى كائن JSON إذا كانت نصوص
+    if (typeof chlist === 'string') {
+        try {
+            chlist = JSON.parse(chlist);
+            console.log("Parsed JSON:", chlist);
+        } catch (error) {
+            console.error("Invalid JSON format:", error);
+            return;
+        }
     }
-</script>
+
+    // التأكد من أن المدخلات هي مصفوفة
+    if (!Array.isArray(chlist)) {
+        console.error("chlist is not an array");
+        return;
+    }
+
+    // استخراج الأسماء والنسب
+    let names = chlist.map(item => item.name);
+    let percs = chlist.map(item => parseFloat(item.perc)); // تحويل القيم إلى أرقام
+
+    // تحديد الألوان بناءً على النسب
+    let colors = percs.map(perc => {
+        console.log(`Percentage: ${perc}`); // طباعة النسبة لفهم القيم
+        if (perc > 90) return '#28a745'; // أخضر
+        else if (perc >= 80) return '#ffc107'; // أصفر
+        else if (perc >= 70) return '#fd7e14'; // برتقالي
+        else if (perc >= 60)return '#dc3545'; // أحمر (للنسب أقل من 70)
+    });
+
+    // طباعة الأسماء والنسب والألوان
+    console.log("Extracted names:", names);
+    console.log("Extracted percs:", percs);
+    console.log("Assigned colors:", colors);
+
+    // إعداد الرسم البياني
+    var options = {
+        series: [{
+            name: 'الامتثال لمعايير الجودة',
+            data: percs,
+        }],
+        chart: {
+            height: 350,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                dataLabels: {
+                    position: 'top',
+                },
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return val + "%";
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ["#304758"]
+            }
+        },
+        xaxis: {
+            categories: names,
+            position: 'bottom',
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false
+            },
+            crosshairs: {
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        colorFrom: '#D8E3F0',
+                        colorTo: '#BED1E6',
+                        stops: [0, 100],
+                        opacityFrom: 0.4,
+                        opacityTo: 0.5,
+                    }
+                }
+            },
+            tooltip: {
+                enabled: true,
+            }
+        },
+        yaxis: {
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false,
+            },
+            labels: {
+                show: false,
+                formatter: function (val) {
+                    return val + "%";
+                }
+            }
+        },
+        title: {
+            floating: true,
+            offsetY: 330,
+            align: 'center',
+            style: {
+                color: '#444'
+            }
+        },
+        colors: colors // إضافة الألوان المحددة لكل عمود
+    };
+
+    // تمرير بيانات الألوان إلى خاصية colors داخل إعدادات الرسم البياني
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+}
+
+// // اختبار الكود مع قيم معينة
+// let jsonData = [
+//     { "name": "Category1", "perc": 71 }, // يجب أن تكون برتقالية
+//     { "name": "Category2", "perc": 57 }  // يجب أن تكون حمراء
+// ];
+
+
+
+
+
+
+ </script>
 
 {% endblock %}

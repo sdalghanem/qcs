@@ -6,40 +6,58 @@ import json
 from report.views import *
 from .brands_view import *
 
-def departments_rate(request):
-    #deptName = []
-    deptInfoList = []
-    perlist = []
-    infolist =[]
-    departments = Department.objects.filter(company_id = request.session['company_id'])
-    for d in departments:
-        per = 0
-        listdept =  get_dept_terms(d.id)# تجيب لسته البنود
-        listscore = calculate_percentage_for_orders(get_orders_by_company(request.session['company_id'] ,'2024' , 'q1') ,listdept)# تجيب لسته نتايج الاداره بناء على لسته البنود 
-        # total = 0
-        # for lis in listscore:
-        #     total += int(lis['score'])
-        #     if len(listscore) == 0 :
-        #         per = 0
-        #     else:
-        #         per = int(total *100 / len(listscore))
-        row = {
-            'departmentName' : d.description,
-            'percentage': listscore ,#per, #Company ,
-            'id' : d.id,
-        }
-        deptInfoList.append(row)
-        perlist.append(listscore)
-        infolist.append(d.description)
-        
-    #sorted_data = sorted(deptInfoList, key=lambda x: x['percentage'], reverse=True)
-    data = {
-       #'departments' : deptName,
-       'row' : deptInfoList, #  معلومات الادارات
-       'perlist': perlist,
-       'infolist':json.dumps(infolist) ,
-        }
-    return render(request , 'departments/deptsRate.html' , data) 
+def departments_rate(request , y , q):
+    if request.user.is_authenticated:
+        if request.method =='POST':
+            return redirect('departments_rate' , y = request.POST['year'] , q = request.POST['quarter'] )
+        else:
+            #deptName = []
+            deptInfoList = []
+            perlist = []
+            infolist =[]
+            departments = Department.objects.filter(company_id = request.session['company_id'])
+            for d in departments:
+                per = 0
+                listdept =  get_dept_terms(d.id)# تجيب لسته البنود
+                listscore = calculate_percentage_for_orders(get_orders_by_company(request.session['company_id'] ,y ,q) ,listdept)# تجيب لسته نتايج الاداره بناء على لسته البنود 
+                # total = 0
+                # for lis in listscore:
+                #     total += int(lis['score'])
+                #     if len(listscore) == 0 :
+                #         per = 0
+                #     else:
+                #         per = int(total *100 / len(listscore))
+                row = {
+                    'departmentName' : d.description,
+                    'percentage': listscore ,#per, #Company ,
+                    'id' : d.id,
+                }
+                print('#################')
+                print(row)
+                deptInfoList.append(row)
+                perlist.append(listscore)
+                infolist.append(d.description)
+            #sorted_data = sorted(deptInfoList, key=lambda x: x['percentage'], reverse=True)
+            current_year = datetime.now().year
+            years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+            data = {
+            'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
+            'mngPostion' : 'مدير عام' ,
+            'companyLogo': request.session['companylogo'],
+            'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
+            'companyName': Company.objects.get(id = request.session['company_id']).description ,
+            ########################
+            'row' : deptInfoList, #  معلومات الادارات
+            'perlist': perlist,
+            'infolist':json.dumps(infolist) ,
+            'y': y,
+            'q': q,
+            'years':years ,
+                }
+            return render(request , 'departments/deptsRate.html' , data) 
+    else:
+        return render(request , 'login.html')
+
 
 def get_orders_by_company(id , y , q):
     # هذا الفنكشن يقوم بارجاع لسته الطلبات بناء على الشركة بالربع السنوي المحدد
@@ -54,93 +72,202 @@ def get_orders_by_company(id , y , q):
     return orlist
 # ##############################################################################
 
-def sections_rate(request , id):
-    #i d for departments
-    #deptName = []
-    secList = []
-    perlist = []
-    infolist =[]
-    sections = Section.objects.filter(department_id = id)
-    
-    for s in sections:
-        per = 0
-        listdept =  get_sec_terms(s.id)# تجيب لسته البنود
-        listscore = get_score(listdept)# تجيب لسته نتايج القسم بناء على لسته البنود 
-        total = 0
-        for lis in listscore:
-            total += int(lis['score'])
-            if len(listscore) == 0 :
+def sections_rate(request , id ,y , q):
+    # id for department
+    if request.user.is_authenticated:
+        if request.method =='POST':
+            return redirect('sections_rate' ,id = id, y = request.POST['year'] , q = request.POST['quarter'] )
+        else:
+            #i d for departments
+            secList = []
+            perlist = []
+            infolist =[]
+            sections = Section.objects.filter(department_id = id)
+            for s in sections:
                 per = 0
-            else:
-                per = int(total *100 / len(listscore))
-        row = {
-            'secName' : s.description,
-            'percentage': per, #Company
-            'id': s.id
-        }
-        secList.append(row)
-        
-        # row2={
-        #     '':
-        #     '' :
-        # }
-        perlist.append(per)
-        infolist.append(s.description)
-    sorted_data = sorted(secList, key=lambda x: x['percentage'], reverse=True)
-    #sorted_per = sorted(perlist, key=lambda x: x['percentage'], reverse=True)
-    data = {
-       #'departments' : deptName,
-       'row' : sorted_data, #  معلومات الاقسام
-       'perlist': perlist,
-       'infolist':json.dumps(infolist) ,
-        }
-    return render(request , 'departments/sectionsRate.html' , data) 
+                listdept =  get_sec_terms(s.id)# تجيب لسته البنود
+                listscore = get_score(listdept , y , q)# تجيب لسته نتايج القسم بناء على لسته البنود 
+                total = 0
+                for lis in listscore:
+                    total += float(lis['score'])
+                    if len(listscore) == 0 :
+                        per = 0
+                    else:
+                        per = round((total * 100) / len(listscore))
+                row = {
+                    'secName' : s.description,
+                    'secMng' : s.manager_id,
+                    'brandName': s.Brand_id,
+                    'percentage': per, #Company
+                    #'percentage': calculate_percentage_for_orders(get_score(listdept , y , q),get_sec_terms(s.id)),
+                    'id': s.id
+                }
+                secList.append(row)
+                perlist.append(per)
+                infolist.append(s.description)
+            sorted_data = sorted(secList, key=lambda x: x['percentage'], reverse=True)
+            current_year = datetime.now().year 
+            years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+            data = {
+                'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
+                'mngPostion' : 'مدير عام' ,
+                'companyLogo': request.session['companylogo'],
+                'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
+                'companyName': Company.objects.get(id = request.session['company_id']).description ,
+                ########################
+                'depName' : Department.objects.get(id = id).description,
+                'row' : sorted_data, #  معلومات الاقسام
+                'perlist': perlist,
+                'infolist':json.dumps(infolist) ,
+                'years': years,
+                'y': y,
+                'q': q,
+                }
+            print(Department.objects.get(id = id).description)
+            return render(request , 'departments/sectionsRate.html' , data) 
+    else:
+        return render(request , 'login.html')
+
 ####################################################################################
+def terms_rate(request, id , y , q):
+    # i d for sections
+        if request.user.is_authenticated:
+            if request.method =='POST':
+                return redirect('terms_rate' ,id = id, y = request.POST['year'] , q = request.POST['quarter'] )
+            else:
 
-def terms_rate(request , id):
-    #i d for sections
-    tlist = []
-    termsList =  get_sec_terms(id)# تجيب لسته 
-    for t in termsList:
-      # listscore = get_score(t['termid'])
-       result = get_result(t['termid'])
-       for r in result:
-           yes = len(r['yes'])
-           no = len(r['no'])
-           none = len(r['none']) 
-       tlist.append({
-                      'term':t['tname'] ,
-                      'yes': yes ,
-                      'no': no ,
-                      'none': none,
-                      })
+                tlist = []
+
+                termsList = get_sec_terms(id)  # تجيب لسته 
+                for t in termsList:
+                    # listscore = get_score(t['termid'])
+                    result = get_result(t, y, q)
+
+                    # تعيين قيم افتراضية للمتغيرات
+                    yes, no, none = 0, 0, 0
+
+                    for r in result:
+                        yes = len(r.get('yes', []))  # التحقق من وجود المفتاح 'yes' وإلا نستخدم قائمة فارغة
+                        no = len(r.get('no', []))    # التحقق من وجود المفتاح 'no' وإلا نستخدم قائمة فارغة
+                        none = len(r.get('none', []))  # التحقق من وجود المفتاح 'none' وإلا نستخدم قائمة فارغة
+
+                    tlist.append({
+                        'term': Term.objects.get(id=t).description,
+                        'yes': yes,
+                        'no': no,
+                        'none': none
+                    })
+
+                current_year = datetime.now().year
+                years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+                data = {
+                    'mngName': request.session['firestName'] + ' ' + request.session['lastName'],
+                    'mngPostion': 'مدير عام',
+                    'companyLogo': request.session['companylogo'],
+                    'menubrands': Brand.objects.filter(company_id=request.session['company_id']),
+                    'companyName': Company.objects.get(id=request.session['company_id']).description,
+                    ########################
+                    'depName' : Section.objects.get(id = id).department_id.description,
+                    'depid' : Section.objects.get(id = id).department_id.id,
+                    'secName': Section.objects.get(id = id).description ,
+                    'row': tlist,  # معلومات الادارات
+                    'y': y,
+                    'q': q,
+                    'years': years,
+                }
+                # print(data)
+                return render(request, 'departments/termsRate.html', data)
+        else:
+                return render(request , 'login.html')
+
+# def terms_rate(request , id):
+#     #i d for sections
+#     tlist = []
     
-    data = {
-       #'departments' : deptName,
-       'row' : tlist, #  معلومات الادارات
-        }
-    #print(data)
-    return render(request , 'departments/termsRate.html' , data) 
+#     termsList =  get_sec_terms(id)# تجيب لسته 
+#     for t in termsList:
+#       # listscore = get_score(t['termid'])
+#         result = get_result(t , '2024' , 'q1')
+#         for r in result:
+#             yes = len(r['yes'])
+#             no = len(r['no'])
+#             none = len(r['none']) 
+#         tlist.append({
+#                       'term':Term.objects.get(id = t).description ,
+#                       'yes': yes ,
+#                       'no': no ,
+#                       'none': none,
+#                       })
+#     current_year = datetime.now().year 
+#     years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+#     data = {
+#         'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
+#         'mngPostion' : 'مدير عام' ,
+#         'companyLogo': request.session['companylogo'],
+#         'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
+#         'companyName': Company.objects.get(id = request.session['company_id']).description ,
+#         ########################
+#        #'departments' : deptName,
+#        'row' : tlist, #  معلومات الادارات
+#        'y': '2024',
+#        'q': 'q1',
+#        'years': years,
+#         }
+#     #print(data)
+#     return render(request , 'departments/termsRate.html' , data) 
 
-def get_result(term_id):
-    term_score = Term_score.objects.filter(term_id = term_id )
-    scoreList = []
+# def get_result(term_id , y , q):
+#     orders = Report_order.objects.filter(year = y , quarter = q)
+#     for o in orders :
+#         term_score = Term_score.objects.filter(term_id = term_id , report_order_id = o)
+#         scoreList = []
+#         yes = []
+#         no = []
+#         none = []
+#         for ts in term_score :
+#             if ts.score == '1' :
+#                 yes.append(ts.score)
+#             elif ts.score == '0' :
+#                 no.append(ts.score)
+#             else:
+#                 none.append(ts.score)
+#             row = {
+#                 'yes' : yes,
+#                 'no' : no , 
+#                 'none' : none,
+#             }
+#             scoreList.append(row)
+#     return scoreList
+def get_result(term_id, y, q):
+    orders = Report_order.objects.filter(year=y, quarter=q)
+    scoreList = []  # تأكد من تهيئة scoreList هنا خارج الحلقة
     yes = []
     no = []
     none = []
-    for ts in term_score :
-        if ts.score == '1' :
-            yes.append(ts.score)
-        elif ts.score == '0' :
-            no.append(ts.score)
-        else:
-            none.append(ts.score)
+    for o in orders:
+        term_score = Term_score.objects.filter(term_id=term_id, report_order_id=o)
+        
+       
+        
+        for ts in term_score:
+            if ts.score == '1':
+                yes.append(ts.score)
+            elif ts.score == '0':
+                no.append(ts.score)
+            else:
+                none.append(ts.score)
+        
+        # تأكد من أن row يتم إنشاؤه بعد التكرار الكامل على term_score
         row = {
-            'yes' : yes,
-            'no' : no , 
-            'none' : none,
+            'yes': yes,
+            'no': no,
+            'none': none,
         }
+        
+        # إضافة النتيجة إلى scoreList
         scoreList.append(row)
+        print('***************')
+        print(scoreList)
     return scoreList
 
 ##################################################################################
@@ -168,20 +295,30 @@ def get_sec_terms(secid):
         row.append(t.term_id.id)
     return row
 
-def get_score(list):
+def get_score(terms_list, y, q):
     row = []
-   
-    # تستقبل لسته التيرم الخاصه بالاداره
-    for l in list:
-        tscores = Term_score.objects.filter( term_id = l['termid'])
-        for t in tscores:
-            score = {
-                'score' : t.score ,
-                #'term' : t.term_id.description ,
-            }
-            row.append(score)
-            #print(row)
+    
+    # جلب جميع الطلبات بناءً على السنة والربع
+    orders = Report_order.objects.filter(year=y, quarter=q)
+    
+    # التكرار على قائمة البنود (terms_list)
+    for order in orders:
+        for l in terms_list:
+        # التكرار على الطلبات لجلب درجات البند في كل طلب
+       
+            # جلب الدرجات بناءً على term_id والسنة والربع للطلب
+            tscores = Term_score.objects.filter(term_id=l, report_order_id=order)
+            
+            # التكرار على جميع السجلات المطابقة
+            for t in tscores:
+                score = {
+                    'score': t.score,
+                    #'term': t.term_id.description,
+                }
+                row.append(score)
+
     return row
+
 
 
 def calculate_percentage_for_orders(order_list, terms_list):
@@ -197,7 +334,7 @@ def calculate_percentage_for_orders(order_list, terms_list):
         # Initialize order-specific total score and count
         order_total_score = 0
         order_total_terms = len(terms_list)  # Total number of terms for this order
-
+        
         # Sum the scores for each term in this order
         for term_score in term_scores:
             try:
@@ -205,8 +342,7 @@ def calculate_percentage_for_orders(order_list, terms_list):
                 order_total_score += int(term_score.score)
             except ValueError:
                 # Handle any invalid score (non-integer) gracefully
-                continue
-
+                continue       
         # Add the order's total score and terms to the overall total
         overall_total_score += order_total_score
         overall_total_terms += order_total_terms
@@ -216,6 +352,6 @@ def calculate_percentage_for_orders(order_list, terms_list):
         overall_percentage = (overall_total_score / overall_total_terms) * 100
     else:
         overall_percentage = 0
-
+    
     # Return the rounded percentage as an integer
     return round(overall_percentage)

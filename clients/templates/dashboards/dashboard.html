@@ -1,6 +1,15 @@
 {% extends "index.html" %}
 {% load static %}
 
+{% block dashbordMenu %}
+<a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
+    <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+        <span>لوحة المعلومات</span>
+    </div>
+</a>
+{%endblock %}
+
 <!--تمرير اسم المدير للملف الممتد index-->
 {% block mngName1 %} 
  {{mngName}}
@@ -33,7 +42,7 @@
     {% if menubrands %}
         {% for b in menubrands %}
             <li>
-                <a href="{% url 'regions_rate' b.brandid  %}"> {{b.brandName}}</a>
+                <a href="{% url 'regions_rate' b.brandid  y q %}"> {{b.brandName}}</a>
             </li>
         {% endfor %}
     {% endif %}
@@ -41,8 +50,8 @@
 {% endblock %}
 
 {% block home %}
-<div class="row mb-4">
-    <div class="col-6">
+<div class="row mb-4 ">
+    <div class="col-6 ">
         <h3>{{companyName}}</h3>
 </div>
     <div class="col-6 ">
@@ -79,7 +88,7 @@
 </div>
 
         {% for b in menubrands %}
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-card-five text-center">
                 <div class="widget-content">
                     <div class="account-box">
@@ -116,8 +125,8 @@
                             </div>
                         </div>
                         <div class="card-bottom-section">
-                            <a href="javascript:void(0);" class="">تفاصيل أكثر</a>
-                            <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div>
+                            <a href="{% url 'regions_rate' b.brandid b.y b.q %}" class="">تفاصيل أكثر</a>
+                            <!-- <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div> -->
                         </div>
               
                     </div>
@@ -125,7 +134,12 @@
               
       
                 <table class="table table-striped">
-                    <thead>
+                    <thead class="bg-dark">
+                    <tr>
+                        <th colspan="3"> الإدارات</th>
+                    </tr>
+                    </thead>
+                    <thead class="bg-success">
                         <tr>
                             {% for dp in b.depts %}
                                 <th>{{ dp.departmentName }} </th>
@@ -140,10 +154,31 @@
                         </tr>
                     </tbody>
                 </table>
-
-          
                 <table class="table table-striped">
-                    <thead>
+                    <thead class="bg-danger">
+                        <tr>
+                            {% for dp in b.deptslast %}
+                                <th>{{ dp.departmentName }} </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for dp in b.deptslast %}
+                                <td>{{ dp.percentage }}%</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+
+          <hr>
+                <table class="table table-striped">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th colspan="3"> المناطق</th>
+                        </tr>
+                        </thead>
+                    <thead class="bg-success">
                         <tr>
                             {% for reg in b.regionsRates %}
                                 <th>{{ reg.region_name }} </th>
@@ -158,10 +193,31 @@
                         </tr>
                     </tbody>
                 </table>
-
+                <table class="table table-striped">
+                    <thead class="bg-danger">
+                        <tr>
+                            {% for reg in b.regionsRates_last %}
+                                <th>{{ reg.region_name }} </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for reg in b.regionsRates_last %}
+                                <td>{{ reg.region_score }}%</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
                
                 <table class="table table-striped">
-                    <thead>
+                    <thead class="bg-dark">
+                        <tr>
+                            <th colspan="3"> الفروع</th>
+                        </tr>
+                        </thead>
+                    <thead class="bg-success">
                         <tr>
                             {% for br in b.branchs %}
                                 <th>{{ br.branchName }} </th>
@@ -175,7 +231,24 @@
                             {% endfor %}
                         </tr>
                     </tbody>
-                </table>
+                </table> 
+
+                <table class="table table-striped">
+                    <thead class="bg-danger">
+                        <tr>
+                            {% for br in b.branchs_last %}
+                                <th>{{ br.branchName }} </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for br in b.branchs_last %}
+                                <td>{{ br.rate }}%</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table> 
             </div>
          </div>
 

@@ -1,28 +1,119 @@
 {% extends "index.html" %}
 {% load static %}
+
+{% block dashbordMenu %}
+<a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
+    <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+        <span>لوحة المعلومات</span>
+    </div>
+</a>
+{%endblock %}
+
+<!--تمرير اسم المدير للملف الممتد index-->
+{% block mngName1 %} 
+ {{mngName}}
+{%endblock %}
+
+{% block mngName2 %} 
+ {{mngName}}
+{%endblock %} 
+<!--تمرير منصب المدير للملف الممتد index-->
+{% block mngPostion1 %} 
+ {{mngPostion}}
+{%endblock %}
+
+{% block mngPostion2 %} 
+ {{mngPostion}}
+{%endblock %}
+<!--قائمة البراندات-->
+
+<!--ًصورة المستخدم-->
+{% block profileImg %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+{% block profileImg2 %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+
+
+{% block menubr %}
+
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.id y q %}"> {{b.description}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+
 {% block home %}
 
 <!-- BREADCRUMB -->
-<div class="page-meta">
-    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">شركة   ماكدونالدز</a></li>
-            <!-- <li class="breadcrumb-item " aria-current="page"><a href="#">الرياض</a></li>
-            <li class="breadcrumb-item active" aria-current="page">حي السلام</li> -->
-        </ol>
-    </nav>
+<div class="row mb-4 align-items-center">
+  <!-- Logo and Brand -->
+  
+  <div class="col-5">
+    <h3 class="mb-0">
+    <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
+    {{brandName}}
+</h3> 
+           
+
+  </div>
+<div class="col-6">
+  <form action="#" method="post" class="form">
+      {% csrf_token %}
+      <div class="row align-items-center">
+          <!-- Quarter Field -->
+          <div class="col-md-4">
+              <select class="form-control form-control-sm" name="quarter">
+                  <option value="q1">الربع الأول</option>
+                  <option value="q2">الربع الثاني</option>
+                  <option value="q3">الربع الثالث</option>
+                  <option value="q4">الربع الرابع</option>
+              </select>
+          </div>
+
+          <!-- Year Field -->
+          <div class="col-md-4">
+              <select class="form-control form-control-sm" name="year">
+                  {% for year in years %}
+                      <option value="{{ year }}">{{ year }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="col-md-4">
+              <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
+          </div>
+      </div>
+  </form>
+</div>
 </div>
 <!-- /BREADCRUMB -->
-
 <div class="row layout-top-spacing">
 
-    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-        <div class="widget-content widget-content-area br-8">
-            <!-- js chart -->
-            <div class="w-chart-render-one">
-                <div id="chart"></div>
-            </div>
-         <!--end js chart -->
+  <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+      <div class="widget-content widget-content-area br-8">
+          <!-- js chart -->
+          <!-- <div class="w-chart-render-one">
+              <div id="chart"></div>
+          </div> -->
+       <!--end js chart -->
+       {% if q == 'q1' %} 
+       <h6>  الربع الأول {{y}}</h6>
+       {% elif q == 'q2' %}  
+       <h6>  الربع الثاني {{y}}</h6>
+       {% elif q == 'q3' %}  
+       <h6>  الربع الثالث {{y}}</h6>
+       {% elif q == 'q4' %}  
+       <h6>  الربع الرابع {{y}}</h6>
+       {% endif %}
 
             <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
                 <thead>
@@ -46,7 +137,7 @@
                               <div class="progress br-30">
                                   <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
                               </div></td>
-                            <td> <a href="{% url 'reports_list' r.id   %}" class="btn btn-primary">التقارير</a> </td>
+                            <td> <a href="{% url 'reports_list' r.id  y q %}" class="btn btn-primary">التقارير</a> </td>
                         </tr>
                         {% endfor %}
                     {% endif %}
