@@ -18,6 +18,12 @@
 
 {% block clients_home %}
 
+<style>
+    .active-filter {
+        background-color: #a1cfff;
+        color: white;
+    }
+</style>
 
     <div class="container my-4">    
         <!-- Buttons -->
@@ -26,6 +32,17 @@
             <button class="btn btn-warning mx-2" onclick="showOrders('incomplete')">الطلبات الغير مكتملة</button>
             <button class="btn btn-success mx-2" onclick="showOrders('completed')">الطلبات المكتملة</button>
         </div> -->
+               <!-- حقل البحث وأزرار الفلترة بجانب بعض -->
+<div class="d-flex mb-3">
+    <input type="text" id="search-input" class="form-control w-25 " placeholder="ابحث عن كلمة...">
+    <div class="btn-group mr-2" role="group">
+        <button class="btn btn-outline-primary filter-btn" data-filter="جديد">جديد</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="مكتمل">مكتمل</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="غير مكتمل">غير مكتمل</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="معتمد">معتمد</button>
+        <button class="btn btn-outline-secondary filter-btn" data-filter="all">الكل</button>
+    </div>
+</div>
         <!-- Table -->
         <table class="table table-bordered table-striped">
             <thead>
@@ -38,8 +55,9 @@
                  
                 </tr>
             </thead>
-            <tbody id="ordersTableBody">
+            <!-- <tbody id="ordersTableBody"> -->
                 <!-- Orders will be dynamically loaded here -->
+                <tbody id="table-body">
                  {% for o in orders %}
                     <tr>
                         <td>HC-AH-{{o.id}}</td>
@@ -55,8 +73,54 @@
     </div>
 
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 
-
+    <script>
+        $(document).ready(function() {
+            // فلترة الجدول عند الكتابة في حقل البحث
+            $('#search-input').on('input', function() {
+                let searchText = $(this).val().toLowerCase();
+      
+                $('#table-body tr').each(function() {
+                    // البحث في كل خلية في الصف
+                    let rowText = $(this).text().toLowerCase();
+                    if (rowText.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+      
+            // عند الضغط على زر فلترة
+            $('.filter-btn').click(function() {
+                // استعادة الألوان الافتراضية للأزرار
+                $('.filter-btn').removeClass('active-filter');
+                
+                // إضافة اللون النشط للزر المضغوط
+                $(this).addClass('active-filter');
+      
+                // الحصول على الكلمة المراد البحث عنها
+                let filter = $(this).data('filter');
+      
+                // فلترة الصفوف بناءً على الكلمة المختارة
+                $('#table-body tr').each(function() {
+                    let rowText = $(this).find('td:eq(2)').text();
+                    if (filter === 'all' || rowText.includes(filter)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                
+                // مسح النص الموجود في حقل البحث
+                $('#search-input').val('');
+            });
+        });
+      </script>
+    
 
 
 {% endblock %}

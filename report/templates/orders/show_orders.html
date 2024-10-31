@@ -18,6 +18,7 @@
   {% endblock %}
 
 {% block clients_home %}
+
 <div class="row"></div>
     <div class="col-4">
         <a href="{% url 'new_order' %}" class="btn btn-sm btn-dark">+ اضافة طلب جديد</a>
@@ -29,36 +30,95 @@
 <div class="row mt-2">
     <div class="card">
     <div class="col-12 card-body">
+
+          <!-- حقل البحث وأزرار الفلترة بجانب بعض -->
+    <div class="d-flex mb-3">
+        <input type="text" id="search-input" class="form-control w-25 ml-2" placeholder="ابحث عن ...">
+        <div class="btn-group" role="group">
+            <button class="btn btn-outline-primary filter-btn" data-filter="جديد">جديد</button>
+            <button class="btn btn-outline-primary filter-btn" data-filter="مكتمل">مكتمل</button>
+            <button class="btn btn-outline-primary filter-btn" data-filter="غير مكتمل">غير مكتمل</button>
+            <button class="btn btn-outline-primary filter-btn" data-filter="معتمد">معتمد</button>
+            <button class="btn btn-outline-secondary filter-btn" data-filter="all">الكل</button>
+        </div>
+    </div>
+
         <table class="table table-striped">
-            <tr>
                 <thead class="bg-dark">
                     <tr>
                         <th>رقم الطلب</th>
                         <th>الفرع</th>
+                        <th>حالة الطلب</th>
                         <th>العلامة التجارية</th>
                         <th>الشركة</th>
                         <th>المفتش</th>
                         <th>تاريخ الطلب</th>
-                        <th>حالة الطلب</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="table-body">
                     {% for o in orders %}
                     <tr>
                         <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
                         <td>{{o.bransh_id.description}}</td>
+                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %}{% if o.status == '2' %} مكتمل{% endif %}</td> 
                         <td>{{o.bransh_id.brand_id.description}}</td>
                         <td>{{o.bransh_id.brand_id.company_id.description}}</td>
                         <td>{{o.employee_id}}</td>
                         <td>{{o.registerDate}}</td>
-                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %}{% if o.status == '2' %} مكتمل{% endif %}</td> 
                         <td><a href="{% url 'show_order_details' o.id %}" class="btn btn-sm btn-primary"> عرض</a></td>
                     </tr>
                     {% endfor %}
-                 
+                 </tbody>
         </table>
     </div>
 
-</div></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+            // فلترة الجدول عند الكتابة في حقل البحث
+            $('#search-input').on('input', function() {
+                //alert("work")
+                let searchText = $(this).val().toLowerCase();
+      
+                $('#table-body tr').each(function() {
+                    // البحث في كل خلية في الصف
+                    let rowText = $(this).text().toLowerCase();
+                    if (rowText.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+        // عند الضغط على زر فلترة
+        $('.filter-btn').click(function() {
+            // استعادة الألوان الافتراضية للأزرار
+            $('.filter-btn').removeClass('active-filter');
+            
+            // إضافة اللون النشط للزر المضغوط
+            $(this).addClass('active-filter');
+  
+            // الحصول على الكلمة المراد البحث عنها
+            let filter = $(this).data('filter');
+  
+            // فلترة الصفوف بناءً على الكلمة المختارة
+            $('#table-body tr').each(function() {
+                let rowText = $(this).find('td:eq(2)').text();
+                if (filter === 'all' || rowText.includes(filter)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+  </script>
+
 {% endblock %}

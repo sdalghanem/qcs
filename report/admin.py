@@ -24,7 +24,7 @@ class Score_historyAdmin(admin.ModelAdmin):
 
 class Report_orderAdmin(admin.ModelAdmin):
     list_display = ('bransh_id'  , 'employee_id' , 'registerDate')
-   
+    list_filter=('status' , )
 
 # Register your models here.
 admin.site.register(Zone , ZoneAdmin)

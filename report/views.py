@@ -74,7 +74,7 @@ def add_newZone(request , id):
     new.save()
     return redirect('brand_terms' , id = id)
 
-
+# اضافة المسؤولين
 def insert_responsible(request , brandid , termid):
     #id for term
     # term = Term.objects.get(id = termid)
@@ -86,7 +86,15 @@ def insert_responsible(request , brandid , termid):
     print("حفظ جديد")
     return redirect('brand_terms' , id = brandid)
     
-
+# اضافة الملاحظات
+def insert_note(request , brandid , termid):
+    #id for term
+    # term = Term.objects.get(id = termid)
+    new = Term.objects.get(id = termid)
+    new.note = request.POST['note']
+    new.save()
+    print("حفظ  ملاحظة جديد")
+    return redirect('brand_terms' , id = brandid)
     
 def show_responsible(request,id):
     if request.user.is_authenticated:
@@ -148,23 +156,48 @@ def show_order_details(request , id):
         return render(request , 'inspectors/login.html')
 
 
-def calc_order(id):
-    #id for order
-      # جلب جميع السجلات المرتبطة بالطلب المحدد
-    scores = Term_score.objects.filter(report_order_id_id=id)
+# def calc_order(id):
+#     #id for order
+#       # جلب جميع السجلات المرتبطة بالطلب المحدد
+#     scores = Term_score.objects.filter(report_order_id_id=id)
+
+#     # التحقق من وجود درجات
+#     if not scores.exists():
+#         return 0  # إذا لم تكن هناك درجات، أعد 0
+
+#     # حساب مجموع الدرجات (والتي هي إما 0 أو 1)
+#     total_score = sum(int(score.score) for score in scores)
+
+#     # حساب عدد البنود (terms) وهو العدد الكلي للدرجات الممكنة
+#     total_terms = scores.count()
+
+#     # حساب النسبة المئوية وتحويلها إلى عدد صحيح
+#     percentage = int((total_score / total_terms) * 100) if total_terms > 0 else 0
+
+#     return percentage
+
+def calc_order(order_id):
+    # جلب جميع السجلات المرتبطة بالطلب المحدد
+    scores = Term_score.objects.filter(report_order_id_id=order_id)
 
     # التحقق من وجود درجات
     if not scores.exists():
         return 0  # إذا لم تكن هناك درجات، أعد 0
 
-    # حساب مجموع الدرجات (والتي هي إما 0 أو 1)
-    total_score = sum(int(score.score) for score in scores)
+    # جمع الدرجات الصالحة فقط (التي تكون غير فارغة وقابلة للتحويل إلى عدد صحيح)
+    total_score = 0
+    valid_terms_count = 0
 
-    # حساب عدد البنود (terms) وهو العدد الكلي للدرجات الممكنة
-    total_terms = scores.count()
+    for score in scores:
+        if score.score.strip():  # التحقق من أن الدرجة غير فارغة
+            try:
+                total_score += int(score.score)  # إضافة الدرجة إلى المجموع
+                valid_terms_count += 1  # زيادة عدد البنود الصالحة
+            except ValueError:
+                continue  # تجاهل أي درجة لا يمكن تحويلها إلى عدد صحيح
 
-    # حساب النسبة المئوية وتحويلها إلى عدد صحيح
-    percentage = int((total_score / total_terms) * 100) if total_terms > 0 else 0
+    # حساب النسبة المئوية بناءً على البنود الصالحة فقط
+    percentage = round( float((total_score / valid_terms_count) * 100)) if valid_terms_count > 0 else 0
 
     return percentage
 
@@ -177,6 +210,9 @@ def submit_result(request , resault , orderid):
     new.quarter = ord.quarter
     new.year = ord.year
     new.registerDate = date.today()
+    ord.status = '3' 
+    ord.save()
     new.save()
+    #تغيير الحاله الى معتمد
     return redirect('show_order_details' , id=orderid)
     

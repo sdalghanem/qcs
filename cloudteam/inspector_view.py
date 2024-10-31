@@ -81,9 +81,9 @@ def get_evaluation_points(request, zone_id , orID):
     for t in terms :
         if Term_score.objects.filter(term_id_id = t.term_id.id , report_order_id_id = orID).exists():
           score = Term_score.objects.get(term_id = t.term_id.id , report_order_id_id = orID).score
-          row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : '0' , 'score': score})
+          row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'status' : '0' , 'score': score , 'termNote': t.term_id.note})
         else:
-            row.append({'term' : t.term_id.description ,'term_id': t.term_id.id })
+            row.append({'term' : t.term_id.description ,'term_id': t.term_id.id , 'termNote': t.term_id.note })
     print(row)  
     data = {
     'username':  request.session['username'] ,

@@ -75,6 +75,7 @@
                   <option value="q2">الربع الثاني</option>
                   <option value="q3">الربع الثالث</option>
                   <option value="q4">الربع الرابع</option>
+                  <option value="0">سنة</option>
               </select>
           </div>
 
@@ -113,6 +114,8 @@
        <h6>  الربع الثالث {{y}}</h6>
        {% elif q == 'q4' %}  
        <h6>  الربع الرابع {{y}}</h6>
+       {% elif q == '0' %}  
+       <h6>  سنة {{y}}</h6>
        {% endif %}
 
             <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">

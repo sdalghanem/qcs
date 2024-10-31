@@ -61,6 +61,7 @@
                         <table class="table table-striped">
                             <tr>
                             <th>بنود تفتيش تقرير الجودة</th>
+                            <th>الملاحظات</th>
                             <th>المسؤوليات</th>
                             <th>التفاصيل</th>
                             
@@ -70,6 +71,14 @@
                         
                         <tr>
                             <td>{{trm.description }}</td>
+                            <td> <!--في حال وجود ملاحظات  لايظهر الزر و تظهر الملاحظات-->
+                                {% if trm.note %}
+                                {{trm.note}}  <a href="#" class="text-danger" onclick="remove_note('{{trm.id}}')">X</a>
+
+                               {% else %}
+                                <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#note{{trm.id}}"> +  إضافة ملاحظة</a> 
+                                {% endif %}
+                            </td>
                             <td> <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#responiple{{trm.id}}"> + </a> </td>
                             <td> <a href="{% url 'show_responsible' trm.id %}" class="badge badge-primary "> عرض </a></td>
                         </tr>
@@ -226,8 +235,40 @@
               </div>
             </div>
           </div>
-          {% endfor %}
+{% endfor %}
 
+{% for trm in terms %}
+
+        <!-- Modal Note-->
+        <div class="modal fade" id="note{{trm.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">اضافة ملاحظة </h5>
+                 
+                </div>
+                <div class="modal-body">
+                 
+                    <form class="section general-info " method="post" action="{% url 'insert_note'  brandId  trm.id%}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea class=" form-control textarea" name="note" placeholder="اكتب الملاحظة لتظهر عند التقييم"></textarea>
+                                    </div>
+                                 </div>
+                            </div>
+                           
+                </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+{% endfor %}
 
      <!-- Modal -->
      <div class="modal fade" id="location" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -272,6 +313,41 @@
       </div>
 
 <script>
+function remove_note(id){
+
+    let userConfirmed = confirm("سيتم حذف الملاحظة , هل انت متأكد ؟");
+    if (userConfirmed){
+    ///////////////////////////////حذف الملاحظة/////////////////////////
+    let brandId = '{{brandId}}' ;
+        $.ajax({
+            type: 'post',
+            url:'/cloudteam/remove_note/',
+            async: true,
+            data:{
+            termid : id , 
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+                window.location.reload();
+               // window.location = "{% url 'brand_terms' 1234 %}".replace(/1234/, brandId.toString());
+                //alert("تم تفعيل الباقة بنجاح")
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+//////////////////////////////////////////////////////////////////
+    }else{
+        alert(" تم الالغاء")
+    }
+   
+}
+
 
 
 function save_packege(){

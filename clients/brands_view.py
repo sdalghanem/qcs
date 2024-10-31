@@ -331,15 +331,21 @@ def reports_list(request , id , y , q):
              return redirect('reports_list' , id= id , y = request.POST['year'] , q = request.POST['quarter'] )
         else:
             reportsInfo = []
-            reports = Report_order.objects.filter(bransh_id = id , year = y  , quarter = q)
+            if q == '0':
+                  reports = Report_order.objects.filter(bransh_id = id , year = y  ,  status = '3' )
+            else:
+                reports = Report_order.objects.filter(bransh_id = id , year = y  , quarter = q , status = '3' )
             for ro in reports:
-                resualt = Score_history.objects.get(report_order_id = ro.id)
-                row = {
-                    'reportDate': ro.registerDate , 
-                    'rate' : resualt.total_score ,
-                    'id' : ro.id ,
-                }
-                reportsInfo.append(row)
+                if Score_history.objects.filter(report_order_id = ro.id).exists():
+                    resualt = Score_history.objects.get(report_order_id = ro.id)
+                    row = {
+                        'reportDate': ro.registerDate , 
+                        'rate' : resualt.total_score ,
+                        'id' : ro.id ,
+                        'quarter' : ro.quarter,
+                    }
+                    reportsInfo.append(row)
+                
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
             data = {
@@ -446,7 +452,10 @@ def branchs_resault(region_id , brand_id , y , q):
     #print(type(branches))
     repo =[]
     for br in branches:
-        report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year= y , quarter = q) 
+        if q == '0':
+            report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year= y , status ='3')
+        else :  
+             report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year= y , quarter = q , status ='3')
         for ro in report_orders :
             score_his = Score_history.objects.filter(report_order_id = ro.id)
             for score in score_his:
@@ -478,7 +487,10 @@ def branchs_city_resault(city_id , brand_id , y , q):
     #print(type(branches))
     repo =[]
     for br in branches:
-        report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year=y , quarter = q)
+        if q == '0':
+             report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year=y , status = '3')
+        else :
+            report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year=y , quarter = q , status = '3')
         for ro in report_orders :
             score_his = Score_history.objects.filter(report_order_id = ro.id)
             for score in score_his:
@@ -506,7 +518,10 @@ def branchs_dist_resault(dist_id , brand_id , y , q):
     #print(type(branches))
     repo =[]
     for br in branches:
-        report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year = y , quarter = q)
+        if q == '0':
+             report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year = y , status = '3')
+        else:
+            report_orders = Report_order.objects.filter(bransh_id = br['brancheID'] , year = y , quarter = q , status = '3')
         for ro in report_orders :
             score_his = Score_history.objects.filter(report_order_id = ro.id)
             for score in score_his:
@@ -518,7 +533,10 @@ def branchs_dist_resault(dist_id , brand_id , y , q):
 
 def branchs_percentage(branch_id , y , q ):
     repo = []
-    report_orders = Report_order.objects.filter(bransh_id = branch_id , year=y , quarter=q)
+    if q == '0':
+         report_orders = Report_order.objects.filter(bransh_id = branch_id , year=y ,status = '3' )
+    else:
+        report_orders = Report_order.objects.filter(bransh_id = branch_id , year=y , quarter=q ,status = '3')
     for ro in report_orders :
         score_his = Score_history.objects.filter(report_order_id = ro.id)
         for score in score_his:
@@ -535,15 +553,18 @@ def branchs_percentage(branch_id , y , q ):
 ##########################################################################################
 
 def get_order_ids(id , y , q):
+    print("اختبار قيمة الربع " + str(q))
     # id for brand y for year  q for quarter
     brnchs = Branch.objects.filter(brand_id_id = id)
     row = []
     for b in brnchs :
-        ords = Report_order.objects.filter(bransh_id_id = b.id , status = '2' , year = y , quarter = q)
+        if q == '0':
+            ords = Report_order.objects.filter(bransh_id_id = b.id , status = '3' , year = y )
+        else :
+            ords = Report_order.objects.filter(bransh_id_id = b.id , status = '3' , year = y , quarter = q)
         for o in ords:
             row.append(o.id)
     percentage = calculate_average_percentage(row)
-    print(type(percentage))
     return percentage
 
 def calculate_average_percentage(report_order_ids):

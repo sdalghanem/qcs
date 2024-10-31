@@ -75,6 +75,7 @@
                     <option value="q2">الربع الثاني</option>
                     <option value="q3">الربع الثالث</option>
                     <option value="q4">الربع الرابع</option>
+                    <option value="0">سنة</option>
                 </select>
             </div>
 
@@ -113,6 +114,9 @@
          <h6>  الربع الثالث {{y}}</h6>
          {% elif q == 'q4' %}  
          <h6>  الربع الرابع {{y}}</h6>
+         {% elif q == '0' %}  
+         <h6>  سنة {{y}}</h6>
+
          {% endif %}
 
             <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
@@ -120,7 +124,9 @@
                     
                     <tr> 
                         <th>No.</th>
-                        <th>تاريخ</th>
+                        <th>تاريخ التقرير</th>
+                        <th>السنه</th>
+                        <th>الربع </th>
                         <th>درجة التقييم</th>
                         <th>تفاصيل</th>
                     </tr>
@@ -131,6 +137,18 @@
                         {% for r in row %}
                         <td>HC-{{r.id}}</td>
                         <td>{{r.reportDate}}</td>
+                        <td>{{r.reportDate.year}}</td>
+                        <td>
+                            {% if r.quarter == 'q1' %}
+                            الربع الأول
+                            {% elif r.quarter == 'q2' %}
+                            الربع الثاني
+                            {% elif r.quarter == 'q3' %}
+                            الربع الثالث
+                            {% elif r.quarter == 'q4' %}
+                            الربع الرابع
+                            {% endif %}
+                        </td>
                         <td>{{r.rate}}%</td>
                         <td> <a href="{% url 'show_report' r.id %}" class="btn btn-primary">عرض التقرير</a> </td>
                     </tr>

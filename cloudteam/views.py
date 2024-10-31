@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate , login as auth_login , logout
 def save_packege(request):
     # اضافه البنود بناء على تفعيل الباقة للشركة
     # اذا كان البند موجود فقط نقول بتحويل الكنسل الى 0
-    # اذا كان البند غير موجود نقول بحفظه
+    # اذا كان البند غير موجود نقوم بحفظه
     # اذا كان البند الموجود من غير الباقه المفعله نقوم بتحويل الكنسل الى 1
 
     pck = request.POST['pck']
@@ -54,7 +54,11 @@ def packege_terms(id):
         allterm.append({'title' : tit.section , 'terms': row}) 
     return allterm
 
-
+def remove_note(request):
+     update = Term.objects.get(id = request.POST['termid'])
+     update.note = ''
+     update.save()
+     return JsonResponse( {'data' : 'ok'} , safe=False)
 
 
 

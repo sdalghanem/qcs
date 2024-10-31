@@ -41,8 +41,8 @@ path('delete_district/<str:id>' , countries_views.delete_district , name='delete
 
 
 ################################################################
-path('save_packege/' , views.save_packege , name='save_packege'),  
-
+path('save_packege/' , views.save_packege , name='save_packege'),   
+path('remove_note/' , views.remove_note , name='remove_note'),
 # cloud team pages .
 path('login_admin' , views.login_admin , name='login_admin'), 
 path('logout_view' , views.logout_view , name='logout_view'), 

@@ -14,7 +14,7 @@ from .brands_view import *
 def gm_dashboard(request , y , q):
     if request.user.is_authenticated:
         if request.method =='POST':
-            return redirect('gm_dashboard' , y = request.POST['year'] , q= request.POST['quarter'])
+            return redirect('gm_dashboard' , y = request.POST['year'] , q = str(request.POST['quarter']))
         else:
             row = []
             brands = Brand.objects.filter(company_id = request.session['company_id'])
@@ -33,10 +33,13 @@ def gm_dashboard(request , y , q):
                 ####### الفروع
                 branchs = calc_branchs(b.id , y , q)
                 branchs_last = calc_branchs_last(b.id , y , q)
-
-                print(branchs)
                 #########
-                perc = int(get_order_ids(id =brandid , y = y , q = q)) # هذا نسبة الربع الاول
+                perc = round(float(get_order_ids(id =brandid , y = y , q = q)))  # هذا نسبة الربع او السنه
+                if q == '0':
+                    quarters = get_order_quarters(brandid , y)
+                else:
+                    quarters = ''
+                print('النتيجه الكلية : ' + ' ' + str(q))
                 row = {
                     'brandName' : brandName ,
                     'brandid' : brandid,
@@ -65,6 +68,7 @@ def gm_dashboard(request , y , q):
                 'years': years,
                 'y': y,
                 'q':q,
+                'quarters': quarters,
             }
             return render(request , 'dashboards/dashboard.html' , data)
     else:
@@ -116,8 +120,11 @@ def get_orders_by_brand(id , y , q):
     # هذا الفنكشن يقوم بارجاع لسته الطلبات بناء على العلامة التجارية بالربع السنوي المحدد
     orlist= []
     branchs = Branch.objects.filter(brand_id_id = id)
-    for bh in branchs:           
-        orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y , quarter = q) 
+    for bh in branchs:
+        if q == '0':
+             orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y  ,status = '3') 
+        else :           
+            orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y , quarter = q , status = '3') 
         for o in orders :
             orlist.append(o.id)
     return orlist
@@ -126,31 +133,42 @@ def calc_regions(id ,y , q):
      # id for brand
     region_scores = []  # قائمة لتخزين السكور لكل منطقة
     regions = Region.objects.all()
-
     for r in regions:
         depName = r.name
         total_region_score = 0  # متغير لتجميع السكور الخاصة بكل منطقة
         branches = region_branches(r.id, id)
-
+        divided = 0
         for br in branches:
-            report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , quarter = q)
+            if q == '0':
+                 report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , status = '3') 
+                 for r in report_orders :
+                     divided += 1
+            else :
+                report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , quarter = q , status = '3')
+                for r in report_orders :
+                     divided += 1
 
             for ro in report_orders:
                 score_his = Score_history.objects.filter(report_order_id=ro.id)
-
                 for score in score_his:
                     # تحويل total_score إلى int للتأكد من عدم وجود مشاكل في الإضافة
                     try:
                         total_region_score += int(score.total_score)
+                        
                     except ValueError:
                         # إذا كانت القيمة لا يمكن تحويلها إلى int، يتم تجاهلها أو التعامل معها
                         pass
-
         # إضافة اسم المنطقة ومجموع السكور إلى قائمة النتيجة
+        print(depName)
+        print(divided)
+        if divided == 0:
+            result = 0
+        else: 
+            result = int(total_region_score / divided)
         region_scores.append({
             'region_name': depName,
-            'region_score': total_region_score
-        })
+            'region_score': result
+        })     
     sorted_data = sorted(region_scores, key=lambda x: x['region_score'], reverse=True)
     return sorted_data[:3]
 
@@ -163,10 +181,16 @@ def calc_regions_last(id ,y , q):
         depName = r.name
         total_region_score = 0  # متغير لتجميع السكور الخاصة بكل منطقة
         branches = region_branches(r.id, id)
-
+        divided = 0 # العدد الذي ستقسم عليه مجموع النتائج وهو عدد التقارير المعتمده
         for br in branches:
-            report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , quarter = q)
-
+            if q == '0':
+                 report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , status = '3') 
+                 for r in report_orders :
+                    divided += 1
+            else :
+                report_orders = Report_order.objects.filter(bransh_id=br['brancheID'] , year = y , quarter = q , status = '3')
+                for r in report_orders :
+                    divided += 1
             for ro in report_orders:
                 score_his = Score_history.objects.filter(report_order_id=ro.id)
 
@@ -177,11 +201,14 @@ def calc_regions_last(id ,y , q):
                     except ValueError:
                         # إذا كانت القيمة لا يمكن تحويلها إلى int، يتم تجاهلها أو التعامل معها
                         pass
-
+        if divided == 0:
+            result = 0
+        else: 
+            result = int(total_region_score / divided)
         # إضافة اسم المنطقة ومجموع السكور إلى قائمة النتيجة
         region_scores.append({
             'region_name': depName,
-            'region_score': total_region_score
+            'region_score': result
         })
     sorted_data = sorted(region_scores, key=lambda x: x['region_score'])
     return sorted_data[:3] 
@@ -205,7 +232,7 @@ def calc_branchs(id , y , q):
              percentage = int((total / len(score_list)) )
 
         #############################################
-        print(final_score)
+        #print(final_score)
         row = {
             'branchName' : br.description ,
             'rate' : percentage,
@@ -233,7 +260,7 @@ def calc_branchs_last(id , y , q):
              percentage = int((total / len(score_list)) )
 
         #############################################
-        print(final_score)
+        #print(final_score)
         row = {
             'branchName' : br.description ,
             'rate' : percentage,
@@ -243,22 +270,95 @@ def calc_branchs_last(id , y , q):
     return sorted_data[:3]   
     ###########################################################################################
 ##################################################################################################
-def get_order_ids(id , y , q):
+def get_order_ids(id , y , q): # هذي الفنكشن موجوده في ملف brands_view.py
     # id for brand y for year  q for quarter
     brnchs = Branch.objects.filter(brand_id_id = id)
     row = []
     for b in brnchs :
-        ords = Report_order.objects.filter(bransh_id_id = b.id , status = '2' , year = y , quarter = q)
+        if q == '0':    
+            ords = Report_order.objects.filter(bransh_id_id = b.id , status = '3' , year = y )
+        else:
+            ords = Report_order.objects.filter(bransh_id_id = b.id , status = '3' , year = y , quarter = q)
         for o in ords:
             row.append(o.id)
     percentage = calculate_average_percentage(row)
-    print(type(percentage))
+  
     return percentage
+
+
+# def get_order_quarters(id , y ):
+#     # id for brand y for year  q for quarter
+#     brnchs = Branch.objects.filter(brand_id_id = id)
+#     qlist = []
+#     row = []
+#     for b in brnchs :
+#         for q in ['q1' , 'q2' , 'q3' , 'q4']:
+#             ords = Report_order.objects.filter(bransh_id_id = b.id , status = '3' , year = y , quarter = q)
+#             for o in ords:
+#                 row.append(o.id)
+#             percentage = calculate_average_percentage(row)
+#             qlist.append({'quarter': q , 'percentage' : percentage})
+#     #print(type(percentage))
+#     return qlist
+
+
+def get_order_quarters(brand_id, year):
+    # brand_id هو رقم المعرف للعلامة التجارية
+    branches = Branch.objects.filter(brand_id_id=brand_id)
+    quarter_results = []
+
+    for quarter in ['q1', 'q2', 'q3', 'q4']:
+        # قائمة لتخزين معرّفات الطلبات (Report_order) لهذا الربع
+        report_order_ids = []
+
+        for branch in branches:
+            # استخراج جميع الطلبات بناءً على الفرع، السنة، والربع
+            report_orders = Report_order.objects.filter(
+                bransh_id_id=branch.id,
+                status='3',
+                year=year,
+                quarter=quarter
+            )
+            report_order_ids.extend(report_orders.values_list('id', flat=True))
+
+        # حساب النسبة المئوية لهذا الربع
+        percentage = calculate_averagequarters(report_order_ids) if report_order_ids else 0
+        quarter_results.append({'quarter': quarter, 'percentage': percentage})
+ 
+    return quarter_results
+
+
+def calculate_averagequarters(report_order_ids):
+    # استخراج الدرجات بناءً على قائمة معرفات الطلبات (report_order_ids)
+    score_histories = Score_history.objects.filter(report_order_id__in=report_order_ids)
+
+    if not score_histories.exists():
+        return 0  # إذا لم توجد بيانات كافية
+
+    # حساب مجموع الدرجات وعدد السجلات
+    total_score_sum = 0
+    count = 0
+
+    for score_history in score_histories:
+        try:
+            # تحويل الدرجة إلى عدد صحيح وإضافتها إلى المجموع
+            total_score_sum += int(score_history.total_score)
+            count += 1
+        except ValueError:
+            continue  # تجاهل السجلات غير الصحيحة
+
+    # حساب متوسط النسبة المئوية
+    average_percentage = (total_score_sum / (count * 100)) * 100 if count > 0 else 0
+
+    return int(average_percentage)  # النتيجة كنسبة مئوية صحيحة
+
 
 def calculate_average_percentage(report_order_ids):
     # جلب السجلات بناءً على قائمة report_order_ids
     score_histories = Score_history.objects.filter(report_order_id__in=report_order_ids)
-
+    # for sh in score_histories:
+    #     print("نتيجه النهائية للسنه")
+    #     print(sh.report_order_id.quarter)
     # التحقق من وجود درجات
     if not score_histories.exists():
         return 0  # لا توجد بيانات لحساب المتوسط
@@ -281,8 +381,8 @@ def calculate_average_percentage(report_order_ids):
 
     # حساب النسبة المئوية (لنفترض أن أقصى درجة هي 100)
     average_percentage = (average_score / 100) * 100
-
-    return int(average_percentage)  # تحويل النسبة إلى عدد صحيح
+   
+    return float(average_percentage)  # تحويل النسبة إلى عدد صحيح
 ################################################################################################
 def brandManager_dashboard(request ):
     data = {
@@ -341,6 +441,6 @@ def dept_Manager_dashboard(request):
             'deptName': request.session['deptName'],
             'dept_id' : request.session['dept_id'],
             }
-    print(data)
+    #print(data)
     return render(request , 'dashboards/dept_Manager_dashboard.html' , data)
 

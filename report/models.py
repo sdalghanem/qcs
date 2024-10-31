@@ -16,6 +16,7 @@ class Zone(models.Model):
 class Term(models.Model):
     description = models.CharField(max_length=100 , verbose_name ='البند')
     brand_id = models.ForeignKey(Brand, on_delete=models.CASCADE , verbose_name =' العلامة التجارية')
+    note = models.CharField(max_length=1500 , verbose_name ='ملاحظات' , null=True)
     cancel = models.BooleanField(default= 0 , null= True)
     class Meta:
         verbose_name_plural = "البند"

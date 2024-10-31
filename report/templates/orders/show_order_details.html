@@ -18,10 +18,12 @@
   {% endblock %}
 
 {% block clients_home %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+
 <div class="row"></div>
     <div class="col-4">
-        <a href="{% url 'new_order' %}" class="btn btn-sm btn-dark">+ اضافة طلب جديد</a>
-        <a href="#" class="btn btn-sm btn-dark">الطلبات المنتهية</a>
+        <a href="{% url 'show_orders' %}" class="btn btn-sm btn-dark">  < الرجوع للتقارير</a>
        
     </div>
 </div>
@@ -54,9 +56,14 @@
                         <td>{{o.registerDate}}</td>
                         <td>{{o.quarter}}</td>
                         <td>{{o.year}}</td>
-                        <td> {{fainl_res}}%  
+                        <td> {{fainl_res}} %   
                             {% if btnOn == '1' and o.status == '2' %}
                               <a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-success"> اعتماد </a>
+                            {% elif  btnOn == '0' and o.status == '2' %}
+                            <br>
+                            <span> غير مكتمل</span>
+                            {% elif btnOn == '0' and o.status == '3' %}
+
                             {% endif %}
                             </td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
                     </tr>
@@ -77,7 +84,16 @@
                     {% for t in terms %}
                     <tr>
                         <td>{{t.term_id.description}}</td>
-                        <td>{{t.score}}</td>
+                        <td>
+                            {% if t.score == ' ' %}
+                                مستبعد
+                            {% elif t.score == '1' %}
+                                <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem;"></i>
+                            {% elif t.score == '0' %}
+                                <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem;"></i>
+                            {% endif %}
+        
+                        </td>
                         <td>{{t.note}}</td>
                         <td> {% if t.img %}
                             <a href="../../../{{t.img}}" class="btn btn-sm btn-dark">عرض</a>

@@ -45,7 +45,7 @@
 
                     <div class="form-group mt-2">
                         <select class="form-control" id="brand" style="display: none;">
-
+                            
                         </select>
                     </div>
 
@@ -122,9 +122,9 @@
         } ,
         
             success:function(data){ 
+                brand.innerHTML = ` <option> اختر العلامه التجارية</option>`;
              data.forEach((element) => {
                 console.log(element)
-                
                  brand.innerHTML += `
                  <option value="${element.id}">${element.name}</option>
                  `;
@@ -144,6 +144,8 @@
         // alert(company.value)
         branch.style.display = 'inline'; // Show the city dropdown
         branch.innerHTML = " ";
+        
+
             $.ajax({
             type: 'post',
             url:'/report/get_branch',
@@ -154,9 +156,9 @@
         } ,
         
             success:function(data){ 
+             
              data.forEach((element) => {
                 console.log(element)
-                
                 branch.innerHTML += `
                  <option value="${element.id}">${element.name}</option>
                  `;

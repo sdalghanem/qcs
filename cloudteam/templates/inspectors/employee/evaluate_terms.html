@@ -17,6 +17,8 @@
   {% endblock %}
 
 {% block clients_home %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
 <div class="row"></div>
 <div class="col-12 mb-2">
     <a href="{% url 'evaluate' orID %}" class="btn btn-sm btn-dark"> <  الرجوع لأماكن التقتيش  </a>
@@ -36,16 +38,29 @@
     <tbody>
         {% for r in row %}
         <tr>
-            <td>{{ r.term }}</td>
+            <td>{{ r.term }} 
+                {% if r.termNote%}
+                <a id="showNote" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#note_show{{ r.term_id }}" > ملاحظة</a>
+               {% endif %}
+            </td>
             <td>
                 {% if r.status %}
                 {% else %}
                 <a href="#" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#evaluationModal{{ r.term_id }}" onclick="openEvaluationModal()">قيم</a>
-
                 {% endif %}
             </td>
             <td>
-                {{r.score}}
+                {% if r.score %}
+                    {% if r.score == ' ' %}
+                         مستبعد
+                    {% elif r.score == '1' %}
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem;"></i>
+                    {% elif r.score == '0' %}
+                    <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem;"></i>
+                    {% endif %}
+                {% else %}
+                    لم يتم التقييم
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
@@ -71,6 +86,7 @@
                             <option value="">اختر...</option>
                             <option value="1">نعم</option>
                             <option value="0">لا</option>
+                            <option value=" ">تخطي</option>
                         </select>
                     </div>
                     <div id="imageUploadSection{{ r.term_id }}" class="mb-3" style="display: none;">
@@ -92,6 +108,27 @@
     </div>
 </div>
 {% endfor %}
+
+
+     <!-- Modal -->
+     {% for r in row %}
+     <div class="modal fade" id="note_show{{r.term_id}}" tabindex="-2" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">             
+            </div>
+            <div class="modal-body">
+             
+                <h3>{{r.termNote}}</h3>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      {% endfor %}
 
 <script>
     function toggleImageAndCommentSections(termId) {
