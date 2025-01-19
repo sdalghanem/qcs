@@ -60,7 +60,7 @@ body:before {
   height: 450px;
 }
 
-.auth-overlay {
+/* .auth-overlay {
   position: fixed;
   right: 0;
   top: 0;
@@ -68,8 +68,19 @@ body:before {
   border-radius: inherit;
   background-image: linear-gradient(-225deg, #231557 0%, #44107A 29%, rgba(255, 19, 97, 0.75) 100%);
   width: 55%;
+} */
+.auth-overlay {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  border-radius: inherit;
+  background-image: url('../../../img/backgroundLogin.png'); /* إضافة الصورة كخلفية */
+  background-size: cover; /* لجعل الصورة تغطي المساحة بالكامل */
+  background-position: center; /* وضع الصورة في المنتصف */
+  background-repeat: no-repeat; /* منع تكرار الصورة */
+  width: 55%;
 }
-
 .opt-input {
   padding: 12px 14px;
   text-align: center;

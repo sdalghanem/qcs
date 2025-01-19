@@ -19,7 +19,7 @@ def gm_dashboard(request , y , q):
             row = []
             brands = Brand.objects.filter(company_id = request.session['company_id'])
             brandsList = []
-
+            chartInfo = []
         # # # # هنا لوب البراندات تحط فيه اللي تبيه يظهر
             for b in brands:
                 brandName = b.description
@@ -39,7 +39,13 @@ def gm_dashboard(request , y , q):
                     quarters = get_order_quarters(brandid , y)
                 else:
                     quarters = ''
-                print('النتيجه الكلية : ' + ' ' + str(q))
+               # print('النتيجه الكلية : ' + ' ' + str(q))
+                # for brn in  branchs:
+                #     for bch in brn :
+                #         print('################')
+                #         print(bch)
+                #         print('################')
+                #         chartInfo.append({'branchName' : bch.branchName , 'rate' : bch.rate , 'brand_id': b.id})
                 row = {
                     'brandName' : brandName ,
                     'brandid' : brandid,
@@ -55,6 +61,7 @@ def gm_dashboard(request , y , q):
                     'branchs_last': branchs_last,
                 }
                 brandsList.append(row)
+               
         # السنوات
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
@@ -69,6 +76,8 @@ def gm_dashboard(request , y , q):
                 'y': y,
                 'q':q,
                 'quarters': quarters,
+                #'chartInfo':chartInfo
+                'position': request.session['position'] 
             }
             return render(request , 'dashboards/dashboard.html' , data)
     else:
@@ -159,8 +168,6 @@ def calc_regions(id ,y , q):
                         # إذا كانت القيمة لا يمكن تحويلها إلى int، يتم تجاهلها أو التعامل معها
                         pass
         # إضافة اسم المنطقة ومجموع السكور إلى قائمة النتيجة
-        print(depName)
-        print(divided)
         if divided == 0:
             result = 0
         else: 
@@ -236,8 +243,11 @@ def calc_branchs(id , y , q):
         row = {
             'branchName' : br.description ,
             'rate' : percentage,
+            'brand_id' : id
         }
         branchsInfo.append(row)
+        # print(branchsInfo)
+        # print("-----------")
     sorted_data = sorted(branchsInfo, key=lambda x: x['rate'], reverse=True)
     return sorted_data[:3]
 
@@ -391,6 +401,8 @@ def brandManager_dashboard(request ):
         'brand_id' : request.session['brand_id'],
         'brandName': request.session['brandName'],
         'brandLogo': request.session['brandLogo'],
+        'y': '2024',
+        'q':'q1',
     }
     return render(request , 'dashboards/brandManager_dashboard.html' , data)
     

@@ -18,6 +18,8 @@
   {% endblock %}
 
 {% block clients_home %}
+<p> <a href="{% url 'packege' %}" class="btn btn-sm btn-darck"> العودة للباقات  </a> >  <a href="{% url 'packege_details' pkid %}" class="btn btn-sm btn-darck" > {{pckName}}  </a> > <a href="{% url 'section_details' titleID%}" class="btn btn-sm btn-darck"> العودة لبنود {{title}}  </a></p>
+
 <div class="row">
     
     <div class="col-lg-12">
@@ -35,7 +37,7 @@
                     <button class="btn btn-primary" type="button" onclick="addRow()">+</button>
                 </div>
             </div>
-            <button class="btn btn-success" type="button" onclick="printValues()">حفظ </button>
+            <button class="btn btn-primary btn-sm" type="button" onclick="printValues()">حفظ </button>
         </div>
     </div>
 </form>

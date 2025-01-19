@@ -33,15 +33,19 @@ def add_new_packages(request):
             newPck = Packege()
             newPck.description = brandName
             newPck.save()
-            packeges = Packege.objects.all()
-            data = {
-                    'row' : packeges ,
-                    "msg": 'تم الحفظ بنجاح' ,
-                    'class' :'alert-success' ,
-                    'username':  request.session['username'] ,
-                    'img': request.session['img']
-                    }
-            return render(request , 'preset/index.html' , data) 
+            print('هذا الاي دي الجديد')
+            print(newPck.id)
+            return redirect('packege_details' , id = newPck.id)
+            #
+            # data = {
+            #         'row' : packeges ,
+            #         "msg": 'تم الحفظ بنجاح' ,
+            #         'class' :'alert-success' ,
+            #         'username':  request.session['username'] ,
+            #         'img': request.session['img']
+            #         }
+            #return render(request , 'preset/index.html' , data) 
+
     else :
             return render(request , 'inspectors/login.html')
 
@@ -49,16 +53,23 @@ def add_new_packages(request):
 # تفاصيل الباقة
 def packege_details(request , id):
     if request.user.is_authenticated:
+        row=[]
         #id packege
         print(id)
         pck =Packege.objects.get(id = id)
         titles = Term_title.objects.filter(packege_id = id)
+        # استخراج جميع البنود التابعه للعنوان
+        for t in titles :
+            if Preset_terms.objects.filter(term_title_id = t.id).exists:
+                pre = Preset_terms.objects.filter(term_title_id = t.id)
+                row.append({'title_id': t.id ,'title': t.section , 'terms': pre})
         data = {
             'pckName' : pck.description ,
             'pkid': id ,
             'titles': titles ,
             'username':  request.session['username'] ,
-            'img': request.session['img']
+            'img': request.session['img'],
+            'row': row,
         }
         return render(request , 'preset/packages_details.html' , data) 
     else :
@@ -72,6 +83,8 @@ def add_termsPage(request , id):
         data = {
             'titleID' : id ,
             'pkid' : title.packege_id_id,
+            'pckName' : title.packege_id.description,
+            'title': title.section,
             'username':  request.session['username'] ,
             'img': request.session['img']
         }
@@ -94,7 +107,7 @@ def add_new_terms(request):
         
         data = {
             'terms' : 'ok',
-        # 'sec': request.POST['secName']
+            # 'sec': request.POST['secName']
         }
         return JsonResponse( data , safe=False)
     else :
@@ -107,11 +120,13 @@ def add_new_terms(request):
 def section_details(request , id ):
     if request.user.is_authenticated:
         #id title
-        title =Term_title.objects.get(id = id).section
+        title = Term_title.objects.get(id = id).section
         terms = Preset_terms.objects.filter(term_title_id = id)
         data = {
             'title' : title ,
             'terms': terms,
+            'pckName': Term_title.objects.get(id = id).packege_id.description,
+            'pckid': Term_title.objects.get(id = id).packege_id.id,
             'username':  request.session['username'] ,
             'img': request.session['img']
         }
@@ -139,6 +154,21 @@ def update_term_title(request , id):
 
 def delete_term(request , id):
     term = Preset_terms.objects.get(id = id)
-    titid = term.term_title_id.id
+    packid = term.term_title_id.packege_id.id
     term.delete()
-    return redirect(section_details , id = titid)
+    return redirect('packege_details' , id = packid)
+
+def delete_package(request , id):
+    # id for package
+    pck = Packege.objects.get(id = id)
+    if Term_title.objects.filter(packege_id = id).exists():
+        return redirect(packege)
+    else :
+        pck.delete()
+        return redirect(packege)
+    
+def edit_pck_title(request , id) :
+        pck = Packege.objects.get(id = id)
+        pck.description = request.POST['description']
+        pck.save()
+        return redirect(packege)

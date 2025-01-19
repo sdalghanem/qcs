@@ -16,6 +16,19 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
+  {% block search %}
+  <input type="text" id="search-input" style="border: none; border-radius: 35px; background-color: #f1f1f1; padding: 7px; margin-left: 20px;" placeholder="ابحث ...">
+  <div class="btn-group mr-2" role="group">
+      <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد">جديد</button>
+      <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل">مكتمل</button>
+      <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل">غير مكتمل</button>
+      <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد">معتمد</button>
+      <button class="btn btn-primary filter-btn btn-sm" data-filter="all">الكل</button>
+  </div>
+
+  {% endblock %}
+  
+
 {% block clients_home %}
 
 <style>
@@ -25,24 +38,8 @@
     }
 </style>
 
-    <div class="container my-4">    
-        <!-- Buttons -->
-        <!-- <div class="d-flex justify-content-center my-3">
-            <button class="btn btn-primary mx-2" onclick="showOrders('new')">الطلبات الجديدة</button>
-            <button class="btn btn-warning mx-2" onclick="showOrders('incomplete')">الطلبات الغير مكتملة</button>
-            <button class="btn btn-success mx-2" onclick="showOrders('completed')">الطلبات المكتملة</button>
-        </div> -->
-               <!-- حقل البحث وأزرار الفلترة بجانب بعض -->
-<div class="d-flex mb-3">
-    <input type="text" id="search-input" class="form-control w-25 " placeholder="ابحث عن كلمة...">
-    <div class="btn-group mr-2" role="group">
-        <button class="btn btn-outline-primary filter-btn" data-filter="جديد">جديد</button>
-        <button class="btn btn-outline-primary filter-btn" data-filter="مكتمل">مكتمل</button>
-        <button class="btn btn-outline-primary filter-btn" data-filter="غير مكتمل">غير مكتمل</button>
-        <button class="btn btn-outline-primary filter-btn" data-filter="معتمد">معتمد</button>
-        <button class="btn btn-outline-secondary filter-btn" data-filter="all">الكل</button>
-    </div>
-</div>
+   
+
         <!-- Table -->
         <table class="table table-bordered table-striped">
             <thead>
@@ -62,7 +59,7 @@
                     <tr>
                         <td>HC-AH-{{o.id}}</td>
                         <td>{{o.bransh_id}} - {{o.bransh_id.brand_id}}</td>
-                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %} {% if o.status == '2' %} مكتمل{% endif %}</td>
+                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %} {% if o.status == '2' %} مكتمل{% endif %} {% if o.status == '3' %} معتمد{% endif %}</td>
                         <td>{{o.registerDate}}</td>
                         <td><a class="btn btn-sm btn-dark" href="{% url 'evaluate' o.id %}" >فتح</a></td>
                       
@@ -70,7 +67,6 @@
                  {% endfor %}
             </tbody>
         </table>
-    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -109,7 +109,7 @@ function get_responisbles(x){
     } ,
     
         success:function(data){ 
-           // console.log(data)
+            console.log(data)
              data.forEach((element) => {
                 //console.log(element)
                  model_responsible.innerHTML+= `<tr>

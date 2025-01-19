@@ -38,9 +38,9 @@
     <tbody>
         {% for r in row %}
         <tr>
-            <td>{{ r.term }} 
+            <td>{{ r.term }} <br>
                 {% if r.termNote%}
-                <a id="showNote" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#note_show{{ r.term_id }}" > ملاحظة</a>
+                <a id="showNote" href="#" class="text-danger" data-toggle="modal" data-target="#note_show{{ r.term_id }}" >شروط خاصة</a>
                {% endif %}
             </td>
             <td>

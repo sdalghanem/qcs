@@ -1,13 +1,18 @@
 {% extends "index.html" %}
 {% load static %}
+
+
 {% block dashbordMenu %}
+{% if position == '0' %}
 <a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
     <div class="">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
         <span>لوحة المعلومات</span>
     </div>
 </a>
+{% endif %}
 {%endblock %}
+
 
 <!--تمرير اسم المدير للملف الممتد index-->
 {% block mngName1 %} 
@@ -47,6 +52,42 @@
     {% endif %}
 
 {% endblock %}
+
+{% block qurter %}
+<div class="col-8 ">
+    <form action="#" method="post" class="form">
+        {% csrf_token %}
+        <div class="row align-items-center">
+            <!-- حقل الربع -->
+            <div class="col-md-3">
+                <select class="form-control form-control-sm" name="quarter">
+                    <option value="q1">الربع الأول</option>
+                    <option value="q2">الربع الثاني</option>
+                    <option value="q3">الربع الثالث</option>
+                    <option value="q4">الربع الرابع</option>
+                    <option value="0">سنة</option>
+                </select>
+            </div>
+
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-2">
+                <select class="form-control form-control-sm" name="year">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{%endblock %}
+
 {% block home %}
 
 
@@ -55,228 +96,130 @@
  <div class="row mb-4 align-items-center">
   <!-- Logo and Brand -->
   
-  <div class="col-5">
+  <div class="col-12">
     <h3 class="mb-0">
     <img src="../../../../../{{companyLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
     {{companyName}}
     
 </h3> 
   </div>
-<div class="col-6">
-  <form action="#" method="post" class="form">
-      {% csrf_token %}
-      <div class="row align-items-center">
-          <!-- Quarter Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="quarter">
-                  <option value="q1">الربع الأول</option>
-                  <option value="q2">الربع الثاني</option>
-                  <option value="q3">الربع الثالث</option>
-                  <option value="q4">الربع الرابع</option>
-              </select>
-          </div>
 
-          <!-- Year Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="year">
-                  {% for year in years %}
-                      <option value="{{ year }}">{{ year }}</option>
-                  {% endfor %}
-              </select>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="col-md-4">
-              <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
-          </div>
-      </div>
-  </form>
-</div>
 </div>
 
-<div>
-<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b> </a>/<a href="{% url 'sections_rate' depid y q %}">ادارة {{depName}}</a> / <b>قسم {{secName}} </b>
+<div class="col-6 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+  {% if position == '0' %}<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b> </a> > {% endif %} <a href="{% url 'sections_rate' depid y q %}">ادارة {{depName}}</a> > <b>قسم {{secName}} </b>
 </div>
 <!-- /BREADCRUMB -->
 
-<div class="row layout-top-spacing">
+<div class="row ">
+  <div class="col-12 pb-4">  
+    <p style="color:#02024B;"><b style="font-size: 20px;">| قسم {{ secName }} </b>
+    </p> 
+    {% if q == 'q1' %} 
+    <h6 style="color:#625BFF ;">  الربع الأول {{ y }}</h6>
+    {% elif q == 'q2' %}  
+    <h6 style="color:#625BFF ;">  الربع الثاني {{ y }}</h6>
+    {% elif q == 'q3' %}  
+    <h6 style="color:#625BFF ;">  الربع الثالث {{ y }}</h6>
+    {% elif q == 'q4' %}  
+    <h6 style="color:#625BFF ;">  الربع الرابع {{ y }}</h6>
+    {% elif q == '0' %}  
+    <h6 style="color:#625BFF ;">  سنة {{ y }}</h6>
+    {% endif %}
+    <input type="text" style=" border-radius: 50px;  border: 1px solid  #625BFF; width: 40%; height: 40px; padding: 5px; float: right; color:#625BFF" placeholder="  بحث "  />
 
-    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-        <div class="widget-content widget-content-area br-8">
-            <!-- js chart -->
-            <div class="w-chart-render-one">
-                <div id="chart"></div>
-            </div>
-         <!--end js chart -->
-
-            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
-                <thead>
-                  <tr class="bg-info text-center">
-                    <th colspan="6">
-                      قسم {{secName}} 
-                      </th>
-                  <tr class="bg-dark text-center">
-                    <th colspan="6">
-                      {% if q == 'q1' %} 
-                      <h6>  الربع الأول {{y}}</h6>
-                      {% elif q == 'q2' %}  
-                      <h6>  الربع الثاني {{y}}</h6>
-                      {% elif q == 'q3' %}  
-                      <h6>  الربع الثالث {{y}}</h6>
-                      {% elif q == 'q4' %}  
-                      <h6>  الربع الرابع {{y}}</h6>
-                      {% endif %}
-                    </th>
-                  </tr>
-                    <tr>
-                        <th>No.</th>
-                        <th>البند</th>
-                        <th> نعم</th>
-                        <th>لا</th>
-                        <th>مستبعد</th>
-                    
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if row %}
-                        {% for r in row %}
-                        <tr>
-                            <td class="text-center">{{forloop.counter}}</td>
-                            <td class="text-center">{{r.term}}</td>
-                            <td class="text-center">{{r.yes}}</td>
-                            <td class="text-center">{{r.no}}</td>
-                            <td class="text-center">{{r.none}}</td>
-                         
-                            <!-- <td>{{r.rate}} %
-                              <div class="progress br-30">
-                                  <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div></td>
-                            <td> <a href="#" class="btn btn-primary">التقارير</a> </td> -->
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-
+  </div>
+  
 </div>
+
+<div class="row">
+  {% if info %}
+  {% for r in info %}
+  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 pb-2">
+    <div class="card">
+      <div class="card-body">
+        <p><b style="color:#02024B">| {{ r.term }}</b></p>
+  
+        <hr>  
+        <canvas id="chart-{{ forloop.counter }}" width="100" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  
+</div>
+
+
+
+
+
 <!-- Include ApexCharts JavaScript file -->
-<script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
-<script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
-<script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
 <!-- Your JavaScript code to create and render the chart -->
-
 <script>
-pero=JSON.parse('{{perlist}}');
-var jsonString ='{{departments}}';
+// إنشاء عنصر إدخال البحث
+// البحث في التيرم باستخدام عنصر إدخال موجود في HTML
+const searchInput = document.querySelector('input[type="text"]');
 
-// هذي الفنكشن تاخذ لستة المناطق سترينج وتحولها لنص قابل للجيسون 
-function decodeHtmlEntities(str) {
-            var txt = document.createElement('textarea');
-            txt.innerHTML = str;
-            return txt.value;
-        }
-var decodedJsonString = decodeHtmlEntities(jsonString);
-try {
-      // تفك الجيسون وتحوله لبنص قابل للقرائة
-      var jsonObject = JSON.parse(decodedJsonString);
-      console.log(jsonObject);
-      // Output: ["الشرقية", "الرياض"]
-  } catch (e) {
-      console.error("Invalid JSON string", e);
-  }
-////////////////////////////////
-draw_res(pero , jsonObject)
+// وظيفة البحث
+searchInput.addEventListener('input', () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  const cards = document.querySelectorAll('.col-xl-4');
 
-function draw_res(pero , jsonObject) {
-
-        var options = {
-         series: [{
-         name: 'الامتثال لمعايير الجودة',
-         data: pero ,
-         
-       }],
-         chart: {
-         height: 350,
-         type: 'bar',
-       },
-       plotOptions: {
-         bar: {
-           borderRadius: 10,
-           dataLabels: {
-             position: 'top', // top, center, bottom
-           },
-         }
-       },
-       dataLabels: {
-         enabled: true,
-         formatter: function (val) {
-           return val + "%";
-         },
-         offsetY: -20,
-         style: {
-           fontSize: '12px',
-           colors: ["#304758"]
-         }
-       },
-       
-       xaxis: {
-         categories: jsonObject ,
-         position: 'buttom',
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false
-         },
-         crosshairs: {
-           fill: {
-             type: 'gradient',
-             gradient: {
-               colorFrom: '#D8E3F0',
-               colorTo: '#BED1E6',
-               stops: [0, 100],
-               opacityFrom: 0.4,
-               opacityTo: 0.5,
-             }
-           }
-         },
-         tooltip: {
-           enabled: true,
-         }
-       },
-       yaxis: {
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false,
-         },
-         labels: {
-           show: false,
-           formatter: function (val) {
-             return val + "%";
-           }
-         }
-       
-       },
-       title: {
-         
-         floating: true,
-         offsetY: 330,
-         align: 'center',
-         style: {
-           color: '#444'
-         }
-       }
-       };
-
-       var chart = new ApexCharts(document.querySelector("#chart"), options);
-       chart.render();
+  cards.forEach(card => {
+    const termText = card.querySelector('p b').textContent.toLowerCase();
+    if (termText.includes(searchTerm)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
     }
+  });
+});
+
+//////////////
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    // تأكد من أن البيانات مرسلة من دجانغو بتنسيق JSON صحيح
+    const rowData = JSON.parse('{{ row|safe|escapejs }}');
+    console.log("Row Data:", rowData);  // تحقق من محتوى البيانات
+
+    rowData.forEach((r, index) => {
+      const canvasId = `chart-${index + 1}`;
+      const canvas = document.getElementById(canvasId);
+
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['نعم', 'لا', 'مستبعد'],
+            datasets: [{
+              label: `Results for ${r.term}`,
+              data: [r.yes, r.no, r.none],
+              backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'top' },
+         
+            }
+          }
+        });
+      } else {
+        console.error(`Canvas not found: ${canvasId}`);
+      }
+    });
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
+});
 </script>
 {% endblock %}

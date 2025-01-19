@@ -15,16 +15,22 @@
   {% block profileImg2 %}
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
+  
+{% block search %}
+<div style="margin-left: 300px;">
+    <a href="{% url 'emp_orders' %}" class="btn btn-sm btn-primary ml-4"> <  الرجوع للتقارير  </a>
+    {% if complete == 'ok'  and orStatus == '1' %}
+    <a href="{% url 'save_evaluation' orID %}" class="btn btn-sm btn-secondary ">حفظ الطلب</a>
+    {% endif %}
+</div>
+
+{% endblock %}
+
 
 {% block clients_home %}
 
 
-<div class="row">
-    <div class="col-12 mb-2">
-        <a href="{% url 'emp_orders' %}" class="btn btn-sm btn-dark"> <  الرجوع للتقارير  </a>
-        <a href="{% url 'save_evaluation' orID %}" class="btn btn-sm btn-primary">حفظ الطلب</a>
-    </div>
-</div>
+
 
 <table class="table  table-striped">.
     <thead>
@@ -37,10 +43,10 @@
     </thead>
     <tbody>
         <tr>
-        <td> {{orNum}} </td>
+        <td> {{orNum}}</td>
         <td> {{orBrn}} </td>
         <td> {{orDate}} </td>
-        <td>{% if orStatus == '0' %} جديد{% elif orStatus == '1' %} غير مكتمل {% elif orStatus == '2' %} مكتمل{% endif %} </td>
+        <td>{% if orStatus == '0' %} جديد{% elif orStatus == '1' %} غير مكتمل {% elif orStatus == '2' %} مكتمل {% elif orStatus == '3' %} معتمد{% endif %}</td>
     </tr>
     </tbody>
 </table>
@@ -50,8 +56,8 @@
         <table class="table  table-striped ">
             <thead>
                 <tr>
-                    <th>المكان</th>
-                    <th>التقييم</th>
+                    <th class="text-center">المكان</th>
+                    <th class="text-center">التقييم</th>
                 </tr>
             </thead>
             <tbody id="ordersTableBody">
@@ -59,9 +65,13 @@
                 {% csrf_token %}
                  {% for z in zones %}
                     <tr>
-                        <td>{{z.name}}</td>
-                        <td>
-                            <a class="btn btn-sm btn-dark" href="{% url 'get_evaluation_points' z.id orNum %}">ابدأ</a>
+                        <td class="text-center">{{z.zoneName}} </td>
+                        <td class="text-center">
+                            {% if z.check == 'ok' %}
+                            <a class="btn btn-sm btn-secondary" href="{% url 'get_evaluation_points' z.id orNum %}">ابدأ</a>
+                            {% elif z.check == 'not' %}
+                            <a class="btn btn-sm btn-danger" href="{% url 'get_evaluation_points' z.id orNum %}">ابدأ</a>
+                            {% endif %}
                         </td>
                     </tr>
                  {% endfor %}

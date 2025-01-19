@@ -4,7 +4,7 @@ from report.models import *
 from django.http import HttpRequest, HttpResponse, JsonResponse
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
-from . import dashboard_view
+from . import dashboard_view , brands_view , departments_view
 import datetime
 # صفحة دخول لوحة التحكم للمدير العام
 # def index(request):
@@ -71,48 +71,55 @@ def login_backend(request):
             current_year = datetime.datetime.now().year
 
             if mngCompany.position == '0':
-                return redirect('gm_dashboard' , y = current_year , q='q1') # يحول على الرابط اللي اسمه هوم 
+                request.session['position'] = mngCompany.position
+                return redirect('gm_dashboard' , y = current_year , q='0') # يحول على الرابط اللي اسمه هوم 
           # مدير عام براند محدد
             elif mngCompany.position == '1' :
                 brand = Brand.objects.get(gm_manager_id = mngCompany.id)
+                request.session['position'] = mngCompany.position
                 request.session['brandName'] = brand.description
                 request.session['brand_id'] = brand.id
                 request.session['brandLogo'] = str(brand.logo)
-                return redirect('brandManager_dashboard')
+                return redirect('regions_rate' , id = brand.id , y = current_year, q = '0')
             # مدير  براند منطقة محددة
             elif mngCompany.position == '2' :
                 brandRegion = Brand_regionManager.objects.get(manager_id = mngCompany.id)
+                request.session['position'] = mngCompany.position
                 request.session['brandName'] = brandRegion.Brand_id.description
                 request.session['brand_id'] = brandRegion.Brand_id.id
                 request.session['brandLogo'] = str(brandRegion.Brand_id.logo)
                 request.session['regionName'] = brandRegion.region_id.name
                 request.session['region_id'] = brandRegion.region_id.id
-
-                return redirect('brandRegionManager_dashboard')
+                return redirect('cities_rate',  id = brandRegion.region_id.id , brand_id = brandRegion.Brand_id.id , y = current_year,q = '0')
+                                
             # مدير  براند مدينة محددة
             elif mngCompany.position == '3' :
                 brand_city = Brand_cityManager.objects.get(manager_id = mngCompany.id)
+                request.session['position'] = mngCompany.position
                 request.session['brandName'] = brand_city.Brand_id.description
                 request.session['brand_id'] = brand_city.Brand_id.id
                 request.session['brandLogo'] = str(brand_city.Brand_id.logo)
                 request.session['cityName'] = brand_city.city_id.name
                 request.session['city_id'] = brand_city.city_id.id
-                return redirect('brandCityManager_dashboard') 
+                return redirect('districts_rate' , id = brand_city.city_id.id , brand_id =brand_city.Brand_id.id  , y = current_year,q = '0') 
             # مدير فرع محدد
             elif mngCompany.position == '4' : 
                 branch = Branch.objects.get(manager_id = mngCompany.id)
+                request.session['position'] = mngCompany.position
                 request.session['brandName'] = branch.brand_id.description
                 request.session['branchName'] = branch.description
                 request.session['brandLogo'] = str(branch.brand_id.logo)
                 request.session['branch_id'] = branch.id
-                return redirect('brach_Manager_dashboard') 
+                request.session['brand_id'] = branch.brand_id.id
+                return redirect('reports_list' , id = branch.id , y = current_year,q = '0')  
             # مدير ادارة
             elif mngCompany.position == '5' :
                 # id department - company name - company logo - mng name - mng postions
                 dept = Department.objects.get(manager_id = mngCompany.id)
+                request.session['position'] = mngCompany.position
                 request.session['deptName'] = dept.description
                 request.session['dept_id'] = dept.id
-                return redirect('dept_Manager_dashboard')  
+                return redirect('sections_rate' , id = dept.id ,y = current_year,q = '0')  
             # اذا مدير عام 0 يعني تدخل في تشييك البوزشن
             # اذا البزوشين 1 يعني مدير براند
             # يعني مدير براند منطقة 2
@@ -120,9 +127,8 @@ def login_backend(request):
             # 4 يعني مدير فرع
             # 5 مدير ادارة
             # ابي اعرف شركته و منصبة
-            
         else:
-            return render(request , 'login.html')
+            return render(request , 'login.html' , {'back' : 'false'})
     return render(request , 'login.html')
 
 # Create your views here.
@@ -163,3 +169,7 @@ def pagefaq(request):
 # def region_score(region_id , mngr_id):
 #     brand = Brand.objects.get(gm_manager_id = mngr_id)
 #     brandId = brand.id 
+
+def logout_client(request):
+    logout(request)
+    return redirect('/clients/login')  # Redirect to login page after logging out

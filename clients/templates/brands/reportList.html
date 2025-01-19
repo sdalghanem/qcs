@@ -3,12 +3,14 @@
 
 
 {% block dashbordMenu %}
+{% if position == '0' %}
 <a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
     <div class="">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
         <span>لوحة المعلومات</span>
     </div>
 </a>
+{% endif %}
 {%endblock %}
 
 <!--تمرير اسم المدير للملف الممتد index-->
@@ -49,27 +51,14 @@
     {% endif %}
 
 {% endblock %}
-{% block home %}
 
-<!-- BREADCRUMB -->
-  <!-- Form -->
-  <div class="row mb-4 align-items-center">
-    <!-- Logo and Brand -->
-    
-    <div class="col-5">
-      <h3 class="mb-0">
-      <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
-      {{brandName}}
-  </h3> 
-             
-  
-    </div>
-  <div class="col-6">
+{% block qurter %}
+<div class="col-6 ">
     <form action="#" method="post" class="form">
         {% csrf_token %}
         <div class="row align-items-center">
-            <!-- Quarter Field -->
-            <div class="col-md-4">
+            <!-- حقل الربع -->
+            <div class="col-md-3">
                 <select class="form-control form-control-sm" name="quarter">
                     <option value="q1">الربع الأول</option>
                     <option value="q2">الربع الثاني</option>
@@ -79,8 +68,8 @@
                 </select>
             </div>
 
-            <!-- Year Field -->
-            <div class="col-md-4">
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-2">
                 <select class="form-control form-control-sm" name="year">
                     {% for year in years %}
                         <option value="{{ year }}">{{ year }}</option>
@@ -88,40 +77,53 @@
                 </select>
             </div>
 
-            <!-- Submit Button -->
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
+            <!-- زر الإرسال -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
             </div>
         </div>
     </form>
 </div>
-</div>
+{%endblock %}
+
+{% block home %}
+
+<!-- BREADCRUMB -->
+  <!-- Form -->
+  <div class="row mb-4 align-items-center">
+    <!-- Logo and Brand -->
+    
+    <div class="col-5">
+      <h3 class="mb-0">
+      <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>{{brandName}}</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-6 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+            {% if position == '0' %} <a href="{% url 'gm_dashboard' y q %}">الرئيسية</a> >{% endif %}  {% if position == '1' %}<a href="{% url 'regions_rate' brand_id y q %}" class="mt-4">جميع المناطق</a>   >  {% endif %} {% if position == '2' %}<a href="{% url 'cities_rate' region_id brand_id y q %}" class="mt-4"> منطقة {{regionName}}</a> > {% endif%}  {% if position == '3' %}<a href="{% url 'districts_rate' city_id  brand_id y q %}" class="mt-4">مدينة {{cityName}}</a> > <a href="{% url 'branchs_rate' dist_id  brand_id y q %}" class="mt-4">حي {{disName}}</a> >{% endif %} فرع {{branchName}}</b>
+        </div>
+      </div>
+          
+
 <!-- /BREADCRUMB -->
-<div class="row layout-top-spacing">
-
-    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+<div class="row">
+    <div class=" card p-4 col-xl-3 col-lg-3 col-md-3 col-sm-12  m-2 ">
+        <h4>فرع {{branchName}} </h4>
+        <hr>
+        <b>مدير الفرع</b>
+        <p>{{branchMng}}</p>
+        <b>البريد الإلكتروني</b>
+        <p>{{branchEmail}}</p>
+        <b>اتصال</b>
+        <p>{{branchMobile}}</p>
+    </div>
+    <div class=" card p-4 col-xl-8 col-lg-8 col-md-8 col-sm-12  m-2">
         <div class="widget-content widget-content-area br-8">
-            <!-- js chart -->
-            <!-- <div class="w-chart-render-one">
-                <div id="chart"></div>
-            </div> -->
+        
          <!--end js chart -->
-         {% if q == 'q1' %} 
-         <h6>  الربع الأول {{y}}</h6>
-         {% elif q == 'q2' %}  
-         <h6>  الربع الثاني {{y}}</h6>
-         {% elif q == 'q3' %}  
-         <h6>  الربع الثالث {{y}}</h6>
-         {% elif q == 'q4' %}  
-         <h6>  الربع الرابع {{y}}</h6>
-         {% elif q == '0' %}  
-         <h6>  سنة {{y}}</h6>
-
-         {% endif %}
-
-            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
-                <thead>
-                    
+  
+            <table class="table table-striped mt-4" >
+                <thead style="background-color:#0AD0AC; ">
                     <tr> 
                         <th>No.</th>
                         <th>تاريخ التقرير</th>
@@ -150,7 +152,7 @@
                             {% endif %}
                         </td>
                         <td>{{r.rate}}%</td>
-                        <td> <a href="{% url 'show_report' r.id %}" class="btn btn-primary">عرض التقرير</a> </td>
+                        <td> <a href="{% url 'show_report' r.id %}" class="btn btn-secondary btn-sm">عرض التقرير</a> </td>
                     </tr>
                     {% endfor %}
                     {% else %}

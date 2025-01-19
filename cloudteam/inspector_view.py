@@ -59,18 +59,68 @@ def evaluate(request , id):
       orBrn = order.bransh_id.description
       orDate = order.registerDate
       orStatus = order.status
-      data ={
+      complete = check_aplay(brandid , id)
+      zoneRow = []
+      for z in zones :
+          print(check_eva(z.id , id))
+          zoneRow.append({'zoneName' : z.name , 'check' : check_eva(z.id , id) , 'id' : z.id} )
+      data = {
         'username':  request.session['username'] ,
         'img': request.session['img'] ,
-        'zones': zones ,
+        'complete' : complete , 
+        'zones': zoneRow ,
+
         'orNum': orNum,
         'orBrn': orBrn,
         'orDate' : orDate,
         'orStatus': orStatus , # حالة الطلب 
-        'orID': order.id
+        'orID': order.id , 
       }
       return render(request , 'inspectors/employee/evaluate.html' , data) 
 
+
+
+def check_aplay(brandid , orID):
+    zones = Zone.objects.filter(brand_id = brandid)
+    resault = []
+    final = []
+    for z in zones :
+      terms = Term_responsible.objects.filter(zone_id = z.id)    
+      #print(len(terms))
+      total = 0
+      for t in terms :
+          if Term_score.objects.filter(term_id_id = t.term_id.id , report_order_id_id = orID).exists():
+              total = total + 1
+      # print('total')
+      # print(total)
+      if len(terms) == total:
+         resault.append('ok') 
+      else :
+          resault.append('not') 
+    for r in resault :
+        if r == 'not' :
+            final.append('false') 
+    if len(final) > 0 :
+        return 'not'
+    else:
+        return 'ok'
+
+
+def check_eva(zone_id , orID):
+    terms = Term_responsible.objects.filter(zone_id = zone_id)    
+    #print(len(terms))
+    total = 0
+    for t in terms :
+        if Term_score.objects.filter(term_id_id = t.term_id.id , report_order_id_id = orID).exists():
+            total = total + 1
+    # print('total')
+    # print(total)
+    if len(terms) == total:
+        return 'ok'
+    else :
+        return 'not'
+
+     
 def get_evaluation_points(request, zone_id , orID):
     # افترض أن البنود الخاصة بكل منطقة مخزنة في قاعدة البيانات
     # جلب البيانات بناءً على معرف المكان (zone_id)

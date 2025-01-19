@@ -49,239 +49,280 @@
 
 {% endblock %}
 
+<!--الاربعا-->
+{% block qurter %}
+<li class="nav-item">
+
+{% if q == 'q1' %} 
+<a href="#"  data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary">  الربع الأول {{y}}  </a>
+{% elif q == 'q2' %}  
+<a href="#"  data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary">  الربع الثاني {{y}}  </a>
+{% elif q == 'q3' %}  
+<a href="#"  data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary">  الربع الثالث {{y}}  </a>
+{% elif q == 'q4' %}  
+<a href="#"  data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}  </a>
+{% elif q == '0' %}  
+<a href="#"  data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary">  سنه {{y}}  </a>
+{% endif %}
+</li>
+{%endblock %}
+
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+ 
+  {{companyName}}
+</b>  
+{% endblock %}
+
+<!-- بداية الصفحة-->
 {% block home %}
-<div class="row mb-4 ">
-    <div class="col-6 ">
-        <h3>{{companyName}}</h3>
-</div>
-    <div class="col-6 ">
-        <form action="#" method="post" class="form">
-            {% csrf_token %}
-            <div class="row align-items-center">
-                <!-- حقل الربع -->
-                <div class="col-md-3">
-                    <select class="form-control form-control-sm" name="quarter">
-                        <option value="q1">الربع الأول</option>
-                        <option value="q2">الربع الثاني</option>
-                        <option value="q3">الربع الثالث</option>
-                        <option value="q4">الربع الرابع</option>
-                        <option value="0">سنة</option>
-                    </select>
-                </div>
 
-                <!-- حقل السنة (ديناميكي) -->
-                <div class="col-md-3">
-                    <select class="form-control form-control-sm" name="year">
-                        {% for year in years %}
-                            <option value="{{ year }}">{{ year }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
 
-                <!-- زر الإرسال -->
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
-                </div>
-            </div>
-        </form>
-    </div>
-   
-</div>
-
+<div class="row"> <!-- start card row -->
+<!-- بداية مربع العلامات التجارية-->
         {% for b in menubrands %}
-        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12 layout-spacing">
-            <div class="widget widget-card-five text-center">
-                <div class="widget-content">
-                    <div class="account-box">
+           <!--مخفييييييييي-->
+           <table style="display: none;">
+            <tr id="branchData-{{ forloop.counter }}">
+              {% for br in b.branchs %}
+                <td data-branch-name="{{ br.branchName }}" data-rate="{{ br.rate }}"></td>
+              {% endfor %}
+            </tr>
+          </table>
+           <!--مخفييييييييي-->
+     
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 " > <!--يداية الكارد الاساسي-->
+           <div class="p-4 ml-4">
+            <img src="../../../{{b.logo}}" alt="money-bag" width="70px" height="70px" style="margin-right: 14px;">
+            <!-- <hr style=" height: 1px; border: 1px dotted #02024B"> -->
 
-                        <div class="info-box">
-                            <div class="icon">
-                                <span>
-                                    <img src="../../../{{b.logo}}" alt="money-bag" width="100%">
-                                </span>
-                            </div>
+            <div class="row p-0 mt-2 mb-2" >
+
+              <div class="row"> <!-- بداية مربع الدوائر-->
+                <p style="color:#625bff;"><b style="margin-right: 12px;">| الإدارات</b></p>
+                {% for dp in b.depts %}
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <div style="
+                        position: relative; 
+                        border-radius: 50%; 
+                        width: 150px; 
+                        height: 150px; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        text-align: center; 
+                        background: linear-gradient(to right, #625BFF, #0AD0AC); 
+                        margin: 20px auto;">
+                        
+                        <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
+                        <div style="
+                            border-radius: 50%; 
+                            background-color: white; 
+                            width: 145px; 
+                            height: 145px; 
+                            display: flex; 
+                            flex-direction: column; 
+                            justify-content: center; 
+                            align-items: center; 
+                            padding: 10px;">
                             
-                            <div class="balance-info text-center">   
-                                {% if q == 'q1' %} 
-                                <h6>  الربع الأول {{y}}</h6>
-                                {% elif q == 'q2' %}  
-                                <h6>  الربع الثاني {{y}}</h6>
-                                {% elif q == 'q3' %}  
-                                <h6>  الربع الثالث {{y}}</h6>
-                                {% elif q == 'q4' %}  
-                                <h6>  الربع الرابع {{y}}</h6>                          
-                                {% elif q == '0' %}  
-                                <h6>  سنة {{y}}</h6>
-                                {% endif %}
-                               
-                                {% if b.perc >= 90 %}
-                                <p class="text-white  badge-success  text-center">% {{b.perc}}</p>
-                                {% elif b.perc < 90 and b.perc >= 80  %}
-                                <p class="text-white  badge-warning  text-center">% {{b.perc}}</p>
-                                {% elif b.perc < 80 %}
-                                <p class="text-white  badge-danger  text-center">% {{b.perc}}</p>
-                                {% endif %}
-                    
-                                
-                                <p>{{b.description}}</p>
-                              
-                            </div>
+                            <!-- اسم القسم -->
+                            <p style="
+                                margin: 0; 
+                                color: black; 
+                                font-size: 14px; 
+                                text-align: center; 
+                                word-wrap: break-word;">
+                                {{dp.departmentName}}
+                            </p>
                         </div>
-                        <div class="card-bottom-section">
-                            <a href="{% url 'regions_rate' b.brandid b.y b.q %}" class="">تفاصيل أكثر</a>
-                            <!-- <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div> -->
+                        
+                        <!-- الدائرة الصغيرة للنسبة -->
+                        <div style="
+                            position: absolute; 
+                            top: 50%; 
+                            left: -25px; /* زيادة البعد عن النص */
+                            transform: translateY(-50%); 
+                            background-color: #625bff; 
+                            color: #fff; 
+                            border-radius: 50%; 
+                            width: 40px; 
+                            height: 40px; 
+                            display: flex; 
+                            justify-content: center; 
+                            align-items: center; 
+                            font-weight: bold;">
+                            {{dp.percentage}}%
                         </div>
-              
                     </div>
                 </div>
-                
-           
-                {% if quarters %}
-                <table class="table table-striped">
-                    <thead class="bg-dark">
-                    <tr>
-                        <th colspan="4"> التقييم السنوي</th>
-                    </tr>
-                    </thead>
-                    <thead class="bg-primary">
-                        <tr>
-                            <th>الربع الأول</th>
-                            <th>الربع الثاني</th>
-                            <th>الربع الثالث</th>
-                            <th>الربع الرابع</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for q in quarters %}
-                                <td>{{ q.percentage }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
-                {% endif %}
+                {% endfor %}
+            </div> <!-- نهاية مربع الدوائر -->
+            
+               <!---->
+              <div class="row" >
+              
+
+                <div class="col-lg-5 col-xl-5 col-md-6 col-sm-6 p-4" style="height: 200px; overflow-y: hidden;">
+                    <p style="color:#625bff;" class="mb-4"><b>| المناطق</b></p>
+          
+
+                  {% for reg in b.regionsRates %}
+                    {% if reg.region_score > 0 %}
+                      <div style="background-color:#f1f1f1; border-radius: 50px; margin-top: 10px;"> 
+                          <p style="color: #000; padding: 7px; font-size: 12px; padding-right: 20px;">{{ reg.region_name }} 
+                              <span style="float: left; margin-left: 20px;">{{ reg.region_score }}%</span>
+                          </p>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              
+
+                <div class="col-lg-7 col-xl-7 col-md-6 col-sm-6 pt-4">
+                  <p style="color:#625bff;" class="mb-2"><b>| أفضل الفروع</b></p>
+
+                    <div style="width: 100%; margin: auto;">
+                      <canvas id="branchChart-{{ forloop.counter }}" width="400" height="200"></canvas>
+
+                      </div>
+                </div>
+              </div>
+              <!---->
+              <div class="card-bottom-section">
+                  <a href="{% url 'regions_rate' b.brandid b.y b.q %}" class="btn btn-sm btn-primary  mb-2 mt-2 " style="margin-right: 14px;">تفاصيل أكثر</a>
+                  <!-- <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div> -->
+              </div>
+          </div>
+        </div>
+  <!---------------------------------------------------------------------------------------------->
+        </div> <!-- end col نهاية الكارد الاساسي-->
+<!--نهاية  مربع العلامات التجارية -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
       
-                <table class="table table-striped">
-                    <thead class="bg-dark">
-                    <tr>
-                        <th colspan="3"> الإدارات</th>
-                    </tr>
-                    </thead>
-                    <thead class="bg-success">
-                        <tr>
-                            {% for dp in b.depts %}
-                                <th>{{ dp.departmentName }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for dp in b.depts %}
-                                <td>{{ dp.percentage }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
+        <script>
+          (function() {
+            var ctx = document.getElementById('branchChart-{{ forloop.counter }}').getContext('2d');
+        
+            // استرجاع البيانات من الـ HTML (الـ data-attributes)
+            var branchData = document.querySelectorAll('#branchData-{{ forloop.counter }} td');
+        
+            // إعداد أسماء الفروع والنسب الافتراضية
+            var branchNames = [' ', '', '']; // أسماء افتراضية
+            var percentages = [0, 0, 0]; // نسب افتراضية
+        
+            // استبدال البيانات الحقيقية إذا وجدت
+            branchData.forEach(function(item, index) {
+              if (index < 3) { // فقط 3 بيانات
+                branchNames[index] = item.getAttribute('data-branch-name') || 'فرع ' + (index + 1);
+                percentages[index] = parseFloat(item.getAttribute('data-rate')) || 0;
+              }
+            });
+        
+            var branchChart = new Chart(ctx, {
+              type: 'bar', // نوع الشارت (شارت أفقي)
+              data: {
+                labels: branchNames, // أسماء الفروع (لن تظهر لأننا سنخفيها في الخيارات)
+                datasets: [{
+                  data: percentages, // النسب
+                  backgroundColor: ['#0AD0AC', '#625BFF', '#02024B'], // ألوان الأعمدة
+                  borderColor: ['#0AD0AC', '#625BFF', '#02024B'],
+                  borderWidth: 1,
+                  borderRadius: 50 // مدبب للأعمدة بنصف قطر 50
+                }]
+              },
+              options: {
+                indexAxis: 'y', // تحديد أن المحور الأفقي هو الذي يحتوي على الفروع
+                scales: {
+                  x: {
+                    beginAtZero: true, // يبدأ المحور الأفقي من صفر
+                    grid: {
+                      display: false // إلغاء الشبكة في المحور الأفقي
+                    },
+                    ticks: {
+                      display: false // إخفاء الأرقام أسفل الشارت
+                    }
+                  },
+                  y: {
+                    display: true, // إخفاء المحور الرأسي بالكامل
+                    grid: {
+                      display: true // إلغاء الشبكة في المحور الرأسي
+                    },
+                    ticks: {
+                      display: true // إخفاء النصوص في المحور الرأسي
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: false // إخفاء العنوان أو أي وصف
+                  },
+                  tooltip: {
+                    enabled: true // تعطيل التولتيب عند تمرير الماوس
+                  },
+                  datalabels: {
+                    display: false // إخفاء البيانات داخل الأعمدة
+                  }
+                }
+              },
+              plugins: [ChartDataLabels] // تحميل الـ plugin لعرض البيانات داخل الأعمدة
+            });
+          })();
+        </script>
+        
+      {% endfor %}                  
+</div><!--end wor for card -->
 
 
-                <table class="table table-striped">
-                    <thead class="bg-danger">
-                        <tr>
-                            {% for dp in b.deptslast %}
-                                <th>{{ dp.departmentName }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for dp in b.deptslast %}
-                                <td>{{ dp.percentage }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
 
-          <hr>
-                <table class="table table-striped">
-                    <thead class="bg-dark">
-                        <tr>
-                            <th colspan="3"> المناطق</th>
-                        </tr>
-                        </thead>
-                    <thead class="bg-success">
-                        <tr>
-                            {% for reg in b.regionsRates %}
-                                <th>{{ reg.region_name }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for reg in b.regionsRates %}
-                                <td>{{ reg.region_score }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="table table-striped">
-                    <thead class="bg-danger">
-                        <tr>
-                            {% for reg in b.regionsRates_last %}
-                                <th>{{ reg.region_name }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for reg in b.regionsRates_last %}
-                                <td>{{ reg.region_score }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
-                <hr>
-               
-                <table class="table table-striped">
-                    <thead class="bg-dark">
-                        <tr>
-                            <th colspan="3"> الفروع</th>
-                        </tr>
-                        </thead>
-                    <thead class="bg-success">
-                        <tr>
-                            {% for br in b.branchs %}
-                                <th>{{ br.branchName }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for br in b.branchs %}
-                                <td>{{ br.rate }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table> 
 
-                <table class="table table-striped">
-                    <thead class="bg-danger">
-                        <tr>
-                            {% for br in b.branchs_last %}
-                                <th>{{ br.branchName }} </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% for br in b.branchs_last %}
-                                <td>{{ br.rate }}%</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table> 
+
+<!-- مودال لعرض الفورم -->
+<div class="modal fade" id="quarterModal" tabindex="-1" aria-labelledby="quarterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quarterModalLabel">الفترة الزمنية</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-         </div>
+            <div class="modal-body">
+                <!-- الفورم -->
+                <form action="#" method="post" class="form">
+                    {% csrf_token %}
+                    <div class="row align-items-center">
+                        <!-- حقل الربع -->
+                        <div class="col-md-12 mb-3">
+                            <select class="form-control text-center" name="quarter" id="quarter" style="border: none; background-color: #f1f1f1;">
+                                <option value="q1">الربع الأول</option>
+                                <option value="q2">الربع الثاني</option>
+                                <option value="q3">الربع الثالث</option>
+                                <option value="q4">الربع الرابع</option>
+                                <option value="0">سنة</option>
+                            </select>
+                        </div>
 
-         {% endfor %}
-        <!---->
+                        <!-- حقل السنة (ديناميكي) -->
+                        <div class="col-md-12 mb-3">
+                            <select  class="form-control text-center" name="year" id="year" style="border: none; background-color: #f1f1f1;">
+                                {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- زر الإرسال -->
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary  w-100">عرض</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- تضمين مكتبة Bootstrap (نسخة 5 فأحدث) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 {%endblock%}

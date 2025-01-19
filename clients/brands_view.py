@@ -64,7 +64,11 @@ def regions_rate(request , id , y, q):
             chlist = sorted(chartList, key=lambda x: x['perc'], reverse=True)
             #print(chlist)
             allRegionScore = get_order_ids(id = id , y = y , q = q) # هذا نسبة الربع الاول
-
+            # تشييك البراند اذا موجود او لا 
+            if request.session['position'] == '0':
+                mngBrand = ''
+            else :
+                mngBrand = request.session['brand_id']
 
             data = {
                 'row': sorted_data,
@@ -75,7 +79,8 @@ def regions_rate(request , id , y, q):
                 'brandName' :brandName ,
                 'brandLogo' :brandLogo ,
                 'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-                'mngPostion' : 'مدير عام' ,
+                'mngPostion' : return_JobTitle(request.session['position']) ,
+                'mngBrand' :mngBrand,
                 'companyLogo': request.session['companylogo'],
                 'menubrands': branList ,
                 'years' : years ,
@@ -83,6 +88,7 @@ def regions_rate(request , id , y, q):
                 'q': q,
                 'brandMng': Brand.objects.get(id = id).gm_manager_id ,
                 'allRegionScore' : allRegionScore,
+                'position': request.session['position'] 
             }
         
             print(regionlist)
@@ -90,6 +96,21 @@ def regions_rate(request , id , y, q):
     else:
         return render(request , 'login.html')
 
+# هذي الفنكشن تعطيها رقم البوزشن ويرجع لك اسم المنصب كتابة
+def return_JobTitle(postion):
+    if postion == '0':
+        return 'مدير عام'
+    elif postion == '1':
+        return 'مدير علامة تجارية'
+    elif postion == '2':
+        return 'مدير منطقة'
+    elif postion == '3':
+        return 'مدير مدينة'
+    elif postion == '4':
+        return 'مدير فرع'
+    elif postion == '5':
+        return 'مدير إدارة'
+    
 def city_dashboard(region_id , brand_id , y , q):
       #id = region id
     # اول شي تجيب المدن اللي بوسط المنطقة
@@ -118,17 +139,16 @@ def city_dashboard(region_id , brand_id , y , q):
                             'mngName':m.manager_id.user.first_name + ' ' + m.manager_id.user.last_name,
                             'rate': percentage,
                             'id': m.city_id.id,
-                            'brand_id': m.Brand_id.id,
-                            
+                            'brand_id': m.Brand_id.id,                           
                            }
                 cityInfo.append(cityRow)
         row ={
             'brand_id': brand_id,
             'regionName': c.region_id.name ,
             'regid': c.region_id.id,
-            'cities':cityInfo
+            'cities':cityInfo ,
         }
-                # sorted_data = sorted(cityInfo, key=lambda x: x['rate'], reverse=True)
+         # sorted_data = sorted(cityInfo, key=lambda x: x['rate'], reverse=True)
     return row
                
 
@@ -143,7 +163,7 @@ def cities_rate(request , id ,brand_id , y , q):
             cities = City.objects.filter(region_id = id)
             cityInfo = []
             # chart data
-            perlist=[]
+            #perlist=[]
             citieslist=[]
             
             for c in cities:
@@ -174,31 +194,54 @@ def cities_rate(request , id ,brand_id , y , q):
                         cityInfo.append(cityRow)
                         
                         # chart data
-                        perlist.append(percentage)
-                        citieslist.append(m.city_id.name )
+                        #perlist.append(percentage)
+                        citieslist.append({'cityName': m.city_id.name , "perc": percentage} )
                     sorted_data = sorted(cityInfo, key=lambda x: x['rate'], reverse=True)
                     
             #print(cityInfo)
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+            
+            # حساب 
+            final_score = branchs_resault(id , brand_id , y , q)
+            total = 0
+            percentage_r = 0
+            score_list = []
+            for fs in final_score:
+                score_list.append(int(fs['score'])) 
+            for sl in score_list:
+                total += sl
+            if len(score_list) == 0 :
+                percentage_r = 0
+            else :
+                percentage_r = int((total / len(score_list)) )
+            #################################
+            if request.session['position'] == '0':
+                mngBrand = ''
+            else :
+                mngBrand = request.session['brand_id']
 
             data = {
                 'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-                'mngPostion' : 'مدير عام' ,
+                'mngPostion' : return_JobTitle(request.session['position']) ,
                 'companyLogo': request.session['companylogo'],
                 'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
                 'brandName': Brand.objects.get(id = brand_id ).description ,
                 'brandLogo' :  Brand.objects.get(id = brand_id ).logo,
                 'brand_id': brand_id ,
                 # بيانات المدن ونتائجها
-                'cityMangers' : sorted_data, 
+                'cityMangers' : cityInfo, 
                 # بيانات للشارت 
-                'perlist':perlist ,
+                #'perlist':perlist ,
                 'citieslist':json.dumps(citieslist) ,
                 'y' : y,
                 'q': q,
+                'mngBrand' : mngBrand ,
                 'years' : years,
-                'regionName': Region.objects.get(id = id).name
+                'regionName': Region.objects.get(id = id).name ,
+                'regRate': percentage_r ,
+                'position': request.session['position'] ,
+
             }
             return render(request , 'brands/citiesRate.html' , data) 
     else:
@@ -241,17 +284,37 @@ def districts_rate(request , id , brand_id , y, q ):
                         'brand_id' : brand_id,
                     }
                     distlist.append(row)
-                    perlist.append(percentage)
-                    disrow.append(d.name)
+                    #perlist.append( percentage)
+                    disrow.append({'disName':d.name , 'perc': percentage})
                     
                     sorted_data = sorted(distlist, key=lambda x: x['rate'], reverse=True)
             print(distlist)
             #print(distlist)
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+
+            ## نسبة المدينه للعرض بالدائرة 
+            final_score_city = branchs_city_resault(id, brand_id , y , q)
+            total_city = 0
+            score_list_city = []
+            for fs in final_score_city:
+                score_list_city.append(int(fs['score'])) 
+            for sl in score_list_city:
+                total_city += sl
+            #print(len(score_list))
+            if len(score_list) == 0 :
+                percentage_city = 0
+            else :
+                    percentage_city = int((total_city / len(score_list_city)) )
+            #################################
+            #################################
+            if request.session['position'] == '0':
+                mngBrand = ''
+            else :
+                mngBrand = request.session['brand_id']
             data={
                 'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-                'mngPostion' : 'مدير عام' ,
+                'mngPostion' : return_JobTitle(request.session['position']) ,
                 'companyLogo': request.session['companylogo'],
                 'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
                 'brandName': Brand.objects.get(id = brand_id ).description ,
@@ -265,7 +328,12 @@ def districts_rate(request , id , brand_id , y, q ):
                 'years' : years,
                 'brand_id': brand_id,
                 'regionName': City.objects.get(id = id).region_id.name,
+                'region_id': City.objects.get(id = id).region_id.id,
                 'cityName': City.objects.get(id = id).name,
+                'percentage_city' : percentage_city,
+                'position': request.session['position'] ,
+                'mngBrand': mngBrand
+
             }
             return render(request , 'brands/distRate.html' , data) 
     else:
@@ -307,18 +375,36 @@ def branchs_rate(request , id , brand_id , y , q):
                 sorted_data = sorted(branchsInfo, key=lambda x: x['rate'], reverse=True)
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+
+            #################################
+            if request.session['position'] == '0':
+                mngBrand = ''
+            else :
+                mngBrand = request.session['brand_id']
+
             data = {
                 'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-                'mngPostion' : 'مدير عام' ,
+                'mngPostion' : return_JobTitle(request.session['position']) ,
                 'companyLogo': request.session['companylogo'],
                 'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
                 'brandName': Brand.objects.get(id = brand_id ).description ,
                 'brandLogo' :  Brand.objects.get(id = brand_id ).logo,
+                'disName' : District.objects.get(id = id).name ,
                 ########################
                 'row' : sorted_data,
                 'y' : y,
                 'q': q,
                 'years': years,
+                'brand_id': brand_id,
+                'region_id': District.objects.get(id = id).city_id.region_id.id,
+                'regionName': District.objects.get(id = id).city_id.region_id.name,
+                'cityName': District.objects.get(id = id).city_id.name,
+                'city_id': District.objects.get(id = id).city_id.id,
+                'position': request.session['position'] ,
+                'mngBrand': mngBrand
+
+
+
             }
             return render(request , 'brands/branchsRate.html' , data )
     else:
@@ -348,18 +434,37 @@ def reports_list(request , id , y , q):
                 
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+            #################################
+            if request.session['position'] == '0':
+                mngBrand = ''
+            else :
+                mngBrand = request.session['brand_id']
             data = {
                 'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-                'mngPostion' : 'مدير عام' ,
+                'mngPostion' : return_JobTitle(request.session['position']) ,
                 'companyLogo': request.session['companylogo'],
                 'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
                 'brandName': Branch.objects.get(id = id ).brand_id.description ,
                 'brandLogo' :  Branch.objects.get(id = id ).brand_id.logo,
+                'brand_id' :  Branch.objects.get(id = id ).brand_id.id,
+                'branchName' : Branch.objects.get(id = id ).description ,
+                'branchMng' : Branch.objects.get(id = id ).manager_id ,
+                'branchEmail' : Branch.objects.get(id = id ).manager_id.user.email ,
+                'branchMobile' : Branch.objects.get(id = id ).manager_id.mobile ,
+                'region_id':Branch.objects.get(id = id ).district_id.city_id.region_id.id,
+                'regionName':Branch.objects.get(id = id ).district_id.city_id.region_id.name,
+                'city_id':Branch.objects.get(id = id ).district_id.city_id.id,
+                'cityName':Branch.objects.get(id = id ).district_id.city_id.name,
+                'disName': Branch.objects.get(id = id ).district_id.name,
+                'dist_id': Branch.objects.get(id = id ).district_id.id,
                 ########################
                 'row' : reportsInfo,
                 'y': y,
                 'q': q,
                 'years': years,
+                'position': request.session['position'] ,
+                'mngBrand': mngBrand
+
             }
             return render(request , 'brands/reportList.html' , data)
     else:
@@ -401,13 +506,28 @@ def show_report(request , id):
         term_result.append(row)
         print(term_result)
     current_year = datetime.now().year
+    #################################
+    if request.session['position'] == '0':
+        mngBrand = ''
+    else :
+                mngBrand = request.session['brand_id']
     data = {
         'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
-        'mngPostion' : 'مدير عام' ,
+        'mngPostion' : return_JobTitle(request.session['position']) ,
         'companyLogo': request.session['companylogo'],
         'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
         'brandName': Report_order.objects.get(id = id ).bransh_id.brand_id.description ,
         'brandLogo' :  Report_order.objects.get(id = id ).bransh_id.brand_id.logo,
+        'brand_id' :  Report_order.objects.get(id = id ).bransh_id.brand_id.id,
+        'regionName' :  Report_order.objects.get(id = id ).bransh_id.district_id.city_id.region_id.name,
+        'region_id' :  Report_order.objects.get(id = id ).bransh_id.district_id.city_id.region_id.id,
+        'disName':  Report_order.objects.get(id = id ).bransh_id.district_id.name,
+        'dist_id':  Report_order.objects.get(id = id ).bransh_id.district_id.id,
+        'city_id': Report_order.objects.get(id = id ).bransh_id.district_id.city_id.id,
+        'cityName': Report_order.objects.get(id = id ).bransh_id.district_id.city_id.name,
+        'branchName' : Report_order.objects.get(id = id ).bransh_id.description,
+        'branch_id' : Report_order.objects.get(id = id ).bransh_id.id,
+
         ########################
 
         'row': term_result,
@@ -418,6 +538,9 @@ def show_report(request , id):
          'y': current_year ,
          'q': 'q1',
          'reportid' : id ,
+         'position': request.session['position'] ,
+        'mngBrand': mngBrand
+
         }
     #print(term_result)
     return render(request , 'brands/report.html' , data)

@@ -35,6 +35,8 @@ path('profile' , views.profile , name='profile'),
 path('queries' , views.queries , name='queries'), 
 path('contactus' , views.contactus , name='contactus'), 
 path('pagefaq' , views.pagefaq , name='pagefaq'),
+path('logout_client' , views.logout_client , name='logout_client'),
+
 # المسؤولين
 path('offhome' , officials.index , name='offhome'),
 path('offqueries' , officials.queries , name='offqueries'), 
@@ -48,6 +50,6 @@ path('sections_list' , api.sections_list , name='sections_list' ),
 path('reports_list' , api.reports_list , name='reports_list' ), 
 path('view_report' , api.view_report , name='view_report' ), 
 path('get_responisbles' , api.get_responisbles , name='get_responisbles' ),
-path('get_percentage' , api.get_percentage , name='get_percentage' ),
+path('get_percentage' , api.get_percentage , name='get_percentage' ), 
 
 ]

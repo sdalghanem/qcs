@@ -1,13 +1,17 @@
 {% extends "index.html" %}
 {% load static %}
+
 {% block dashbordMenu %}
+{% if position == '0' %}
 <a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
     <div class="">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
         <span>لوحة المعلومات</span>
     </div>
 </a>
+{% endif %}
 {%endblock %}
+
 
 <!--تمرير اسم المدير للملف الممتد index-->
 {% block mngName1 %} 
@@ -37,7 +41,6 @@
 
 
 {% block menubr %}
-
     {% if menubrands %}
         {% for b in menubrands %}
             <li>
@@ -45,236 +48,100 @@
             </li>
         {% endfor %}
     {% endif %}
-
 {% endblock %}
+
+
+{% block qurter %}
+<div class="col-8 ">
+    <form action="#" method="post" class="form">
+        {% csrf_token %}
+        <div class="row align-items-center">
+            <!-- حقل الربع -->
+            <div class="col-md-3">
+                <select class="form-control form-control-sm" name="quarter">
+                    <option value="q1">الربع الأول</option>
+                    <option value="q2">الربع الثاني</option>
+                    <option value="q3">الربع الثالث</option>
+                    <option value="q4">الربع الرابع</option>
+                    <option value="0">سنة</option>
+                </select>
+            </div>
+
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-2">
+                <select class="form-control form-control-sm" name="year">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{%endblock %}
+
 {% block home %}
-
-
 <!-- BREADCRUMB -->
  <!-- Form -->
  <div class="row mb-4 align-items-center">
   <!-- Logo and Brand -->
   
-  <div class="col-5">
+  <div class="col-12">
     <h3 class="mb-0">
     <img src="../../../../../{{companyLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
     {{companyName}}
     
 </h3> 
   </div>
-<div class="col-6">
-  <form action="#" method="post" class="form">
-      {% csrf_token %}
-      <div class="row align-items-center">
-          <!-- Quarter Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="quarter">
-                  <option value="q1">الربع الأول</option>
-                  <option value="q2">الربع الثاني</option>
-                  <option value="q3">الربع الثالث</option>
-                  <option value="q4">الربع الرابع</option>
-              </select>
-          </div>
 
-          <!-- Year Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="year">
-                  {% for year in years %}
-                      <option value="{{ year }}">{{ year }}</option>
-                  {% endfor %}
-              </select>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="col-md-4">
-              <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
-          </div>
-      </div>
-  </form>
-</div>
 </div>
 
 <div>
-<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b>  </a>   / <b>ادارة {{depName}}</b>
+
+<div class="col-5 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+  {% if position == '0' %}<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b>  </a>   >{% endif %} <b>ادارة {{depName}}</b>
 </div>
 <!-- /BREADCRUMB -->
-<!-- /BREADCRUMB -->
+<div class="row">
+  <div class="col-12 pb-4">
+    <p style="color:#02024B;"><b style="font-size: 20px;">|  ادارة {{depName}}  </b>
+      {% if q == 'q1' %} 
+      <h6 style="color:#625BFF ;">  الربع الأول {{ y }}</h6>
+      {% elif q == 'q2' %}  
+      <h6 style="color:#625BFF ;">  الربع الثاني {{ y }}</h6>
+      {% elif q == 'q3' %}  
+      <h6 style="color:#625BFF ;">  الربع الثالث {{ y }}</h6>
+      {% elif q == 'q4' %}  
+      <h6 style="color:#625BFF ;">  الربع الرابع {{ y }}</h6>
+      {% elif q == '0' %}  
+      <h6 style="color:#625BFF ;">  سنة {{ y }}</h6>
+      {% endif %}
+  
+  </div>
+</div>
 
-<div class="row layout-top-spacing">
-
-    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-        <div class="widget-content widget-content-area br-8">
-            <!-- js chart -->
-            <div class="w-chart-render-one">
-                <div id="chart"></div>
-            </div>
-         <!--end js chart -->
-
-            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
-                <thead>
-                  <tr class="bg-dark text-center">
-                    <th colspan="6">
-                      {% if q == 'q1' %} 
-                      <h6>  الربع الأول {{y}}</h6>
-                      {% elif q == 'q2' %}  
-                      <h6>  الربع الثاني {{y}}</h6>
-                      {% elif q == 'q3' %}  
-                      <h6>  الربع الثالث {{y}}</h6>
-                      {% elif q == 'q4' %}  
-                      <h6>  الربع الرابع {{y}}</h6>
-                      {% endif %}
-                    </th>
-                  </tr>
-
-                    <tr>
-                        <th>الترتيب</th>
-                        <th>القسم</th>
-                        <th>مدير القسم</th>
-                        <th>العلامة التجارية</th>
-                        <th> التقييم</th>
-                        <th>تفاصيل</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if row %}
-                        {% for r in row %}
-                        <tr>
-                            <td class="text-center">{{forloop.counter}}</td>
-                            <td class="text-center">{{r.secName}}</td>
-                            <td class="text-center">{{r.secMng}}</td>
-                            <td class="text-center">{{r.brandName}}</td>
-                            <td class="text-center">{{r.percentage}}%</td>
-                            <td><a class="btn btn-primary" href="{% url 'terms_rate' r.id y q %}">تفاصيل</a></td>
-                            <!-- <td>{{r.rate}} %
-                              <div class="progress br-30">
-                                  <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div></td>
-                            <td> <a href="#" class="btn btn-primary">التقارير</a> </td> -->
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    
-                </tbody>
-            </table>
-
+<div class="row">
+  {% if row %}
+    {% for r in row %}
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <b style="color:#02024B">| {{r.secName}}</b>
+            <h2 style="color:#625BFF ;">{{r.percentage}}%</h2>
+           <p style="color:#02024B"><b>مدير القسم:</b>  {{r.secMng}}</p>
+           <p style="color:#02024B"><b>العلامة التجارية:</b>  {{r.brandName}}</p>
+           <a class="btn btn-secondary btn-sm" href="{% url 'terms_rate' r.id y q %}">تفاصيل أكثر</a>
+          </div>
         </div>
-    </div>
+      </div>
+    {% endfor %}
+  {% endif %}
 
-</div>
-<!-- Include ApexCharts JavaScript file -->
-<script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
-<script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
-<script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script>
-<!-- Your JavaScript code to create and render the chart -->
 
-<script>
-pero=JSON.parse('{{perlist}}');
-var jsonString ='{{infolist}}';
-
-// هذي الفنكشن تاخذ لستة المناطق سترينج وتحولها لنص قابل للجيسون 
-function decodeHtmlEntities(str) {
-            var txt = document.createElement('textarea');
-            txt.innerHTML = str;
-            return txt.value;
-        }
-var decodedJsonString = decodeHtmlEntities(jsonString);
-try {
-      // تفك الجيسون وتحوله لبنص قابل للقرائة
-      var jsonObject = JSON.parse(decodedJsonString);
-      console.log(jsonObject);
-      // Output: ["الشرقية", "الرياض"]
-  } catch (e) {
-      console.error("Invalid JSON string", e);
-  }
-////////////////////////////////
-draw_res(pero , jsonObject)
-
-function draw_res(pero , jsonObject) {
-
-        var options = {
-         series: [{
-         name: 'الامتثال لمعايير الجودة',
-         data: pero ,
-         
-       }],
-         chart: {
-         height: 350,
-         type: 'bar',
-       },
-       plotOptions: {
-         bar: {
-           borderRadius: 10,
-           dataLabels: {
-             position: 'top', // top, center, bottom
-           },
-         }
-       },
-       dataLabels: {
-         enabled: true,
-         formatter: function (val) {
-           return val + "%";
-         },
-         offsetY: -20,
-         style: {
-           fontSize: '12px',
-           colors: ["#304758"]
-         }
-       },
-       
-       xaxis: {
-         categories: jsonObject ,
-         position: 'buttom',
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false
-         },
-         crosshairs: {
-           fill: {
-             type: 'gradient',
-             gradient: {
-               colorFrom: '#D8E3F0',
-               colorTo: '#BED1E6',
-               stops: [0, 100],
-               opacityFrom: 0.4,
-               opacityTo: 0.5,
-             }
-           }
-         },
-         tooltip: {
-           enabled: true,
-         }
-       },
-       yaxis: {
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false,
-         },
-         labels: {
-           show: false,
-           formatter: function (val) {
-             return val + "%";
-           }
-         }
-       
-       },
-       title: {
-         
-         floating: true,
-         offsetY: 330,
-         align: 'center',
-         style: {
-           color: '#444'
-         }
-       }
-       };
-
-       var chart = new ApexCharts(document.querySelector("#chart"), options);
-       chart.render();
-    }
-</script>
-{% endblock %}
+ {% endblock %}

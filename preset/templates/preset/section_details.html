@@ -18,17 +18,18 @@
   {% endblock %}
 
 {% block clients_home %}
+<p> <a href="{% url 'packege' %}" class="btn btn-sm btn-darck"> العودة للباقات  </a> >  <a href="{% url 'packege_details' pckid %}" class="btn btn-sm btn-darck" > العودة  {{pckName}}  </a> </p>
+
 <!------------------------------------------------------------------------------------------------->
 
-<div class=" card">
-    <div class="card-header">
-        <h4>عرض بنود {{title}}  
-        </h4>
 
-    </div>
+ 
+        <h5 style="color:#02024B" class="p-4">| بنود {{title}} </h5>
+
+  
    
-        <div class="card-body">
-            <div class="row">
+        <div class="card">
+            <div class="row p-4">
            
         
                 <div class="searchable-container col-lg-12">
@@ -46,6 +47,6 @@
                 </div>
             </div>  
         </div>
-    </div>
+
 
 {% endblock %}

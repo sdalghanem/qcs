@@ -17,31 +17,28 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
+
+{% block search %}
+
+<input type="text" id="search-input"  placeholder="  بحث .. " style="padding: 8px; border: none; background-color: #f1f1f1; border-radius: 20px; margin-left: 20px;">
+<div class="btn-group " role="group">
+    <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد">جديد</button>
+    <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل">مكتمل</button>
+    <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل">غير مكتمل</button>
+    <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد">معتمد</button>
+    <button class="btn btn-primary filter-btn btn-sm" data-filter="all">الكل</button>
+</div>
+
+<a href="{% url 'new_order' %}" class="btn btn-sm btn-secondary " style="margin-right: 20px;">+ اضافة طلب جديد</a>
+
+{% endblock %}
+
 {% block clients_home %}
 
-<div class="row"></div>
-    <div class="col-4">
-        <a href="{% url 'new_order' %}" class="btn btn-sm btn-dark">+ اضافة طلب جديد</a>
-        <a href="#" class="btn btn-sm btn-dark">الطلبات المنتهية</a>
-
-    </div>
-</div>
 
 <div class="row mt-2">
     <div class="card">
     <div class="col-12 card-body">
-
-          <!-- حقل البحث وأزرار الفلترة بجانب بعض -->
-    <div class="d-flex mb-3">
-        <input type="text" id="search-input" class="form-control w-25 ml-2" placeholder="ابحث عن ...">
-        <div class="btn-group" role="group">
-            <button class="btn btn-outline-primary filter-btn" data-filter="جديد">جديد</button>
-            <button class="btn btn-outline-primary filter-btn" data-filter="مكتمل">مكتمل</button>
-            <button class="btn btn-outline-primary filter-btn" data-filter="غير مكتمل">غير مكتمل</button>
-            <button class="btn btn-outline-primary filter-btn" data-filter="معتمد">معتمد</button>
-            <button class="btn btn-outline-secondary filter-btn" data-filter="all">الكل</button>
-        </div>
-    </div>
 
         <table class="table table-striped">
                 <thead class="bg-dark">
@@ -61,7 +58,7 @@
                     <tr>
                         <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
                         <td>{{o.bransh_id.description}}</td>
-                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %}{% if o.status == '2' %} مكتمل{% endif %}</td> 
+                        <td>{% if o.status == '0' %} جديد {% elif o.status == '1' %} غير مكتمل{% elif o.status == '2' %} مكتمل{% elif o.status == '3' %} معتمد {% endif %}</td> 
                         <td>{{o.bransh_id.brand_id.description}}</td>
                         <td>{{o.bransh_id.brand_id.company_id.description}}</td>
                         <td>{{o.employee_id}}</td>

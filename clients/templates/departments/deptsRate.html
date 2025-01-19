@@ -47,6 +47,45 @@
     {% endif %}
 
 {% endblock %}
+
+
+
+{% block qurter %}
+<div class="col-6 ">
+    <form action="#" method="post" class="form">
+        {% csrf_token %}
+        <div class="row align-items-center">
+            <!-- حقل الربع -->
+            <div class="col-md-3">
+                <select class="form-control form-control-sm" name="quarter">
+                    <option value="q1">الربع الأول</option>
+                    <option value="q2">الربع الثاني</option>
+                    <option value="q3">الربع الثالث</option>
+                    <option value="q4">الربع الرابع</option>
+                    <option value="0">سنة</option>
+                </select>
+            </div>
+
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-2">
+                <select class="form-control form-control-sm" name="year">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{%endblock %}
+
+
 {% block home %}
 
 
@@ -62,110 +101,110 @@
     
 </h3> 
   </div>
-<div class="col-6">
-  <form action="#" method="post" class="form">
-      {% csrf_token %}
-      <div class="row align-items-center">
-          <!-- Quarter Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="quarter">
-                  <option value="q1">الربع الأول</option>
-                  <option value="q2">الربع الثاني</option>
-                  <option value="q3">الربع الثالث</option>
-                  <option value="q4">الربع الرابع</option>
-              </select>
-          </div>
 
-          <!-- Year Field -->
-          <div class="col-md-4">
-              <select class="form-control form-control-sm" name="year">
-                  {% for year in years %}
-                      <option value="{{ year }}">{{ year }}</option>
-                  {% endfor %}
-              </select>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="col-md-4">
-              <button type="submit" class="btn btn-primary btn-sm w-100">عرض</button>
-          </div>
-      </div>
-  </form>
 </div>
-</div>
-
-<div>
-<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b> </a>   / 
+<div class="row">
+    <div class="col-2 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+      <a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>جميع الإدارات</b> </a>   > 
+    </div>
 </div>
 <!-- /BREADCRUMB -->
 
-<div class="row layout-top-spacing">
-
-    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-        <div class="widget-content widget-content-area br-8">
-            <!-- js chart -->
-            <div class="w-chart-render-one">
-                <div id="chart"></div>
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-4" style="
+              position: relative; 
+              border-radius: 50%; 
+              width: 300px; 
+              height: 300px; 
+              display: flex; 
+              justify-content: center; 
+              align-items: center; 
+              text-align: center; 
+              background: linear-gradient(to right, #625BFF, #0AD0AC); ">
+              
+              <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
+            <div style="
+                border-radius: 50%; 
+                background-color: white; 
+                width: 295px; 
+                height: 295px; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center;">
                 
+                <h4 style="margin: 0;">
+                  {% if q == 'q1' %} 
+                  <h6>  الربع الأول {{y}}</h6>
+                  {% elif q == 'q2' %}  
+                  <h6>  الربع الثاني {{y}}</h6>
+                  {% elif q == 'q3' %}  
+                  <h6>  الربع الثالث {{y}}</h6>
+                  {% elif q == 'q4' %}  
+                  <h6>  الربع الرابع {{y}}</h6>
+                  {% elif q == '0' %}  
+                  <h6>  سنة {{y}}</h6>
+                  {% endif %}  
+                </h4>
             </div>
-         <!--end js chart -->
-            <table class="multi-table table table-striped dt-table-hover table-bordered" style="width:100%">
-                <thead>
-                    <tr class="bg-dark text-center">
-                      <th colspan="4">
-                        {% if q == 'q1' %} 
-                        <h6>  الربع الأول {{y}}</h6>
-                        {% elif q == 'q2' %}  
-                        <h6>  الربع الثاني {{y}}</h6>
-                        {% elif q == 'q3' %}  
-                        <h6>  الربع الثالث {{y}}</h6>
-                        {% elif q == 'q4' %}  
-                        <h6>  الربع الرابع {{y}}</h6>
-                        {% endif %}
-                      </th>
-                    </tr>
-                    <tr>
-                        <th>No.</th>
-                        <th>المنطقة</th>
-                        <th> التقييم</th>
-                        <th>تفاصيل</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if row %}
-                        {% for r in row %}
-                        <tr>
-                            <td class="text-center">{{forloop.counter}}</td>
-                            <td class="text-center">{{r.departmentName}}</td>
-                            <td class="text-center">{{r.percentage}}%</td>
-                            <td><a class="btn btn-primary" href="{% url 'sections_rate' r.id y q %}">تفاصيل</a></td>
-                            <!-- <td>{{r.rate}} %
-                              <div class="progress br-30">
-                                  <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div></td>
-                            <td> <a href="#" class="btn btn-primary">التقارير</a> </td> -->
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    
-                </tbody>
-            </table>
-
-        </div>
+      </div>
     </div>
+      <div class="col-xl-6 col-lg-6 col-sm-6 col-md-6 ">
+          <canvas id="DeoartmentRates" style="float: left;"></canvas>   
+      </div>
+</div> <!--end row -->
+
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <table class="table table-striped ">
+        <thead>
+        
+            <tr style="background-color: #625BFF ;">
+                <th class="text-center">الترتيب</th>
+                <th class="text-center">الإدارة</th>
+                <th class="text-center">مدير الإدارة</th>
+                <th class="text-center"> التقييم</th>
+                <th class="text-center">تفاصيل</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if row %}
+                {% for r in row %}
+                    {% if r.percentage > 0 %}
+                    <tr>
+                        <td class="text-center">{{forloop.counter}}</td>
+                        <td class="text-center">{{r.departmentName}}</td>
+                        <td class="text-center"> {{r.deptMng}}</td>
+                        <td class="text-center">{{r.percentage}}%</td>
+                        <td class="text-center"><a class="btn btn-secondary btn-sm" href="{% url 'sections_rate' r.id y q %}">تفاصيل</a></td>
+                        <!-- <td>{{r.rate}} %
+                          <div class="progress br-30">
+                              <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div></td>
+                        <td> <a href="#" class="btn btn-primary">التقارير</a> </td> -->
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            
+        </tbody>
+    </table>
 
 </div>
+</div>
 <!-- Include ApexCharts JavaScript file -->
-<script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
+<!-- <script src="{% static 'src/plugins/src/apex/apexcharts.min.js' %}"></script>   
 <script src="{% static 'src/assets/js/dashboard/dash_1.js' %}"></script> 
-<script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script>
+<script src="{% static '/src/assets/js/widgets/modules-widgets.js' %}"></script> -->
 <!-- Your JavaScript code to create and render the chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script>
  
-pero=JSON.parse('{{perlist}}');
-var jsonString ='{{infolist}}';
+ var jsonString ='{{infolist}}';
+
 
 // هذي الفنكشن تاخذ لستة المناطق سترينج وتحولها لنص قابل للجيسون 
 function decodeHtmlEntities(str) {
@@ -177,99 +216,86 @@ var decodedJsonString = decodeHtmlEntities(jsonString);
 try {
       // تفك الجيسون وتحوله لبنص قابل للقرائة
       var jsonObject = JSON.parse(decodedJsonString);
-      console.log(jsonObject);
+      //console.log(jsonObject);
       // Output: ["الشرقية", "الرياض"]
   } catch (e) {
       console.error("Invalid JSON string", e);
   }
-////////////////////////////////
-draw_res(pero , jsonObject)
+  console.log(jsonObject)
 
-function draw_res(pero , jsonObject) {
 
-        var options = {
-         series: [{
-         name: 'الامتثال لمعايير الجودة',
-         data: pero ,
-         
-       }],
-         chart: {
-         height: 350,
-         type: 'bar',
-       },
-       plotOptions: {
-         bar: {
-           borderRadius: 10,
-           dataLabels: {
-             position: 'top', // top, center, bottom
-           },
-         }
-       },
-       dataLabels: {
-         enabled: true,
-         formatter: function (val) {
-           return val + "%";
-         },
-         offsetY: -20,
-         style: {
-           fontSize: '12px',
-           colors: ["#304758"]
-         }
-       },
-       
-       xaxis: {
-         categories: jsonObject ,
-         position: 'buttom',
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false
-         },
-         crosshairs: {
-           fill: {
-             type: 'gradient',
-             gradient: {
-               colorFrom: '#D8E3F0',
-               colorTo: '#BED1E6',
-               stops: [0, 100],
-               opacityFrom: 0.4,
-               opacityTo: 0.5,
-             }
-           }
-         },
-         tooltip: {
-           enabled: true,
-         }
-       },
-       yaxis: {
-         axisBorder: {
-           show: false
-         },
-         axisTicks: {
-           show: false,
-         },
-         labels: {
-           show: false,
-           formatter: function (val) {
-             return val + "%";
-           }
-         }
-       
-       },
-       title: {
-         
-         floating: true,
-         offsetY: 330,
-         align: 'center',
-         style: {
-           color: '#444'
-         }
-       }
-       };
 
-       var chart = new ApexCharts(document.querySelector("#chart"), options);
-       chart.render();
+  // البيانات القادمة من جانغو
+  //var djangoData = JSON.parse('{{ data|escapejs }}'); 
+
+  // استخراج الأسماء والنسب
+  var branchNames = jsonObject.map(item => item.deptName);
+  var percentages = jsonObject.map(item => item.perc);
+  //console.log( percentages)
+  // إعداد الشارت
+// تحديد الألوان بناءً على النسب
+var barColors = percentages.map(value => {
+  if (value >= 90) {
+    return '#0AD0AC';  // أخضر
+  } else if (value >= 70) {
+    return '#FFA500';  // برتقالي
+  } else {
+    return '#FF0000';  // أحمر
+  }
+});
+
+// إعداد الشارت
+var ctx = document.getElementById('DeoartmentRates').getContext('2d');
+var branchChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: branchNames,
+    datasets: [{
+      label: 'تقييم المناطق',
+      data: percentages,
+      backgroundColor: barColors,  // استخدام الألوان الديناميكية
+      borderColor: barColors,
+      borderWidth: 1,
+      borderRadius: 50
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: {
+        beginAtZero: true,
+        grid: { display: false },
+        ticks: { display: false }
+      },
+      y: {
+        grid: { display: false }
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            var total = tooltipItem.dataset.data.reduce((sum, value) => sum + value, 0);
+            var percentage = (tooltipItem.raw / total * 100).toFixed(2);
+            return percentage + '%';
+          }
+        }
+      },
+      datalabels: {
+        display: true,
+        color: 'white',
+        anchor: 'end',
+        align: 'start',
+        formatter: function (value) {
+          return value.toFixed(2) + '%';
+        }
+      }
     }
-</script>
+  },
+  plugins: [ChartDataLabels]
+});
+
+
+ </script>
+
 {% endblock %}

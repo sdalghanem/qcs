@@ -11,35 +11,27 @@ def departments_rate(request , y , q):
         if request.method =='POST':
             return redirect('departments_rate' , y = request.POST['year'] , q = request.POST['quarter'] )
         else:
-            #deptName = []
             deptInfoList = []
             perlist = []
             infolist =[]
             departments = Department.objects.filter(company_id = request.session['company_id'])
             for d in departments:
-                per = 0
                 listdept =  get_dept_terms(d.id)# تجيب لسته البنود
                 listscore = calculate_percentage_for_orders(get_orders_by_company(request.session['company_id'] ,y ,q) ,listdept)# تجيب لسته نتايج الاداره بناء على لسته البنود 
-                # total = 0
-                # for lis in listscore:
-                #     total += int(lis['score'])
-                #     if len(listscore) == 0 :
-                #         per = 0
-                #     else:
-                #         per = int(total *100 / len(listscore))
                 row = {
                     'departmentName' : d.description,
+                    'deptMng': d.manager_id,
                     'percentage': listscore ,#per, #Company ,
                     'id' : d.id,
                 }
-                print('#################')
-                print(row)
                 deptInfoList.append(row)
-                perlist.append(listscore)
-                infolist.append(d.description)
-            #sorted_data = sorted(deptInfoList, key=lambda x: x['percentage'], reverse=True)
+                infolist.append({ 'deptName' :d.description , 'perc' :listscore })
             current_year = datetime.now().year
             years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
+            # ترتيب من الاعلى الا الانتزل
+            sorted_data = sorted(deptInfoList, key=lambda x: x['percentage'], reverse=True)
+            sorted_data2 = sorted(infolist, key=lambda x: x['perc'], reverse=True)
+
             data = {
             'mngName' :  request.session['firestName'] + ' ' + request.session['lastName'] ,
             'mngPostion' : 'مدير عام' ,
@@ -47,9 +39,9 @@ def departments_rate(request , y , q):
             'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
             'companyName': Company.objects.get(id = request.session['company_id']).description ,
             ########################
-            'row' : deptInfoList, #  معلومات الادارات
+            'row' : sorted_data, #  معلومات الادارات
             'perlist': perlist,
-            'infolist':json.dumps(infolist) ,
+            'infolist':json.dumps(sorted_data2) ,
             'y': y,
             'q': q,
             'years':years ,
@@ -65,8 +57,11 @@ def get_orders_by_company(id , y , q):
     orlist= []
     for bd in brands:
         branchs = Branch.objects.filter(brand_id_id = bd.id)
-        for bh in branchs:           
-            orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y , quarter = q) 
+        for bh in branchs:  
+            if q == '0' :
+                orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y ) 
+            else :
+                orders = Report_order.objects.filter(bransh_id_id =  bh.id , year =y , quarter = q) 
             for o in orders :
                 orlist.append(o.id)
     return orlist
@@ -89,7 +84,7 @@ def sections_rate(request , id ,y , q):
                 listscore = get_score(listdept , y , q)# تجيب لسته نتايج القسم بناء على لسته البنود 
                 total = 0
                 for lis in listscore:
-                    total += float(lis['score'])
+                    total += lis['score']
                     if len(listscore) == 0 :
                         per = 0
                     else:
@@ -157,6 +152,7 @@ def terms_rate(request, id , y , q):
                         'no': no,
                         'none': none
                     })
+                    print(len(tlist))
 
                 current_year = datetime.now().year
                 years = list(range(current_year, current_year - 10, -1))  # السنوات من السنة الحالية ولمدة 10 سنوات سابقة
@@ -170,7 +166,8 @@ def terms_rate(request, id , y , q):
                     'depName' : Section.objects.get(id = id).department_id.description,
                     'depid' : Section.objects.get(id = id).department_id.id,
                     'secName': Section.objects.get(id = id).description ,
-                    'row': tlist,  # معلومات الادارات
+                    'row': json.dumps(tlist),
+                    'info': tlist,   # معلومات الادارات
                     'y': y,
                     'q': q,
                     'years': years,
@@ -239,7 +236,10 @@ def terms_rate(request, id , y , q):
 #             scoreList.append(row)
 #     return scoreList
 def get_result(term_id, y, q):
-    orders = Report_order.objects.filter(year=y, quarter=q)
+    if q == '0':
+        orders = Report_order.objects.filter(year=y, )
+    else:
+        orders = Report_order.objects.filter(year=y, quarter=q)
     scoreList = []  # تأكد من تهيئة scoreList هنا خارج الحلقة
     yes = []
     no = []
@@ -299,7 +299,10 @@ def get_score(terms_list, y, q):
     row = []
     
     # جلب جميع الطلبات بناءً على السنة والربع
-    orders = Report_order.objects.filter(year=y, quarter=q)
+    if q == '0':
+        orders = Report_order.objects.filter( year=y )
+    else:
+        orders = Report_order.objects.filter(year=y, quarter=q)
     
     # التكرار على قائمة البنود (terms_list)
     for order in orders:
@@ -312,7 +315,7 @@ def get_score(terms_list, y, q):
             # التكرار على جميع السجلات المطابقة
             for t in tscores:
                 score = {
-                    'score': t.score,
+                    'score': int(t.score),
                     #'term': t.term_id.description,
                 }
                 row.append(score)

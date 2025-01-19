@@ -14,5 +14,8 @@ path('add_termsPage/<str:id>' , views.add_termsPage , name='add_termsPage'),
 path('add_new_terms' , views.add_new_terms , name='add_new_terms'),   
 path('add_new_term_title/<str:id>' , views.add_new_term_title , name='add_new_term_title'), 
 path('update_term_title/<str:id>' , views.update_term_title , name='update_term_title'),
-path('delete_term/<str:id>' , views.delete_term , name='delete_term'),
+path('delete_term/<str:id>' , views.delete_term , name='delete_term'), 
+
+path('delete_package/<str:id>' , views.delete_package , name='delete_package'), 
+path('edit_pck_title/<str:id>' , views.edit_pck_title , name='edit_pck_title'),
 ]

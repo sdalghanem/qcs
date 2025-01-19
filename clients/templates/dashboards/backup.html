@@ -1,0 +1,193 @@
+<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+    <div class="widget widget-card-five text-center">
+        <div class="widget-content">
+            <div class="account-box">
+
+                <div class="info-box">
+                    <div class="icon">
+                        <span>
+                            <img src="../../../{{b.logo}}" alt="money-bag" width="100%">
+                        </span>
+                    </div>
+                    
+                    <div class="balance-info text-center">   
+                        {% if q == 'q1' %} 
+                        <h6>  الربع الأول {{y}}</h6>
+                        {% elif q == 'q2' %}  
+                        <h6>  الربع الثاني {{y}}</h6>
+                        {% elif q == 'q3' %}  
+                        <h6>  الربع الثالث {{y}}</h6>
+                        {% elif q == 'q4' %}  
+                        <h6>  الربع الرابع {{y}}</h6>                          
+                        {% elif q == '0' %}  
+                        <h6>  سنة {{y}}</h6>
+                        {% endif %}
+                       
+                        {% if b.perc >= 90 %}
+                        <h1 class="text-white  badge-success  text-center">% {{b.perc}}</h1>
+                        {% elif b.perc < 90 and b.perc >= 80  %}
+                        <h1 class="text-white  badge-warning  text-center">% {{b.perc}}</h1>
+                        {% elif b.perc < 80 %}
+                        <h1 class="text-white  badge-danger  text-center">% {{b.perc}}</h1>
+                        {% endif %}
+            
+                        
+                        <p>{{b.description}}</p>
+                      
+                    </div>
+                </div>
+                <div class="card-bottom-section">
+                    <a href="{% url 'regions_rate' b.brandid b.y b.q %}" class="">تفاصيل أكثر</a>
+                    
+                    <!-- <div><span class="badge badge-light-success">+ 3.2% <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span></div> -->
+                </div>
+      
+            </div>
+        </div>
+        
+   
+        {% if quarters %}
+        <table class="table table-striped">
+            <thead class="bg-dark">
+            <tr>
+                <th colspan="4"> التقييم السنوي</th>
+            </tr>
+            </thead>
+            <thead class="bg-primary">
+                <tr>
+                    <th>الربع الأول</th>
+                    <th>الربع الثاني</th>
+                    <th>الربع الثالث</th>
+                    <th>الربع الرابع</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for q in quarters %}
+                        <td>{{ q.percentage }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+
+        <table class="table table-striped">
+            <thead class="bg-dark">
+            <tr>
+                <th colspan="3"> الإدارات</th>
+            </tr>
+            </thead>
+            <thead class="bg-success">
+                <tr>
+                    {% for dp in b.depts %}
+                        <th>{{ dp.departmentName }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for dp in b.depts %}
+                        <td>{{ dp.percentage }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+
+
+        <table class="table table-striped">
+            <thead class="bg-danger">
+                <tr>
+                    {% for dp in b.deptslast %}
+                        <th>{{ dp.departmentName }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for dp in b.deptslast %}
+                        <td>{{ dp.percentage }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+
+  <hr>
+        <table class="table table-striped">
+            <thead class="bg-dark">
+                <tr>
+                    <th colspan="3"> المناطق</th>
+                </tr>
+                </thead>
+            <thead class="bg-success">
+                <tr>
+                    {% for reg in b.regionsRates %}
+                        <th>{{ reg.region_name }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for reg in b.regionsRates %}
+                        <td>{{ reg.region_score }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped">
+            <thead class="bg-danger">
+                <tr>
+                    {% for reg in b.regionsRates_last %}
+                        <th>{{ reg.region_name }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for reg in b.regionsRates_last %}
+                        <td>{{ reg.region_score }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+     
+        <table class="table table-striped">
+            <thead class="bg-dark">
+                <tr>
+                    <th colspan="3"> الفروع</th>
+                </tr>
+                </thead>
+            <thead class="bg-success">
+                <tr>
+                    {% for br in b.branchs %}
+                        <th>{{ br.branchName }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for br in b.branchs %}
+                        <td>{{ br.rate }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table> 
+
+        <table class="table table-striped">
+            <thead class="bg-danger">
+                <tr>
+                    {% for br in b.branchs_last %}
+                        <th>{{ br.branchName }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for br in b.branchs_last %}
+                        <td>{{ br.rate }}%</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table> 
+    </div>
+ </div>

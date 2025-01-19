@@ -17,16 +17,23 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
+{% block search %}
+
+<a href="{% url 'show_orders' %}" class="btn btn-sm btn-primary">  < الرجوع للتقارير</a>
+{% for o in orinfo %}
+{% if btnOn == '1' and o.status == '2' %}
+<a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-secondary"> اعتماد التقييم </a>                         
+{% endif %}
+{% endfor %}
+
+
+{% endblock %}
+
 {% block clients_home %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 
 
-<div class="row"></div>
-    <div class="col-4">
-        <a href="{% url 'show_orders' %}" class="btn btn-sm btn-dark">  < الرجوع للتقارير</a>
-       
-    </div>
-</div>
+
 
 <div class="row mt-2">
     <div class="card">
@@ -56,15 +63,7 @@
                         <td>{{o.registerDate}}</td>
                         <td>{{o.quarter}}</td>
                         <td>{{o.year}}</td>
-                        <td> {{fainl_res}} %   
-                            {% if btnOn == '1' and o.status == '2' %}
-                              <a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-success"> اعتماد </a>
-                            {% elif  btnOn == '0' and o.status == '2' %}
-                            <br>
-                            <span> غير مكتمل</span>
-                            {% elif btnOn == '0' and o.status == '3' %}
-
-                            {% endif %}
+                        <td>{{fainl_res}} %   
                             </td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
                     </tr>
                     {% endfor %}
