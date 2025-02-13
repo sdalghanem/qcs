@@ -18,22 +18,36 @@
   {% endblock %}
 
 {% block clients_home %}
-<div class="row"></div>
-<div class="col-12 mb-2">
-    <a href="{% url 'brands_dashbord' companyID %}" class="btn btn-sm btn-dark"> <  الرجوع للعلامات التجارية   </a>
-    <a href="{% url 'regions_city_managers' brandID %}" class="btn btn-sm btn-dark"> <  الرجوع لإدارة المناطق   </a>
-    <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#add_cityMngr">+  مدير مدينة   </button>
 
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+
+<div class="row"></div>
+
+<div class="p-4">
+    <label><img src="../../../{{companyLogo}}" alt="avatar" width="80px"><b>{{companyName}}</b></label>        
+    <div>
+        <a href="{% url 'brands_dashbord' companyID %}" class="btn btn-sm btn-primary"> <  الرجوع للعلامات التجارية   </a>
+        <a href="{% url 'regions_city_managers' brandID %}" class="btn btn-sm btn-primary"> <  الرجوع لإدارة المناطق   </a>
+        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_cityMngr">+  مدير مدينة   </button>
+        </div>
 </div>
 
+
+
 <table class="table table-striped">
-    <thead>
-        <tr class="bg-dark">
+    <thead >
+        <tr style="background-color: #0ad0ac;">
             <th colspan="4" class="text-center">{{ brandName }}</th>
         </tr>
         <tr>
             <th>المدينة</th>
             <th>مدير المدينة</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -42,7 +56,7 @@
         <tr>
             <td>{{c.city_id}}</td>
             <td>{{c.manager_id}}</td>
-            <td><a href="{% url 'deletecityMngr' c.id regionID %}" class="btn btn-sm btn-danger">حذف</a></td>
+            <td><a href="{% url 'deletecityMngr' c.id regionID %}" class="btn btn-sm btn-danger delete-confirm">حذف</a></td>
         </tr>
         {% endfor %}
        {% else %}
@@ -67,7 +81,7 @@
                     {% csrf_token %}
                     <input type="text" value="{{brandID}}" name="brandID" hidden />
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example" name="city" required>
+                        <select class="form-control border-0 bg-light " aria-label="Default select example" name="city" required>
                             <option value="">المدينة</option>
                         <!-- عرض جميع المناطق من قاعدة البياناتة-->
                             {% if cities %}
@@ -79,7 +93,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example" name="mngr" required>
+                        <select class="form-control border-0 bg-light" aria-label="Default select example" name="mngr" required>
                             <option value="">المدير</option>
                         <!-- عرض جميع المناطق من قاعدة البياناتة-->
                             {% if mngrs %}
@@ -93,8 +107,8 @@
              
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-sm  btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
                 </div>
                 </form>
             </div>
@@ -103,7 +117,63 @@
 </div>
 
 
-
+<script>
+    let alerts= document.getElementById("alert").value;
+    //alert(alerts)
+ 
+     if( alerts == 'error'){
+         Swal.fire({
+         title: "موجود مسبقاً",
+         text: "المنطقة أو مدير مدينة مضاف مسبقاً",
+         icon: "error"
+         });
+         
+     }
+     else if (alerts == 'succcess') {
+         Swal.fire({
+         title: "تم الحفظ",
+         text: "تم اضافة مدير مدينة بنجاح",
+         icon: "success"
+         });
+     }  
+     else if (alerts == 'delete') {
+         Swal.fire({
+         title: "تم الحذف",
+         text: "تم حذف مدير مدينة بنجاح",
+         icon: "success"
+         });
+     } 
+ </script>
+ <script>
+     document.addEventListener('DOMContentLoaded', function () {
+         // الحصول على جميع أزرار الحذف التي تحمل الكلاس المحدد
+         const deleteButtons = document.querySelectorAll('.delete-confirm');
+         
+         deleteButtons.forEach(function(button) {
+             button.addEventListener('click', function(e) {
+                 e.preventDefault(); // منع الانتقال الافتراضي للرابط
+                 const link = this.getAttribute('href'); // الحصول على رابط الحذف
+     
+                 // إظهار نافذة التأكيد
+                 Swal.fire({
+                     title: 'هل أنت متأكد؟',
+                     text: "لن تتمكن من استعادة هذا العنصر بعد الحذف!",
+                     icon: 'warning',
+                     showCancelButton: true,
+                     confirmButtonColor: '#3085d6',
+                     cancelButtonColor: '#d33',
+                     confirmButtonText: 'نعم، احذفه!',
+                     cancelButtonText: 'إلغاء'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         // إذا أكد المستخدم، يتم الانتقال إلى الرابط لتنفيذ الحذف
+                         window.location.href = link;
+                     }
+                 });
+             });
+         });
+     });
+     </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

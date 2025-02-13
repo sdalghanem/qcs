@@ -30,7 +30,7 @@
 
 <!--ًصورة المستخدم-->
 {% block profileImg %}
-<img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
+<img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
 {% endblock %}
 {% block profileImg2 %}
 <img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
@@ -112,7 +112,7 @@
                         align-items: center; 
                         text-align: center; 
                         background: linear-gradient(to right, #625BFF, #0AD0AC); 
-                        margin: 20px auto;">
+                        margin: 5px auto;">
                         
                         <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
                         <div style="
@@ -141,7 +141,7 @@
                         <div style="
                             position: absolute; 
                             top: 50%; 
-                            left: -25px; /* زيادة البعد عن النص */
+                            left: -23px; /* زيادة البعد عن النص */
                             transform: translateY(-50%); 
                             background-color: #625bff; 
                             color: #fff; 
@@ -201,7 +201,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
       
-        <script>
+        <!-- <script>
           (function() {
             var ctx = document.getElementById('branchChart-{{ forloop.counter }}').getContext('2d');
         
@@ -269,8 +269,78 @@
               plugins: [ChartDataLabels] // تحميل الـ plugin لعرض البيانات داخل الأعمدة
             });
           })();
-        </script>
-        
+        </script> -->
+        <script>
+          (function() {
+              var ctx = document.getElementById('branchChart-{{ forloop.counter }}').getContext('2d');
+          
+              // استرجاع البيانات من الـ HTML (الـ data-attributes)
+              var branchData = document.querySelectorAll('#branchData-{{ forloop.counter }} td');
+          
+              // إعداد أسماء الفروع والنسب الافتراضية
+              var branchNames = [' ', '', '']; // أسماء افتراضية
+              var percentages = [0, 0, 0]; // نسب افتراضية
+          
+              // استبدال البيانات الحقيقية إذا وجدت
+              branchData.forEach(function(item, index) {
+                  if (index < 3) { // فقط 3 بيانات
+                      branchNames[index] = item.getAttribute('data-branch-name') || 'فرع ' + (index + 1);
+                      percentages[index] = parseFloat(item.getAttribute('data-rate')) || 0;
+                  }
+              });
+          
+              var branchChart = new Chart(ctx, {
+                  type: 'bar', // نوع الشارت (شارت عمودي)
+                  data: {
+                      labels: branchNames, // أسماء الفروع
+                      datasets: [{
+                          data: percentages, // النسب
+                          backgroundColor: ['#0AD0AC', '#625BFF', '#02024B'], // ألوان الأعمدة
+                          borderColor: ['#0AD0AC', '#625BFF', '#02024B'],
+                          borderWidth: 1,
+                          borderRadius: 50, // مدبب للأعمدة بنصف قطر 50
+                          barThickness: 30 // سمك الأعمدة
+                      }]
+                  },
+                  options: {
+                      indexAxis: 'x', // تحديد أن المحور الرأسي هو الذي يحتوي على الفروع
+                      scales: {
+                          x: {
+                              beginAtZero: true, // يبدأ المحور الأفقي من صفر
+                              grid: {
+                                  display: false // إلغاء الشبكة في المحور الأفقي
+                              },
+                              ticks: {
+                                  display: true // عرض النصوص في المحور الأفقي
+                              }
+                          },
+                          y: {
+                              display: true, // عرض المحور الرأسي بالكامل
+                              grid: {
+                                  display: true // إظهار الشبكة في المحور الرأسي
+                              },
+                              ticks: {
+                                  display: true // عرض النصوص في المحور الرأسي
+                              }
+                          }
+                      },
+                      plugins: {
+                          legend: {
+                              display: false // إخفاء العنوان أو أي وصف
+                          },
+                          tooltip: {
+                              enabled: true // تمكين التولتيب عند تمرير الماوس
+                          },
+                          datalabels: {
+                              display: false // إخفاء البيانات داخل الأعمدة
+                          }
+                      }
+                  },
+                  plugins: [ChartDataLabels] // تحميل الـ plugin لعرض البيانات داخل الأعمدة
+              });
+          })();
+          </script>
+          
       {% endfor %}                  
 </div><!--end wor for card -->
 

@@ -1,66 +1,89 @@
 {% extends "index.html" %}
 {% load static %}
+
+{% block dashbordMenu %}
+{% if position == '0' %}
+<a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
+    <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+        <span>لوحة المعلومات</span>
+    </div>
+</a>
+{% endif %}
+{%endblock %}
+
+
+{% block menubr %}
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.id y q %}"> {{b.description}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
+<!--ًصورة المستخدم-->
+{% block profileImg %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
+{% endblock %}
+{% block profileImg2 %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+
+{% block qurter %}
+<li class="nav-item">
+
+  {% if q == 'q1' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الأول {{y}}
+  </a>
+  {% elif q == 'q2' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثاني {{y}}
+  </a>
+  {% elif q == 'q3' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثالث {{y}}
+  </a>
+  {% elif q == 'q4' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}
+  </a>
+  {% elif q == '0' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> سنه {{y}} </a>
+  {% endif %}
+</li>
+{%endblock %}
+
+
+<!--company name-->
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
+<!--company name-->
+
 {% block home %}
 
 <div class="layout-px-spacing">
 
-    <div class="middle-content container-xxl p-0">
+    <div class="middle-content p-0">
 
-        <!-- BREADCRUMB -->
-        <div class="page-meta">
-            <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">لوحة المعلومات</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">تواصل معنا</li>
-                </ol>
-            </nav>
-        </div>
-        <!-- /BREADCRUMB -->
+        <div class="statbox widget box box-shadow layout-top-spacing ">
+            <div class="text-center">
+                <img alt="avatar" src="../../static/src/assets/img/Logo 2.svg" width="300px" >
+            </div>
 
-        <div class="statbox widget box box-shadow layout-top-spacing">
-
-            <div class="widget-content widget-content-area">
 
                 <div class="contact-us-form">
 
                     <div class="row gx-5">
-                        <div class="col-md-6">
-                            <form class="row g-4">
-                                <div class="col-md-12">
-                                    <h5>راسلنا</h5>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputName" class="form-label">الاسم</label>
-                                    <input type="text" class="form-control" id="inputName">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputEmail" class="form-label">الايميل</label>
-                                    <input type="email" class="form-control" id="inputEmail">
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputSubject" class="form-label">الموضوع</label>
-                                    <input type="text" class="form-control" id="inputSubject">
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputMessage" class="form-label">الرسالة</label>
-                                    <textarea id="inputMessage" class="form-control" cols="30" rows="10"></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">ارسال</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-6 align-self-center">
-                            <div id="contact-map" class="w-100 rounded mb-2 mb-lg-0 mt-2" style="height: 486px"></div>
-                            <!-- <div id="contact-map"></div> -->
-                        </div>
 
-                        <div class="col-md-12 mt-4">
+                        <div class="col-md-12 ">
 
                             <div class="paper contact-us-info-section-1">
 
                                 <div class="row gx-5">
-                                    <div class="col-12">
+                                    <div class="col-12 text-center">
                                         <h4 class="contact-title">تحدث إلينا</h4>
                                     </div>
 
@@ -97,7 +120,7 @@
                                     </div>
 
 
-                                    <div class="col-12 mt-5">
+                                    <div class="col-12 mt-5 text-center">
                                         <h4 class="contact-title">راسلنا على</h4>
                                     </div>
 
@@ -175,7 +198,6 @@
                     
                 </div>
 
-            </div>
 
         </div>
 
@@ -188,39 +210,7 @@
  <script src="{% static '/src/plugins/src/leaflet/us-states.js'%}"></script>
  <script src="{% static '/src/plugins/src/leaflet/eu-countries.js'%}"></script>
  <script src="{% static '/src/plugins/src/leaflet/leaflet.js'%}"></script>
- <script>
-
-     // / Define Map Location
-     var leaflet = L.map('contact-map', {
-         center: [40.74785318312211, -73.98370985752007],
-         zoom: 30
-     });
-
-     // Init Leaflet Map. For more info check the plugin's documentation: https://leafletjs.com/
-     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-     }).addTo(leaflet);
-
-     // Define Marker Layer
-     var markerLayer = L.layerGroup().addTo(leaflet);
-
-     // Set Custom SVG icon marker
-     var leafletIcon = L.divIcon({
-         html: `<span><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="fill: #ffffff80;color: #191e3a;">
-                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                 <circle cx="12" cy="11" r="3"></circle>
-                 <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
-                 </svg></span>`,
-         bgPos: [10, 10],
-         iconAnchor: [20, 37],
-         popupAnchor: [-18, -37],
-         className: 'leaflet-marker'
-     });
-
-     // Show current address
-     L.marker([40.74785318312211, -73.98370985752007], { icon: leafletIcon }).addTo(markerLayer).bindPopup('16 E 34th St, NY 10016, US', { closeButton: false }).openPopup();
-     
- </script>  
+ 
 
   
 {% endblock %}

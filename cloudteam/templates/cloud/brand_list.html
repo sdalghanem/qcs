@@ -18,139 +18,83 @@
   {% endblock %}
 
 {% block clients_home %}
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
 
- 
-           <!--الشعار و اسم الشركة-->
-          
-<div class="row ">
-   
-    <div class="col-4 text-center">
-        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="20%">      {{companyName}}    </h4>
-    </div>
-   
-    
-</div>
-<div class="row mb-2 mt-2">
-    <div class="col-2">
-        <a href="{%url 'users_managment' companyId %}" class="btn btn-dark "> موظفين الشركة</a> </td>
-    </div>
-    <div class="col-2">
-        <a href="{%url 'departments' companyId %}" class="btn btn-dark ">إدارات الشركة</a> </td>
-    </div>
-    
-</div>
-
-<!------------------------>
 <div class="row">
-<!--اضافة علامة تجارية-->
+    <!-- عرض العلامات التجارية-->
+    <div class="card m-2">
 
-<div class="card mb-4   col-xl-4 col-lg-4 col-md-4 ">
-    <form class="section general-info pt-4" method="post" action="{% url 'add_new_brand' companyId %}" enctype="multipart/form-data">
-        <div class="info">
-            <div class="row">
-                <div class="col-lg-11 mx-auto">
-                    {{res}} 
-                    <!-- تبيهات-->
-                        {% csrf_token %}
-                            <div class="card-header text-center">
-                            <label>إضافة علامة تجارية</label>
-                            </div>
+    <div class="m-4">
+        <label><img src="../../../{{companyLogo}}" alt="avatar" width="80px"><b>{{companyName}}</b></label>        
+        <div>
+            <a href="{%url 'users_managment' companyId %}" class="btn btn-sm btn-primary "> إدارة حسابات الموظفين </a> </td>
+            <a href="{%url 'departments' companyId %}" class="btn btn-sm btn-primary ">هيكلة الإدارات</a> </td>
+            <a href="#" class="btn btn-sm btn-primary "  data-toggle="modal" data-target="#addNewBrand">إضافة علامة تجارية</a> </td>
+        </div>
+    </div>
 
-                            <div class="row">
-                            <div class="col-md-12  pt-4">
-                                <div class="form-group">
-                                    <label for="fullName">اسم العلامة التجارية</label>
-                                    <input name="brandName" type="text" class="form-control mb-3" id="fullName" placeholder="....." value="">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
-                            <div class="form ">
-
-                                <div class="row">
-                                    <div class="col-md-12 pb-4">
-                                        <label for="fullName">الشعار</label>
-                                        <input type="file" name="brandLogo">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 mt-1 card-footer">
-                                    <div class="form-group text-center">
-                                        <button type="submit" class="btn btn-secondary">حفظ</button>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    
+    </div>
+</div><!--end row-->
+<div>
+    <div class="m-4">
+        <h5>العلامات التجارية</h5>
+    </div>
+    <div class="row">
+        <!-- <div class="col-lg-12 col-md-12 col-sm-12" >
+            <div class="card text-center">
+                <div class="card-header">
+                    مدير عام الشركة
+                </div>
+               <div class="card-body">
+                <b style="color:#625bff">{{mng_company}} </b>
+               </div>
+             
+                <div class="card-footer">
+                    <a href="#" class="btn btn-sm btn-primary">تعديل</a> 
                 </div>
             </div>
-        </div>
-    </form>
-</div>           
+        </div> -->
+       
+ 
 
-<!------------------------>
-
-
-<!-- عرض العلامات التجارية-->
-<div class="card mb-4  col-xl-8 col-lg-8 col-md-8  ">
-
-<div class="searchable-container  pt-4">
-
-    <div class="card-header text-center">
-        <div class="row">
-                <label> العلامات التجارية </label>
-        </div>
-    </div>
-
-    <div class="row">
-        {% for b in brands %}
-        <div class="col-md-12 pt-4 pb-2">
-            
-                <div class="items">
-                    <div class="user-profile" >  
-                        <img src="../../../{{b.logo}}" alt="avatar" >
-                    </div>
-                    <div class="user-name">
-                        <p class=""> {{ b.description }}</p>
-                    </div>
-                
-                    <div class="user-status">
+       
+                {% for b in brands %}
+                <div class="col-lg-4 col-md-12 col-sm-12" >
+                    <div class="card text-center">
+                        <div class="card-header" style="background-color: white;">
+                            <img src="../../../{{b.logo}}" alt="avatar" class="rounded-circle me-2" width="50" height="50" >
+                            {{ b.description }}
+                        </div>
+                       <div class="card-body">
+                       
+                        <b>  مدير العلامة التجارية </b>
                         {% if b.gm_manager_id %} 
-                        <span class="badge outline-badge-info"> {{b.gm_manager_id}} </span> 
-                        <span class="badge outline-badge-info" data-toggle="modal" data-target="#exampleModalCenter{{b.id}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> </span>
+                        <p style="color: #02024b;"> {{b.gm_manager_id}}  <a href="#" data-toggle="modal" data-target="#exampleModalCenter{{b.id}}" > <i class="material-icons sm" >edit</i></a></p> 
+                        
                         {% else %} 
-                        <span class="badge outline-badge-danger" data-toggle="modal" data-target="#exampleModalCenter{{b.id}}">إضافة مدير + </span>
+                        <span class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter{{b.id}}">إضافة   </span>
                          {% endif %}
-                         <a class="badge outline-badge-dark" href="{% url 'regions_city_managers' b.id %}" >إدارة المناطق</a>
-                    </div>
-                    <div class="user-name">
-                        <a href="{% url 'brand_terms' b.id %}">  <span class="badge outline-badge-dark">اعداد تقرير التفتيش</span></a>
-                    </div>
-                    <div class="action-btn">
-                    <a href="{% url 'add_new_branch' b.id %}">  <span class="badge outline-badge-dark">الفروع</span></a>
-                        <!-- <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></p> -->
+
+
+                       </div>
+                     
+                        <div class="card-footer">
+                           <a class="btn btn-sm btn-primary" href="{% url 'regions_city_managers' b.id %}" >المناطق </a>
+                           <a href="{% url 'brand_terms' b.id %}">  <span class="btn btn-sm btn-primary">اعداد التقارير </span></a>
+                           <a href="{% url 'add_new_branch' b.id %}">  <span class="btn btn-sm btn-primary">الفروع</span></a>
+                        </div>
                     </div>
                 </div>
-            
-        {% endfor %}
-
-        </div>
-    </div>
-
-    </div><!---->
-</div>
-<!-- عرض العلامات التجارية-->
-
-
-</div> <!--end row-->
-
-
-
-       <!-- Modal -->
-       {% for b in brands %}
+                {% endfor %}
+</div> <!--end main row -->
 <!-- Modal -->
+{% for b in brands %}
+
 <div class="modal fade" id="exampleModalCenter{{b.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -190,6 +134,57 @@
 
 
   {% endfor %}
+
+  
+<!-- Evaluation Modal -->
+
+<div class="modal fade" id="addNewBrand" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اضافة علامة تجارية </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="img-uploader-content mb-4">
+                        <input type="file" name="brandLogo" required>
+                    </div>
+                    <input name="brandName" type="text" class="form-control" id="fullName" placeholder="اكتب اسم العلامة التجارية" style="border: none; background-color: aliceblue;">
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+                        <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+  
+    let alerts= document.getElementById("alert").value;
+      //alert(alerts)
+   
+       if( alerts == 'success'){
+          Swal.fire({
+           title: "تم الحفظ",
+           text: "تم حفظ العلامة التجارية بنجاح",
+           icon: "success"
+           });         
+       } else if( alerts == 'exist'){
+          Swal.fire({
+           title: "موجود مسبقاً",
+           text: "العلامة التجارية مضافة مسبقاً",
+           icon: "error"
+           });         
+       } 
+  </script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

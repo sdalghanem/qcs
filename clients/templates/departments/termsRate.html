@@ -34,7 +34,7 @@
 
 <!--ًصورة المستخدم-->
 {% block profileImg %}
-<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
 {% endblock %}
 {% block profileImg2 %}
 <img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
@@ -54,59 +54,42 @@
 {% endblock %}
 
 {% block qurter %}
-<div class="col-8 ">
-    <form action="#" method="post" class="form">
-        {% csrf_token %}
-        <div class="row align-items-center">
-            <!-- حقل الربع -->
-            <div class="col-md-3">
-                <select class="form-control form-control-sm" name="quarter">
-                    <option value="q1">الربع الأول</option>
-                    <option value="q2">الربع الثاني</option>
-                    <option value="q3">الربع الثالث</option>
-                    <option value="q4">الربع الرابع</option>
-                    <option value="0">سنة</option>
-                </select>
-            </div>
+<li class="nav-item">
 
-            <!-- حقل السنة (ديناميكي) -->
-            <div class="col-md-2">
-                <select class="form-control form-control-sm" name="year">
-                    {% for year in years %}
-                        <option value="{{ year }}">{{ year }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- زر الإرسال -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
-            </div>
-        </div>
-    </form>
-</div>
-
+  {% if q == 'q1' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الأول {{y}}
+  </a>
+  {% elif q == 'q2' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثاني {{y}}
+  </a>
+  {% elif q == 'q3' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثالث {{y}}
+  </a>
+  {% elif q == 'q4' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}
+  </a>
+  {% elif q == '0' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> سنه {{y}} </a>
+  {% endif %}
+</li>
 {%endblock %}
+
+<!--company name-->
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
+<!--company name-->
 
 {% block home %}
 
 
 <!-- BREADCRUMB -->
  <!-- Form -->
- <div class="row mb-4 align-items-center">
-  <!-- Logo and Brand -->
-  
-  <div class="col-12">
-    <h3 class="mb-0">
-    <img src="../../../../../{{companyLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
-    {{companyName}}
-    
-</h3> 
-  </div>
 
-</div>
 
-<div class="col-6 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+<div class="col-6 p-2 mb-4 " style=" background-color: #f1f1f1; height: 40px; border-radius: 50px; margin-right: 1vw;">
   {% if position == '0' %}<a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>لوحة بيانات الإدارات</b> </a> > {% endif %} <a href="{% url 'sections_rate' depid y q %}">ادارة {{depName}}</a> > <b>قسم {{secName}} </b>
 </div>
 <!-- /BREADCRUMB -->
@@ -202,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
             datasets: [{
               label: `Results for ${r.term}`,
               data: [r.yes, r.no, r.none],
-              backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
+              backgroundColor: ['#0AD0AC', '#02024b', '#625bff'],
             }]
           },
           options: {

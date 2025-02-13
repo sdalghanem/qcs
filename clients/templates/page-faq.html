@@ -1,5 +1,68 @@
 {% extends "index.html" %}
 {% load static %}
+
+{% block dashbordMenu %}
+{% if position == '0' %}
+<a href="{% url 'gm_dashboard' y q %}" aria-expanded="false" class="dropdown-toggle">
+    <div class="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+        <span>لوحة المعلومات</span>
+    </div>
+</a>
+{% endif %}
+{%endblock %}
+
+
+{% block menubr %}
+    {% if menubrands %}
+        {% for b in menubrands %}
+            <li>
+                <a href="{% url 'regions_rate' b.id y q %}"> {{b.description}}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
+<!--ًصورة المستخدم-->
+{% block profileImg %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
+{% endblock %}
+{% block profileImg2 %}
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+{% endblock %}
+
+{% block qurter %}
+<li class="nav-item">
+
+  {% if q == 'q1' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الأول {{y}}
+  </a>
+  {% elif q == 'q2' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثاني {{y}}
+  </a>
+  {% elif q == 'q3' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثالث {{y}}
+  </a>
+  {% elif q == 'q4' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}
+  </a>
+  {% elif q == '0' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> سنه {{y}} </a>
+  {% endif %}
+</li>
+{%endblock %}
+
+
+<!--company name-->
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
+<!--company name-->
+
+
 {% block home %}
 <div class="middle-content container-xxl p-0">
                     

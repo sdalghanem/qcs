@@ -11,69 +11,70 @@
 
 <!--ًصورة المستخدم-->
   {% block profileImg %}
-  <img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
   {% block profileImg2 %}
-  <img alt="avatar" src="../../../{{companyLogo}}" class="rounded-circle">
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
 {% block clients_home %}
-
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
 <div class="row ">
    
-    <div class="col-12 text-raight">
-        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="10%">      {{companyName}}    </h4>
+    <div class="p-4">
+        <label><img src="../../../{{companyLogo}}" alt="avatar" width="80px"><b>{{companyName}}</b></label>        
+        <div>
+            <a href="{% url 'brands_dashbord' companyID %}" class="btn btn-sm btn-primary"  > العودة لملف الشركة</a>
+            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_department" > إضافة ادارة + </a>
+        </div>
     </div>
-   
-    
-</div>
-
-<div class="row mb-4 mt-2">
-    <div class="col-12">
-        <a href="#" class="btn btn-dark " data-toggle="modal" data-target="#add_department">إضافة ادارة + </a>
-    </div>
-</div>
-
 {% for r in  row %}
 
 
-<div class="col-lg-12 ">
-    <div class="searchable-container card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-center">
-                    <h4>{{r.deptName}}  <a href="#" class="badge  outline-badge-success " data-toggle="modal" data-target="#add_sec{{r.deptId}}">+</a>  
-                    <a href="#" class="badge  outline-badge-warning " data-toggle="modal" data-target="#edit_dept{{r.deptId}}" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </a></h4>     
-                       <span><b>مدير عام الإدارة</b> / {{r.deptMngr}}</span>
-                </div>
+<div class="col-lg-12 m-2">
+    <div class="searchable-container card p-4">
+
+        <div class="row p-2">
+            <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-center">
+                <h4>{{r.deptName}}  <a href="#" class="btn btn-sm btn-primary " data-toggle="modal" data-target="#add_sec{{r.deptId}}"> إضافة قسم</a>  
+            
+                <button class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#edit_dept{{r.deptId}}">  تعديل بيانات الإداراة</button>
+               </h4>     
+                    <span><b>مدير عام الإدارة</b> : {{r.deptMngr}}</span>
             </div>
         </div>
         <div class="row">
-            {% for  s in r.secifo %} 
-            <div class="col-md-12">
-                <div class="searchable-items">
-                    <div class="items">
-                        <div class="user-name">
-                            <p class="">{{s.description}}</p>
-                        </div>
-                        <div class="user-name">
-                            <p class=""><b>مدير القسم</b>/ {{s.manager_id}}</p>
-                        </div>
-                        <div class="user-name">
-                            <p class=""><b>العلامة التجارية</b>/ {{s.Brand_id}}</p>
-                        </div>
-                        <div class="">
-                           <a href="#" data-toggle="modal" data-target="#edit_sec{{s.id}}" class="badge  outline-badge-info "><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <table class="table table-striped">
+                <thead style="background-color: #0ad0ac;">
+                    <tr>
+                        <th>القسم</th>
+                        <th>مدير القسم</th>
+                        <th>العلامة التجارية</th>
+                        <th>تعديل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for  s in r.secifo %} 
+                    <tr>
+                        <td>{{s.description}}</td>
+                        <td>{{s.manager_id}}</td>
+                        <td>{{s.Brand_id}}</td>
+                        <td><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_sec{{s.id}}">تعديل</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
             </div>
         </div>
     </div>
-</div>
 {% endfor %}
+</div>
 
 
 <!-- Modal add department -->
@@ -86,17 +87,18 @@
         </div>
         <div class="modal-body">
          
-            <form class="section general-info " method="post" action="{% url 'add_new_dept' companyID %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'add_new_dept' companyID %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
-                               
-                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم الادارة">                 
-                               
-                                <select class="form-control " name="mngr">
-                                    <option>اختر مدير الادارة</option>
+                                <label> اسم الادارة</label>
+
+                                    <input type="text" class="form-control border-0 mb-2" name="description"   style="background-color: #e9ecef;" required>                 
+                               <label> مدير الادارة</label>
+                                <select class="form-control border-0" name="mngr"  style="background-color: #e9ecef;" required>
                                     {% if mngs %}
+                                    <option>اختر</option>
                                         {% for m in mngs%}
                                             <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
                                         {% endfor %}
@@ -109,8 +111,8 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-primary" type="submit" >حفظ</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-sm btn-primary" type="submit" >حفظ</button>
         </form>
 
         </div>
@@ -131,24 +133,25 @@
         </div>
         <div class="modal-body">
          
-            <form class="section general-info " method="post" action="{% url 'add_new_sec' r.deptId %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'add_new_sec' r.deptId %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
-                               
-                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم">                 
-                               
-                                <select class="form-control mb-2" name="mngr">
-                                    <option>اختر مدير الادارة</option>
-                                    {% if mngs %}
-                                        {% for m in mngs%}
+                                <label> اسم القسم</label>
+                                    <input type="text" class="form-control border-0 mb-2" name="description"  style="background-color: #e9ecef;" required>                 
+                                    <label> مدير القسم</label>
+
+                                <select class="form-control border-0 mb-2" name="mngr"  style="background-color: #e9ecef;" required>
+                                    <option>اختر </option>
+                                    {% if mngs_sec %}
+                                        {% for m in mngs_sec%}
                                             <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
                                         {% endfor %}
                                     {% endif %}
                                 </select>
-
-                                <select class="form-control" name="brand">
+                                <label> العلامة التجارية</label>
+                                <select class="form-control border-0" name="brand"  style="background-color: #e9ecef;" required>
                                     <option>اختر العلامة التجارية</option>
                                     {% if brands %}
                                         {% for b in brands%}
@@ -165,8 +168,8 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-primary" type="submit" >حفظ</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-sm btn-primary" type="submit" >حفظ</button>
                 </form>
         </div>
       </div>
@@ -191,15 +194,17 @@
           <h5 class="modal-title" id="exampleModalLongTitle"> تعديل بيانات ادارة </h5>
         </div>
         <div class="modal-body">
-            <form class="section general-info " method="post" action="{% url 'edit_departmentInfo' r.deptId %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'edit_departmentInfo' r.deptId %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
-                       
-                                    <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم" value="{{r.deptName}}">                 
-                               
-                                <select class="form-control mb-2" name="mngr">
+                                <label> اسم الإدارة</label>
+
+                                    <input type="text" class="form-control border-0 mb-2" name="description"  value="{{r.deptName}}"  style="background-color: #e9ecef;" required>                 
+                                    <label> مدير الإدارة</label>
+
+                                <select class="form-control border-0 mb-2" name="mngr"  style="background-color: #e9ecef;" required>
                                     <!-- <option value="{{r.deptMngr.id}}">{{r.deptMngr}}</option> -->
                                     {% if mngs %}
                                         {% for m in mngs%}
@@ -213,8 +218,8 @@
                     </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-primary" type="submit" >تحديث</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-sm btn-primary" type="submit" >تحديث</button>
         </form>
         </div>
       </div>
@@ -238,23 +243,25 @@
           <h5 class="modal-title" id="exampleModalLongTitle"> تعديل بيانات قسم </h5>
         </div>
         <div class="modal-body">
-            <form class="section general-info " method="post" action="{% url 'edit_secInfo' s.id %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'edit_secInfo' s.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-12  ">
                         <div class="form-group">
-                           
-                                <input type="text" class="form-control mb-2" name="description" placeholder="اسم القسم" value="{{s.description}}">                 
-                           
-                            <select class="form-control mb-2" name="mngr">
-                                <option disabled>اختر مدير الادارة</option>
-                                {% if mngs %}
-                                    {% for m in mngs%}
+                            <label> اسم القسم</label>
+
+                                <input type="text" class="form-control border-0 mb-2" name="description"  value="{{s.description}}"  style="background-color: #e9ecef;" required>                 
+                                <label> مدير القسم</label>
+
+                            <select class="form-control border-0 mb-2" name="mngr"  style="background-color: #e9ecef;" required>
+                                <option disabled>اختر </option>
+                                {% if mngs_sec %}
+                                    {% for m in mngs_sec%}
                                         <option value="{{m.id}}"> {{m.user.first_name}} {{m.user.last_name}}</option>
                                     {% endfor %}
                                 {% endif %}
                             </select>
-                            <p> <b> مدير الادارة الحالي :</b> {{ s.manager_id}} </p>
+                            <p> <b> مدير القسم الحالي :</b> {{ s.manager_id}} </p>
                            
                         </div>
                      </div>
@@ -264,8 +271,8 @@
 
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-      <button  class="btn btn-primary" type="submit" >حفظ</button>
+      <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+      <button  class="btn btn-sm btn-primary" type="submit" >حفظ</button>
             </form>        </div>
       </div>
     </div>
@@ -274,7 +281,91 @@
   <!--end model -->
   {% endfor %}
   {% endfor %}
-
+  <script>
+    let alerts= document.getElementById("alert").value;
+    //alert(alerts)
+ 
+     if( alerts == 'error'){
+         Swal.fire({
+         title: "موجود مسبقاً",
+         text: "المنطقة أو مدير المنطقة مضاف مسبقاً",
+         icon: "error"
+         });
+         
+     }
+     else if (alerts == 'succcess_dept') {
+         Swal.fire({
+         title: "تم الحفظ",
+         text: "تم اضافة إدارة جديدة بنجاح",
+         icon: "success"
+         });
+     }  
+     else if (alerts == 'succcess_sec') {
+         Swal.fire({
+         title: "تم الحفظ",
+         text: "تم اضافة قسم جديد بنجاح",
+         icon: "success"
+         });
+     }  
+     else if (alerts == 'succcess_editdept') {
+         Swal.fire({
+         title: "تم التعديل",
+         text: "تم تعديل بيانات الادارة بنجاح",
+         icon: "success"
+         });
+     }  
+     else if (alerts == 'succcess_editsec') {
+         Swal.fire({
+         title: "تم التعديل",
+         text: "تم تعديل بيانات القسم بنجاح",
+         icon: "success"
+         });
+     } 
+     else if (alerts == 'delete_dept') {
+         Swal.fire({
+         title: "تم الحذف",
+         text: "تم حذف الإدارة بنجاح",
+         icon: "success"
+         });
+     } 
+     else if (alerts == 'delete_sec') {
+         Swal.fire({
+         title: "تم الحذف",
+         text: "تم حذف القسم بنجاح",
+         icon: "success"
+         });
+     } 
+ </script>
+ <script>
+     document.addEventListener('DOMContentLoaded', function () {
+         // الحصول على جميع أزرار الحذف التي تحمل الكلاس المحدد
+         const deleteButtons = document.querySelectorAll('.delete-confirm');
+         
+         deleteButtons.forEach(function(button) {
+             button.addEventListener('click', function(e) {
+                 e.preventDefault(); // منع الانتقال الافتراضي للرابط
+                 const link = this.getAttribute('href'); // الحصول على رابط الحذف
+     
+                 // إظهار نافذة التأكيد
+                 Swal.fire({
+                     title: 'هل أنت متأكد؟',
+                     text: "لن تتمكن من استعادة هذا العنصر بعد الحذف!",
+                     icon: 'warning',
+                     showCancelButton: true,
+                     confirmButtonColor: '#3085d6',
+                     cancelButtonColor: '#d33',
+                     confirmButtonText: 'نعم، احذفه!',
+                     cancelButtonText: 'إلغاء'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         // إذا أكد المستخدم، يتم الانتقال إلى الرابط لتنفيذ الحذف
+                         window.location.href = link;
+                     }
+                 });
+             });
+         });
+     });
+     </script>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

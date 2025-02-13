@@ -29,7 +29,7 @@
 
 <!--ًصورة المستخدم-->
 {% block profileImg %}
-<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
 {% endblock %}
 {% block profileImg2 %}
 <img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
@@ -51,106 +51,95 @@
 
 
 {% block qurter %}
-<div class="col-6 ">
-    <form action="#" method="post" class="form">
-        {% csrf_token %}
-        <div class="row align-items-center">
-            <!-- حقل الربع -->
-            <div class="col-md-3">
-                <select class="form-control form-control-sm" name="quarter">
-                    <option value="q1">الربع الأول</option>
-                    <option value="q2">الربع الثاني</option>
-                    <option value="q3">الربع الثالث</option>
-                    <option value="q4">الربع الرابع</option>
-                    <option value="0">سنة</option>
-                </select>
-            </div>
+<li class="nav-item">
 
-            <!-- حقل السنة (ديناميكي) -->
-            <div class="col-md-2">
-                <select class="form-control form-control-sm" name="year">
-                    {% for year in years %}
-                        <option value="{{ year }}">{{ year }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- زر الإرسال -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
-            </div>
-        </div>
-    </form>
-</div>
-
+  {% if q == 'q1' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الأول {{y}}
+  </a>
+  {% elif q == 'q2' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثاني {{y}}
+  </a>
+  {% elif q == 'q3' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثالث {{y}}
+  </a>
+  {% elif q == 'q4' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}
+  </a>
+  {% elif q == '0' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> سنه {{y}} </a>
+  {% endif %}
+</li>
 {%endblock %}
 
+<!--company name-->
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
+<!--company name-->
 
 {% block home %}
 
 
 <!-- BREADCRUMB -->
- <!-- Form -->
- <div class="row mb-4 align-items-center">
-  <!-- Logo and Brand -->
-  
-  <div class="col-5">
-    <h3 class="mb-0">
-    <img src="../../../../../{{companyLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
-    {{companyName}}
-    
-</h3> 
-  </div>
+
 
 </div>
 <div class="row">
-    <div class="col-2 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
+    <div class="col-2 p-2 mb-4 " style=" background-color: #f1f1f1; height: 40px; border-radius: 50px; margin-right: 1vw;">
       <a href="{% url 'departments_rate' y q  %}" class="mt-4"> <b>جميع الإدارات</b> </a>   > 
     </div>
 </div>
 <!-- /BREADCRUMB -->
 
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-6">
-          <div class="mb-4" style="
-              position: relative; 
+
+  <div class=" d-none  d-lg-block col-md-12 col-lg-6 ">
+      <div class="mb-4" style="
+      margin-right: 1vw;
+          position: relative; 
+          border-radius: 50%; 
+          width: 20vw; 
+          height: 20vw; 
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          text-align: center; 
+          background: linear-gradient(to right, #625BFF, #0AD0AC); ">
+          
+          <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
+          <div style="
               border-radius: 50%; 
-              width: 300px; 
-              height: 300px; 
+              background-color: white; 
+              width: 19.5vw; 
+              height: 19.5vw; 
               display: flex; 
               justify-content: center; 
-              align-items: center; 
-              text-align: center; 
-              background: linear-gradient(to right, #625BFF, #0AD0AC); ">
+              align-items: center;">
               
-              <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
-            <div style="
-                border-radius: 50%; 
-                background-color: white; 
-                width: 295px; 
-                height: 295px; 
-                display: flex; 
-                justify-content: center; 
-                align-items: center;">
-                
-                <h4 style="margin: 0;">
-                  {% if q == 'q1' %} 
-                  <h6>  الربع الأول {{y}}</h6>
-                  {% elif q == 'q2' %}  
-                  <h6>  الربع الثاني {{y}}</h6>
-                  {% elif q == 'q3' %}  
-                  <h6>  الربع الثالث {{y}}</h6>
-                  {% elif q == 'q4' %}  
-                  <h6>  الربع الرابع {{y}}</h6>
-                  {% elif q == '0' %}  
-                  <h6>  سنة {{y}}</h6>
-                  {% endif %}  
-                </h4>
-            </div>
+              <h3 style="margin: 0;">
+                {% if q == 'q1' %} 
+                 الربع الأول {{y}}
+                {% elif q == 'q2' %}  
+                الربع الثاني {{y}}
+                {% elif q == 'q3' %}  
+                 الربع الثالث {{y}}
+                {% elif q == 'q4' %}  
+                 الربع الرابع {{y}}
+                {% elif q == '0' %}  
+                  سنة {{y}}
+                {% endif %}  
+              </h3>
+        
+          </div>
       </div>
+
+
+
     </div>
-      <div class="col-xl-6 col-lg-6 col-sm-6 col-md-6 ">
-          <canvas id="DeoartmentRates" style="float: left;"></canvas>   
+    <div class=" d-none  d-lg-block col-md-12 col-lg-6 ">
+      <canvas id="DeoartmentRates" style="float: left;"></canvas>   
       </div>
 </div> <!--end row -->
 
@@ -158,8 +147,7 @@
   <div class="col-lg-12 col-md-12 col-sm-12">
     <table class="table table-striped ">
         <thead>
-        
-            <tr style="background-color: #625BFF ;">
+            <tr style="background-color: #0AD0AC ;">
                 <th class="text-center">الترتيب</th>
                 <th class="text-center">الإدارة</th>
                 <th class="text-center">مدير الإدارة</th>
@@ -176,7 +164,7 @@
                         <td class="text-center">{{r.departmentName}}</td>
                         <td class="text-center"> {{r.deptMng}}</td>
                         <td class="text-center">{{r.percentage}}%</td>
-                        <td class="text-center"><a class="btn btn-secondary btn-sm" href="{% url 'sections_rate' r.id y q %}">تفاصيل</a></td>
+                        <td class="text-center"><a class="btn btn-primary btn-sm" href="{% url 'sections_rate' r.id y q %}">تفاصيل</a></td>
                         <!-- <td>{{r.rate}} %
                           <div class="progress br-30">
                               <div class="progress-bar br-30 bg-success" role="progressbar" style="width: {{r.rate}}%" aria-valuenow="{{r.rate}}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -238,9 +226,9 @@ var barColors = percentages.map(value => {
   if (value >= 90) {
     return '#0AD0AC';  // أخضر
   } else if (value >= 70) {
-    return '#FFA500';  // برتقالي
+    return '#625BFF';  // برتقالي
   } else {
-    return '#FF0000';  // أحمر
+    return '#02024B';  // أحمر
   }
 });
 
@@ -249,14 +237,15 @@ var ctx = document.getElementById('DeoartmentRates').getContext('2d');
 var branchChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: branchNames,
+    labels: branchNames, // تسميات البارات
     datasets: [{
-      label: 'تقييم المناطق',
+      label: "", // إخفاء الليبل الخاص بالشارت (العنوان أعلى الشارت)
       data: percentages,
       backgroundColor: barColors,  // استخدام الألوان الديناميكية
       borderColor: barColors,
       borderWidth: 1,
-      borderRadius: 50
+      borderRadius: 50,
+      barThickness: 40 // تحديد سمك الأعمدة ليكون 30 بيكسل
     }]
   },
   options: {
@@ -265,10 +254,11 @@ var branchChart = new Chart(ctx, {
       x: {
         beginAtZero: true,
         grid: { display: false },
-        ticks: { display: false }
+        ticks: { display: true } // الإبقاء على تسميات المحور X
       },
       y: {
-        grid: { display: false }
+        grid: { display: false },
+        ticks: { display: true } // الإبقاء على تسميات البارات (المحور Y)
       }
     },
     plugins: {
@@ -289,6 +279,12 @@ var branchChart = new Chart(ctx, {
         formatter: function (value) {
           return value.toFixed(2) + '%';
         }
+      },
+      legend: {
+        display: false // إخفاء الأسطورة
+      },
+      title: {
+        display: false // إخفاء عنوان الشارت أعلى الرسم البياني
       }
     }
   },
@@ -296,6 +292,57 @@ var branchChart = new Chart(ctx, {
 });
 
 
+
  </script>
 
+
+
+<!-- مودال لعرض الفورم -->
+<div class="modal fade" id="quarterModal" tabindex="-1" aria-labelledby="quarterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="quarterModalLabel">الفترة الزمنية</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- الفورم -->
+        <form action="#" method="post" class="form">
+          {% csrf_token %}
+          <div class="row align-items-center">
+            <!-- حقل الربع -->
+            <div class="col-md-12 mb-3">
+              <select class="form-control text-center" name="quarter" id="quarter"
+                style="border: none; background-color: #f1f1f1;">
+                <option value="q1">الربع الأول</option>
+                <option value="q2">الربع الثاني</option>
+                <option value="q3">الربع الثالث</option>
+                <option value="q4">الربع الرابع</option>
+                <option value="0">سنة</option>
+              </select>
+            </div>
+
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-12 mb-3">
+              <select class="form-control text-center" name="year" id="year"
+                style="border: none; background-color: #f1f1f1;">
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-primary  w-100">عرض</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- تضمين مكتبة Bootstrap (نسخة 5 فأحدث) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

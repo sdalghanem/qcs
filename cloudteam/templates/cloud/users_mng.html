@@ -11,252 +11,224 @@
 
 <!--ًصورة المستخدم-->
   {% block profileImg %}
-  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle  ">
   {% endblock %}
   {% block profileImg2 %}
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
 {% block clients_home %}
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
 
- 
-<!--الشعار و العلامة التجارية-->
 <div class="row">
-    <div class="col-5 text-center">
-        <h4><img src="../../../{{companyLogo}}" alt="avatar" width="20%">      {{companyName}}    </h4>
-        
-        
+    <!-- عرض العلامات التجارية-->
+    <div class="card m-2">
+    
+    <div class="p-4">
+        <label><img src="../../../{{companyLogo}}" alt="avatar" width="80px"><b>{{companyName}}</b></label>        
+        <div>
+          <a href="{% url 'brands_dashbord' companyID %}" class="btn btn-sm btn-primary"  > العودة لملف الشركة</a>
+            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNewUser" > إضافة حساب جديد</a>
+        </div>
+      
     </div>
-</div>
-<!------------------------>
-
-
-<div class="accordion searchable-container" id="accordionExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            إضافة حساب جديد
-        </button>
-      </h2>
-      <div id="collapseOne" class="accordion-collapse collapse collapsed" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-         <!--show-->
-         <div class="card">
-   
-
-            <div class="row card-body">
-                <div class="card-header  text-center">
-                   <h5>إضافة حساب جديد</h5> 
-                </div>
-                {{res}} 
-                <!-- تبيهات-->
-                <div class="col-lg-2 col-md-12">
-                    <div class="form-group mt-4">
-                        <label for="password">الصورة الشخصية</label>
-                        <input type="file" name="userimg" id="imageInput"  accept="image/*" onchange="previewImage(event)">
-                        <br>
-                        <img id="imagePreview" src="" alt="Image Preview" style="max-width: 300px; display: none;">
+  
+     <!-- <table class="table table-striped " id="myTable">
+        <thead style="background-color: #0ad0ac;">
+            <tr>
+               <th>أسم الموظف</th>
+                <th>المنصب</th>
+                <th>المنصب الحالي</th>
+                <th>اسم المستخدم</th>
+                <th>رقم الجوال</th>
+                <th>الإيميل</th>
+                <th>تعديل</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in mngs %}
+            <tr>
+                <td>{{m.name }}</td>
+                <td>                        
+                        {% if  m.position == '0' %} 
+                        مدير عام
+                        {% elif  m.position == '1' %} 
+                                مدير علامة تجارية
+                        {% elif  m.position == '2' %} 
+                                مدير منطقة
+                        {% elif  m.position == '3' %} 
+                                مدير مدينة
+                        {% elif  m.position == '4' %} 
+                                مدير فرع
+                        {% elif  m.position == '5' %} 
+                                مدير ادارة
+                        {% elif  m.position == '6' %} 
+                                مدير قسم
+                        {% else %}
+                        لايوجد
+                        {% endif %}
                     
-                    </div>
-                </div> 
-        
-                <div class="col-lg-5 col-md-12 ">
-                    <form action="{% url 'users_managment' companyID %}" method="post" class="form">
-                        {% csrf_token %}
-                        <div class="col-md-12">
-                            <div class="form-group mt-4 ">
-                                <label for="username ">اسم المستخدم</label>
-                                <input name="username" type="text" class="form-control mb-3" id="username"   dir="ltr">
-                            </div>
-                        </div>  
-                        <dvi class="row">
-                       
-                        <div class="col-md-6">
-                            <div class="form-group  ">
-                                <label for="first_name ">الاسم</label>
-                                <input name="first_name" type="text" class="form-control mb-3" id="first_name"   dir="ltr">
-                            </div>
-                        </div>
-        
-                        <div class="col-md-6">
-                            <div class="form-group ">
-                                <label for="last_name ">العائلة</label>
-                                <input name="last_name" type="text" class="form-control mb-3" id="last_name"   dir="ltr">
-                            </div>
-                        </div>
-                    </dvi>
-                        <div class="col-md-12">
-                            <div class="form-group mt-2">
-                                <label for="email">البريد الالكتروني</label>
-                                <input name="email" type="email" class="form-control mb-3" id="email" placeholder="@"  >
-                            </div>
-                        </div>  
-                        
-                   
-        
-                       
-                        
-                        
-                  
-                </div><!--end col-->
-        
-                <div class="col-lg-5 col-md-12">
-                    <div class="col-md-12">
-                        <div class="form-group mt-4">
-                            <label for="password">كلمة المرور</label>
-                            <input name="password" type="password" class="form-control mb-3" id="password"   dir="ltr">
-                        </div>
-                    </div> 
-                        <div class="col-md-12">
-                            <div class="form-group mt-4 ">
-                                <label for="mobile">رقم الجوال</label>
-                                <input name="mobile" type="number" class="form-control mb-3" id="mobile" placeholder="05xxxxxxx"  dir="ltr">
-                            </div>
-                        </div>    
-                        
-                        <div class="col-md-12">
-                            <div class="form-group mt-2">
-                                <label for="position">المنصب</label>
-                                    <select class="form-select" aria-label="Default select example" id="position" name="position">
-                                        <option value="0">مدير عام</option>
-                                        <option value="1">مدير علامة تجارية</option>
-                                        <option value="2">مدير منطقة</option>
-                                        <option value="3">مدير مدينة</option>
-                                        <option value="4">مدير فرع</option>
-                                        <option value="5">مدير ادارة</option>
-                                        <option value="6">مدير قسم</option>
-                                  
-        
-                                    </select>         
-                            </div>
-                        </div>                                                        
-                </div><!--end col-->
-        
-        <div class="card-footer">
-         
-                <div class="form-group mt-2 mb-4 text-center">
-                    <button type="submit" class="btn btn-dark col-lg-2" >حفظ</button>
-                </div>
-            </form>
-           
-        </div>       
-        </div><!--end row -->
+                </td>
+                <td>{{m.current}}</td>
+                <td>{{ m.user }}</td>
+              
+                <td>{{ m.mobile }}</td>
+                <td>{{ m.email }}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#exampleModalCenter{{m.id}}">
+                        تعديل
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table> -->
+      
+    </div>
 
-         <!--end show -->
+</div><!--row-->
+
+
+
+
+<!-- حاوية رئيسية -->
+<div class="container">
+  <div class=" d-flex flex-wrap align-items-center mb-4 mt-4">
+    <!-- حقل البحث -->
+    <div class="d-flex align-items-center" style="min-width: 250px; margin-left: 10px;">
+      <i class="material-icons" style="margin-right: 8px;">search</i>
+      <input 
+        type="text" 
+        class="form-control border-0 bg-light shadow-sm" 
+        placeholder="اكتب للبحث .." 
+        id="searchInput" />
+    </div>
+    
+    
+    <!-- أزرار الفلترة -->
+    <div>
+      <button type="button" class="btn btn-sm btn-primary filter-btn" data-filter="all">الكل</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="0">مدير عام</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="1">مدير علامة تجارية</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="2">مدير منطقة</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="3">مدير مدينة</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="4">مدير فرع</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="5">مدير ادارة</button>
+      <button type="button" class="btn btn-sm btn-secondary filter-btn" data-filter="6">مدير قسم</button>
+    </div>
+  </div>
+  
+
+  <!-- قسم عرض الكاردز -->
+  <div class="row" id="cardsContainer">
+    {% for m in mngs %}
+    <!-- إضافة كلاس card-item واستخدام data-position لتخزين قيمة position -->
+    <div class="col-lg-4  col-md-6 col-sm-12 mb-4 card-item" data-position="{{ m.position }}">
+      <div class="card">
+        <div class="card-body">
+          <h5>{{ m.name }}</h5>
+          <b style="color:#625bff">
+            {% if m.position == '0' %}
+              مدير عام
+            {% elif m.position == '1' %}
+              مدير علامة تجارية
+            {% elif m.position == '2' %}
+              مدير منطقة
+            {% elif m.position == '3' %}
+              مدير مدينة
+            {% elif m.position == '4' %}
+              مدير فرع
+            {% elif m.position == '5' %}
+              مدير ادارة
+            {% elif m.position == '6' %}
+              مدير قسم
+            {% else %}
+              لايوجد
+            {% endif %}
+          </b>
+          <hr class="bg-dark">
+          <p style="color:#02024b"><b> <i class="material-icons"style="color:#625bff">person</i>{{ m.current }}</b></p>
+          <p style="color:#02024b">
+            <i class="material-icons"  style="color:#625bff">call</i>
+ 
+            {{ m.mobile }}</p>
+          <p style="color:#02024b">
+            <i class="material-icons"  style="color:#625bff">email</i>
+            {{ m.email }}</p>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter{{ m.id }}">
+            تعديل
+          </button>
+          <!-- <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter{{ m.id }}">
+          تعطيل الحساب
+          </button> -->
         </div>
       </div>
     </div>
+    {% endfor %}
   </div>
 </div>
-<!----------end add new form -------------->
 
-<div class=" searchable-container  pt-4">
 
-    <div class="card-header text-center">
-        <div class="row">
-                <label> المستخدمين </label>
-        </div>
-    </div>
 
-    <div class="row">
-        {% for m in mngs %}
-        <div class=" col-lg-12 col-md-12 pt-2 ">
-            
-                <div class="items">
-                    <!-- <div class="user-profile" >  
-                        <img src="#" alt="avatar" >
-                    </div> -->
-                    <div class="user-name">
-                        <p class="">
-                            {% if  m.position == '0' %} 
-                               مدير عام
-                            {% elif  m.position == '1' %} 
-                                    مدير علامة تجارية
-                            {% elif  m.position == '2' %} 
-                                    مدير منطقة
-                            {% elif  m.position == '3' %} 
-                                    مدير مدينة
-                            {% elif  m.position == '4' %} 
-                                    مدير فرع
-                            {% elif  m.position == '5' %} 
-                                    مدير ادارة
-                            {% elif  m.position == '6' %} 
-                                     مدير قسم
-                            {% else %}
-                            لايوجد
-                            {% endif %}
-                            <span class="badge outline-badge-danger" data-toggle="modal" data-target="#exampleModalCenter{{m.id}}">تعديل </span>
 
-                        </p>
-                    </div>
-                    <div class="user-name">
-                        <p class=""> {{ m.user }}</p>
-                    </div>
-                    <div class="user-name">
-                        <p class=""> {{ m.user.first_name }} {{ m.user.last_name }}</p>
-                    </div>
-                    <div class="user-name">
-                        <p class=""> {{ m.mobile }}</p>
-                    </div>
-                    <div class="user-name">
-                        <p class=""> {{ m.user.email }}</p>
-                    </div>
-                
-                    
-                   
-                </div>
-            
-        {% endfor %}
-
-        </div>
-    </div>
-
-</div><!---->
 
      <!-- Modal -->
      {% for m in mngs %}
-     <!-- Modal -->
-     <div class="modal fade" id="exampleModalCenter{{m.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered" role="document">
-           <div class="modal-content">
-             <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLongTitle">{{ m.user.first_name }} {{ m.user.last_name }}</h5>
-              
-             </div>
-             <div class="modal-body">
-              
-                 <form class="section general-info pt-4" method="post" action="{% url 'update_position_mngs' m.id%}" enctype="multipart/form-data">
-                         {% csrf_token %}
-                         <div class="row">
-                             <div class="col-md-12  pt-4">
-                                 <div class="form-group">
-                                     <div class="col-lg-4 layout-spacing"   >
-                                        <div class="form-group mt-2">
-                                            <label for="position">المنصب</label>
-                                                <select class="form-select" aria-label="Default select example" id="position" name="position">
-                                                    <option value="0">مدير عام</option>
-                                                    <option value="1">مدير علامة تجارية</option>
-                                                    <option value="2">مدير منطقة</option>
-                                                    <option value="3">مدير مدينة</option>
-                                                    <option value="4">مدير فرع</option>
-                                                    <option value="5">مدير ادارة</option>
-                                                    <option value="6">مدير قسم</option>
-                                                </select>         
-                                        </div>              
-                                     </div>
-                                 </div>
-                              </div>
-                         </div>
-                         <button  class="btn btn-primary" type="submit" >حفظ</button>
-                     </form>
-               
-             </div>
-             <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-             </div>
-           </div>
-         </div>
-       </div>
+     <div class="modal fade" id="exampleModalCenter{{ m.id }}" tabindex="-1" aria-labelledby="modalLabel{{ m.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- رأس المودال مع زر الإغلاق -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel{{ m.id }}">
+              {{ m.user.first_name }} {{ m.user.last_name }}
+            </h5>
+            <!-- زر الإغلاق باستخدام btn-close مع data-bs-dismiss -->
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+          </div>
+          <!-- جسم المودال مع الفورم -->
+          <div class="modal-body">
+            <form method="post" action="{% url 'update_position_mngs' m.id %}" enctype="multipart/form-data" class="confirm-save">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="position{{ m.id }}" class="form-label">المنصب</label>
+                <!-- تعديل الـ select ليكون borderless ويحمل form-control مع ظل وخلفية فاتحة -->
+                <select class="form-control border-0 shadow-sm bg-light" id="position{{ m.id }}" name="position">
+                  <option value="0">مدير عام</option>
+                  <option value="1">مدير علامة تجارية</option>
+                  <option value="2">مدير منطقة</option>
+                  <option value="3">مدير مدينة</option>
+                  <option value="4">مدير فرع</option>
+                  <option value="5">مدير ادارة</option>
+                  <option value="6">مدير قسم</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="mobile{{ m.id }}" class="form-label">رقم الجوال</label>
+                <input type="text" class="form-control border-0 shadow-sm bg-light" id="mobile{{ m.id }}" name="mobile" value="{{ m.mobile }}">
+              </div>
+              <!-- حقل تعديل الايميل -->
+              <div class="mb-3">
+                <label for="email{{ m.id }}" class="form-label">الايميل</label>
+                <input type="email" class="form-control border-0 shadow-sm bg-light" id="email{{ m.id }}" name="email" value="{{ m.email }}">
+              </div>
+    
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-sm btn-primary me-2 ">حفظ</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
        
      
        {% endfor %}
@@ -264,10 +236,157 @@
 
 
 
+<!-- Evaluation Modal -->
+
+<div class="modal fade" id="addNewUser" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-light border-0">
+      <form action="{% url 'users_managment' companyID %}" method="post" class="form">
+        <div class="modal-header bg-light border-0">
+          <h5 class="modal-title">اضافة حساب جديد</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+          {% csrf_token %}
+          <!-- اسم المستخدم -->
+          <div class="mb-3">
+            <label for="username" class="form-label">اسم المستخدم</label>
+            <input name="username" type="text" class="form-control border-0" id="username" dir="ltr" style="background-color: #e9ecef;">
+          </div>
+          <!-- الاسم والعائلة بجانب بعض -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="first_name" class="form-label">الاسم</label>
+              <input name="first_name" type="text" class="form-control border-0" id="first_name" dir="ltr" style="background-color: #e9ecef;">
+            </div>
+            <div class="col-md-6">
+              <label for="last_name" class="form-label">العائلة</label>
+              <input name="last_name" type="text" class="form-control border-0" id="last_name" dir="ltr" style="background-color: #e9ecef;">
+            </div>
+          </div>
+          <!-- البريد الالكتروني -->
+          <div class="mb-3">
+            <label for="email" class="form-label">البريد الالكتروني</label>
+            <input name="email" type="email" class="form-control border-0" id="email" placeholder="@" style="background-color: #e9ecef;">
+          </div>
+          <!-- كلمة المرور -->
+          <div class="mb-3">
+            <label for="password" class="form-label">كلمة المرور</label>
+            <input name="password" type="password" class="form-control border-0" id="password" dir="ltr" style="background-color: #e9ecef;">
+          </div>
+          <!-- رقم الجوال -->
+          <div class="mb-3">
+            <label for="mobile" class="form-label">رقم الجوال</label>
+            <input name="mobile" type="number" class="form-control border-0" id="mobile" placeholder="05xxxxxxx" dir="ltr" style="background-color: #e9ecef;">
+          </div>
+          <!-- المنصب -->
+          <div class="mb-3">
+            <label for="position" class="form-label">المنصب</label>
+            <select class="form-select border-0" id="position" name="position" style="background-color: #e9ecef;">
+              <option value="0">مدير عام</option>
+              <option value="1">مدير علامة تجارية</option>
+              <option value="2">مدير منطقة</option>
+              <option value="3">مدير مدينة</option>
+              <option value="4">مدير فرع</option>
+              <option value="5">مدير ادارة</option>
+              <option value="6">مدير قسم</option>
+            </select>
+          </div>
+        </div>
+        <!-- تذييل المودال مع زر الحفظ (أزرار صغيرة) -->
+        <div class="modal-footer bg-light border-0">
+          <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  
 
 
 
-
+<!-- <script>
+    // استهداف حقل البحث والجدول
+    const searchInput = document.getElementById('searchInput');
+    const tableRows = document.querySelectorAll('#myTable tbody tr');
+  
+    // الاستماع لحدث الكتابة في حقل البحث
+    searchInput.addEventListener('keyup', function() {
+        // الحصول على القيمة المدخلة وتحويلها لحروف صغيرة للتجاهل حالة الأحرف
+        const searchValue = this.value.toLowerCase();
+  
+        // المرور على كل صف في الجدول
+        tableRows.forEach(function(row) {
+            // الحصول على محتويات الصف وتحويلها لحروف صغيرة
+            const rowText = row.textContent.toLowerCase();
+  
+            // التحقق مما إذا كانت القيمة المدخلة موجودة داخل النص
+            if (rowText.indexOf(searchValue) > -1) {
+                // إذا كانت موجودة، يتم عرض الصف
+                row.style.display = '';
+            } else {
+                // وإلا يتم إخفاء الصف
+                row.style.display = 'none';
+            }
+        });
+    });
+  </script> -->
+  <!-- سكربت جافاسكريبت للبحث والفلترة -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // الحصول على عناصر البحث وأزرار الفلترة والكاردز
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card-item');
+    
+    // المتغير لتخزين الفلترة النشطة
+    let activeFilter = 'all';
+  
+    // دالة تقوم بتصفية الكاردز بناءً على البحث والفلترة
+    function filterCards() {
+      const searchQuery = searchInput.value.toLowerCase();
+      cards.forEach(function(card) {
+        // الحصول على محتوى الكارد ونوع position
+        const cardText = card.textContent.toLowerCase();
+        const cardPosition = card.getAttribute('data-position');
+        
+        // التحقق مما إذا كان الكارد يحتوي على نص البحث
+        const matchesSearch = cardText.indexOf(searchQuery) !== -1;
+        // التحقق مما إذا كان الكارد يطابق فلتر position
+        const matchesFilter = activeFilter === 'all' || cardPosition === activeFilter;
+        
+        // عرض الكارد أو إخفاؤه
+        if(matchesSearch && matchesFilter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  
+    // تفعيل البحث عند كل تغيير في حقل البحث
+    searchInput.addEventListener('input', filterCards);
+  
+    // تفعيل الفلترة عند الضغط على زر من أزرار الفلترة
+    filterButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        // إعادة ضبط المظهر لجميع أزرار الفلترة
+        filterButtons.forEach(btn => {
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-secondary');
+        });
+        // تمييز الزر النشط
+        this.classList.remove('btn-secondary');
+        this.classList.add('btn-primary');
+        
+        // تعيين قيمة الفلترة النشطة وتشغيل دالة الفلترة
+        activeFilter = this.getAttribute('data-filter');
+        filterCards();
+      });
+    });
+  });
+  </script>
 
 <!--سكريبت استعراض الصورة قبل الرفع-->
 <script>
@@ -281,6 +400,66 @@
         reader.readAsDataURL(event.target.files[0]);
     }
     </script>
+<!--alerts-->
+<!-- تأكد من صحة مسار الملف الثابت -->
+
+<script>
+  
+  let alerts= document.getElementById("alert").value;
+    //alert(alerts)
+ 
+     if( alerts == 'succcess_update'){
+        Swal.fire({
+         title: "تم التعديل",
+         text: "تم حفظ التعديل بنجاح",
+         icon: "success"
+         });         
+     } else if( alerts == 'succcess_adduser'){
+        Swal.fire({
+         title: "تم الحفظ",
+         text: "تم انشاء حساب مستخدم بنجاح",
+         icon: "success"
+         });         
+     } 
+</script>
+
+<!-- تضمين مكتبة SweetAlert2 -->
+
+
+<script>
+  // عند تحميل الصفحة، نضيف مستمع لكل نموذج يحمل الكلاس confirm-save
+  document.addEventListener('DOMContentLoaded', function() {
+    const confirmForms = document.querySelectorAll('form.confirm-save');
+    confirmForms.forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // منع الإرسال الافتراضي
+        Swal.fire({
+          title: 'هل أنت متأكد؟',
+          text: "سيتم حفظ البيانات",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'نعم، حفظ',
+          cancelButtonText: 'لا، إلغاء'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // إذا ضغط "نعم"، يتم إرسال النموذج
+            form.submit();
+          } else {
+            // إذا ضغط "لا"، يتم إغلاق المودال
+            const modalEl = form.closest('.modal');
+            if (modalEl) {
+              const modalInstance = bootstrap.Modal.getInstance(modalEl);
+              if (modalInstance) {
+                modalInstance.hide();
+              }
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

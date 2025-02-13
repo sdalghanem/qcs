@@ -32,7 +32,7 @@
 
 <!--ًصورة المستخدم-->
 {% block profileImg %}
-<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
 {% endblock %}
 {% block profileImg2 %}
 <img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
@@ -58,13 +58,32 @@
     {% endif %}
 {% endblock %}
 <!--بداية الصفحة -->
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
+
+
 {% block home %}
 
 <style>
+    .badge-light-success{
+        background-color: #0AD0AC;
+        color: #f1f1f1;
+    }
+    .badge-light-danger{
+        background-color: #625bff;
+        color: #f1f1f1;
+    }
+    .badge-light-primary{
+        background-color: #625bff;
+        color: #f1f1f1;
+    }
     /* تغيير لون الزر النشط */
 .page-item.active .page-link {
-    background-color: #0AD0AC !important;  /* اللون المطلوب */
-    border-color: #0AD0AC !important;     /* حدود بنفس اللون */
+    background-color: #02024b !important;  /* اللون المطلوب */
+    border-color: #02024b !important;     /* حدود بنفس اللون */
     color: white !important;              /* لون النص */
 }
 
@@ -81,8 +100,8 @@
     <!-- Logo and Brand -->
     
     <div class="col-5">
-      <h3 class="mb-0">
-      <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
+        <h3 class="mb-0" style="margin-right: 1vw;">
+            <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
       {{brandName}}
       
   </h3> 
@@ -90,8 +109,21 @@
 </div>
 
 <div class="row">
-  <div class="col-7 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
-    {% if position == '0' %}<a href="{% url 'gm_dashboard' y q %}">الرئيسية</a> > {% endif %} {% if position == '1' %}<a href="{% url 'regions_rate' brand_id y q %}" class="mt-4">جميع المناطق</a>   > {% endif %}  {% if position == '2' %}<a href="{% url 'cities_rate' region_id brand_id y q %}" class="mt-4"> منطقة {{regionName}}</a> > {% endif %} {% if position == '3' %}<a href="{% url 'districts_rate' city_id  brand_id y q %}" class="mt-4">مدينة {{cityName}}</a> > <a href="{% url 'branchs_rate' dist_id  brand_id y q %}" class="mt-4">حي {{disName}}</a> > {% endif %}<a href="{% url 'reports_list' branch_id y q %}">فرع {{branchName}}</a>  > <b>تقرير HC-{{branch_id}}</b>
+  <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px; margin-right: 1vw;">
+    {% if position == '0' %}
+    <a href="{% url 'gm_dashboard' y q %}">الرئيسية {{position}}</a> >
+    {% endif %}
+     {% if  position == '1' or position == '0' %}
+     <a href="{% url 'regions_rate' brand_id y q %}" class="mt-4">جميع المناطق</a>  >
+     {% endif %}
+          {% if position == '2' or position == '0'%}
+          <a href="{% url 'cities_rate' region_id brand_id y q %}" class="mt-4"> منطقة {{regionName}}</a> >
+          {% endif %}
+           {% if position == '3' or position == '0'%}
+           <a href="{% url 'districts_rate' city_id  brand_id y q %}" class="mt-4">مدينة {{cityName}}</a> > 
+           <a href="{% url 'branchs_rate' dist_id  brand_id y q %}" class="mt-4">حي {{disName}}</a> > 
+           {% endif %}
+           <a href="{% url 'reports_list' branch_id y q %}">فرع {{branchName}}</a>  > <b>تقرير HC-{{branch_id}}</b>
 </div>
 </div>
 
@@ -101,26 +133,29 @@
 <div class="row">
     <!--جدول النتائج-->
     <div class="card col-xl-12 col-md-12 col-lg-12 col-sm-12 p-4  ">
-        <h3> HC-{{reportid}}</h3>
+        <h3 style="color: #02024b; margin-right: 1vw;"> HC-{{reportid}}</h3>
         <div class="p-2">
             <div class="container my-3">
                 <div class="row g-2 align-items-center">
                     <!-- خانة البحث -->
                     <div class="col-md-6 col-lg-4">
                         <input type="text" id="searchInput" placeholder="بحث بالبند" 
-                               class="form-control" onkeyup="searchTable()">
+                               class="form-control" style="border: none; background-color: #f1f1f1;" onkeyup="searchTable()">
                     </div>
             
                     <!-- الأزرار -->
                     <div class="col-auto">
-                        <button class="btn btn-secondary btn-sm" onclick="filterByStatus('الكل')">الكل</button>
+                        <button class="btn btn-primary btn-sm" onclick="filterByStatus('الكل')">الكل</button>
                     </div>
             
                     <div class="col-auto">
-                        <button class="btn btn-secondary btn-sm" onclick="filterByStatus('نعم')">نعم</button>
+                        <button class="btn btn-primary btn-sm" onclick="filterByStatus('نعم')">نعم</button>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-secondary btn-sm" onclick="filterByStatus('لا')">لا</button>
+                        <button class="btn btn-primary btn-sm" onclick="filterByStatus('لا')">لا</button>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary btn-sm" onclick="filterByStatus('مستبعد')">مستبعد</button>
                     </div>
                 </div>
             </div>
@@ -142,13 +177,13 @@
                          {{r.custom}}
                          <tr>
                             <td>{{r.description}}  </td>
-                            <td> <button class='btn badge {{r.class}} '>{{r.score}} </button></td>
+                            <td> {{r.score}} </td>
                             <td> {{r.note}} </td>
                             <td> {% if  r.img %}
-                                <button class='btn badge {{r.class}}' data-bs-toggle='modal' data-bs-target='#imgsliderModal'  onclick="view_term_img2('{{r.img}}')"> عرض</button>
+                                <button class='btn btn-sm {{r.class}}' data-bs-toggle='modal' data-bs-target='#imgsliderModal'  onclick="view_term_img2('{{r.img}}')"> عرض</button>
                                 {% endif %}
                             </td>
-                            <td>  <button class='btn badge {{r.class}}' data-bs-toggle="modal" data-bs-target="#sliderModal"  onclick="get_responisbles({{r.id}})"> المسؤولين</button> </td>
+                            <td>  <button class='btn btn-sm {{r.class}}' data-bs-toggle="modal" data-bs-target="#sliderModal"  onclick="get_responisbles({{r.id}})"> المسؤولين</button> </td>
                         </tr>
                         {% endfor  %}
                     </tbody>
@@ -207,8 +242,8 @@
       <div class="modal-content">
           <div class="modal-body p-4" >
               <!-- content from js file -->
-              <table class="table table-striped text-center">
-                <thead>
+              <table class="table table-striped text-center" >
+                <thead style="background-color: #0AD0AC;">
                   <th>الموظف</th>
                   <th>القسم</th>
                 </thead>

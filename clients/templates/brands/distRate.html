@@ -33,7 +33,7 @@
 
 <!--ًصورة المستخدم-->
 {% block profileImg %}
-<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
+<img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-left: 5px;">
 {% endblock %}
 {% block profileImg2 %}
 <img alt="avatar" src="../../../../../{{companyLogo}}" class="rounded-circle">
@@ -60,38 +60,32 @@
 {% endblock %}
 
 {% block qurter %}
-<div class="col-6 ">
-    <form action="#" method="post" class="form">
-        {% csrf_token %}
-        <div class="row align-items-center">
-            <!-- حقل الربع -->
-            <div class="col-md-3">
-                <select class="form-control form-control-sm" name="quarter">
-                    <option value="q1">الربع الأول</option>
-                    <option value="q2">الربع الثاني</option>
-                    <option value="q3">الربع الثالث</option>
-                    <option value="q4">الربع الرابع</option>
-                    <option value="0">سنة</option>
-                </select>
-            </div>
+<li class="nav-item">
 
-            <!-- حقل السنة (ديناميكي) -->
-            <div class="col-md-2">
-                <select class="form-control form-control-sm" name="year">
-                    {% for year in years %}
-                        <option value="{{ year }}">{{ year }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+  {% if q == 'q1' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الأول {{y}}
+  </a>
+  {% elif q == 'q2' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثاني {{y}}
+  </a>
+  {% elif q == 'q3' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الثالث {{y}}
+  </a>
+  {% elif q == 'q4' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> الربع الرابع {{y}}
+  </a>
+  {% elif q == '0' %}
+  <a href="#" data-bs-toggle="modal" data-bs-target="#quarterModal" class="btn btn-sm btn-primary"> سنه {{y}} </a>
+  {% endif %}
+</li>
 
-            <!-- زر الإرسال -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary btn-sm w-100">عرض</button>
-            </div>
-        </div>
-    </form>
-</div>
 {%endblock %}
+
+{% block companyName %}
+<b style="display: flex; align-items: center; gap: 10px; color: #02024b;">
+  {{companyName}}
+</b>
+{% endblock %}
 
 {% block home %}
 
@@ -100,8 +94,8 @@
   <!-- Logo and Brand -->
   
   <div class="col-5">
-    <h3 class="mb-0">
-    <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
+    <h3 class="mb-0" style="margin-right: 1vw;">
+      <img src="../../../../../{{brandLogo}}" style="width: 50px; height: auto;" alt="Logo"/>
     {{brandName}}
 </h3> 
            
@@ -115,8 +109,11 @@
 
 
   <div class="row">
-    <div class="col-5 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;">
-      {% if position == '0' %} <a href="{% url 'gm_dashboard' y q %}">الرئيسية</a> > {% endif %}  {% if position == '1' %}<a href="{% url 'regions_rate' brand_id y q %}" class="mt-4">جميع المناطق</a>   >{% endif %}   {% if position == '2' %}<a href="{% url 'cities_rate' region_id brand_id y q %}" class="mt-4"> منطقة {{regionName}}</a> > {% endif %}<b>مدينة {{cityName}}</b>
+    <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 p-2 mb-4 mt-2" style=" background-color: #f1f1f1; height: 40px; border-radius: 50px;margin-right: 1vw;">
+      {% if position == '0' %} <a href="{% url 'gm_dashboard' y q %}">الرئيسية</a> > {% endif %}
+        {% if position == '1' or position == '0' %}<a href="{% url 'regions_rate' brand_id y q %}" class="mt-4">جميع المناطق</a>   >{% endif %}  
+         {% if position == '2' or position == '0' %}<a href="{% url 'cities_rate' region_id brand_id y q %}" class="mt-4"> منطقة {{regionName}}</a> > {% endif %}
+         <b>مدينة {{cityName}}</b>
 
     </div>
   </div>
@@ -124,105 +121,112 @@
   <div class="row">
 
     <!--بداية الدائرة -->
-    <div class="col-sm-12 col-md-4 col-lg-4">
-          <div class="mb-4" style="
-              position: relative; 
-              border-radius: 50%; 
-              width: 250px; 
-              height: 250px; 
-              display: flex; 
-              justify-content: center; 
-              align-items: center; 
-              text-align: center; 
-              background: linear-gradient(to right, #625BFF, #0AD0AC); ">
-              
-              <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
-              <div style="
-                  border-radius: 50%; 
-                  background-color: white; 
-                  width: 245px; 
-                  height: 245px; 
-                  display: flex; 
-                  justify-content: center; 
-                  align-items: center;">
-                  
-                  <h4 style="margin: 0;"> {{cityName}}</h4> 
-              </div>
-              
-              <!-- الدائرة الصغيرة للنسبة -->
-              <div style="
-                  position: absolute; 
-                  top: 50%; 
-                  left: -30px; 
-                  transform: translateY(-50%); 
-                  background-color: #625bff; 
-                  color: #fff; 
-                  border-radius: 50%; 
-                  width: 90px; 
-                  height: 90px; 
-                  display: flex; 
-                  justify-content: center; 
-                  align-items: center; 
-                  font-weight: bold;
-                  font-size: 24px;">
-                   {{percentage_city}}%  
-              </div>
-          </div>  
+    <div class="d-md-block d-lg-none col-md-12 col-sm-12 mb-2">
+      <h4 style="color:#02024b"><b>|  {{cityName}} <span style="color:#625bff">{{percentage_city}}% </span></b> </h4>
     </div>
+  
+    <!--بداية الدائرة -->
+    <div class=" d-none  d-lg-block col-xl-4 col-lg-4 col-md-12 col-sm-12 ">
+      <div class="mb-4" style="
+    margin-right: 1vw;
+        position: relative; 
+        border-radius: 50%; 
+        width: 20vw; 
+        height: 20vw; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        text-align: center; 
+        background: linear-gradient(to right, #625BFF, #0AD0AC); ">
+  
+        <!-- إنشاء طبقة داخلية بيضاء لمحاكاة الإطار -->
+        <div style="
+            border-radius: 50%; 
+            background-color: white; 
+            width: 19.5vw; 
+            height: 19.5vw; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;">
+  
+          <h4 style="margin: 0;"> {{cityName}} </h4>
+  
+        </div>
+  
+        <!-- الدائرة الصغيرة للنسبة -->
+        <div style="
+            position: absolute; 
+            top: 50%; 
+            left: -2vw; 
+            transform: translateY(-50%); 
+            background-color: #625bff; 
+            color: #fff; 
+            border-radius: 50%; 
+            width: 4vw; 
+            height: 4vw; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-weight: bold;
+            font-size: 1rem;">
+          {{percentage_city}}% 
+        </div>
+      </div>
+    </div>
+  
+    <!--نهاية الدائرة-->
     <!--نهاية الدائرة-->
     
     <div class="col-sm-12 col-md-8 col-lg-8">
-      <div style="width: 100%; margin: auto;">
+      <!-- <div style="width: 100%; margin: auto;">
           <canvas id="branchChart4"></canvas>
-        </div>
+        </div> -->
+        <div class="card p-4 col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+          <div class="widget-content widget-content-area br-8">
+            {% if q == 'q1' %} 
+            <h4 class="text-center">  الربع الأول {{y}}</h4>
+            {% elif q == 'q2' %}  
+            <h4 class="text-center">  الربع الثاني {{y}}</h4>
+            {% elif q == 'q3' %}  
+            <h4 class="text-center">  الربع الثالث {{y}}</h4>
+            {% elif q == 'q4' %}  
+            <h4 class="text-center">  الربع الرابع {{y}}</h4>
+            {% elif q == '0' %}  
+            <h4 class="text-center">  سنة {{y}}</h4>
+            {% endif %}
+  
+            <table class="table table-striped " >
+              <thead style="background-color:#0AD0AC; ">
+                      <tr>
+                          <th class="text-center">الترتيب</th>
+                          <th class="text-center">الحي</th>
+                          <th class="text-center">التقييم</th>
+                          <th class="text-center">تفاصيل</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% if distInfo %}
+                          {% for d in distInfo %}
+                          <tr>
+                              <td class="text-center">{{forloop.counter}}</td>
+                              <td class="text-center">{{d.districtName}}</td>
+                              <td class="text-center">{{d.rate}}%</td>
+                              <td class="text-center"> <a href="{% url 'branchs_rate' d.id  d.brand_id y q %}" class="btn btn-primary btn-sm">الفروع</a> </td>
+                          </tr>
+                          {% endfor %}
+                      {% endif %}
+  
+                      
+                  </tbody>
+              </table>
+  
+          </div>
+      </div>
     </div>
     
     </div>
     
 
-  <div class="row">
-    <div class="card p-4 col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-        <div class="widget-content widget-content-area br-8">
-          {% if q == 'q1' %} 
-          <h6>  الربع الأول {{y}}</h6>
-          {% elif q == 'q2' %}  
-          <h6>  الربع الثاني {{y}}</h6>
-          {% elif q == 'q3' %}  
-          <h6>  الربع الثالث {{y}}</h6>
-          {% elif q == 'q4' %}  
-          <h6>  الربع الرابع {{y}}</h6>
-          {% elif q == '0' %}  
-          <h6>  سنة {{y}}</h6>          
-          {% endif %}
-          <table class="table table-striped " >
-            <thead style="background-color:#0AD0AC; ">
-                    <tr>
-                        <th>الترتيب</th>
-                        <th>الحي</th>
-                        <th>التقييم</th>
-                        <th>تفاصيل</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if distInfo %}
-                        {% for d in distInfo %}
-                        <tr>
-                            <td >{{forloop.counter}}</td>
-                            <td>{{d.districtName}}</td>
-                            <td>{{d.rate}}%</td>
-                            <td> <a href="{% url 'branchs_rate' d.id  d.brand_id y q %}" class="btn btn-secondary btn-sm">الفروع</a> </td>
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-
-</div>
 <!-- Include ApexCharts JavaScript file -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -332,4 +336,56 @@ var branchChart = new Chart(ctx, {
 
 
  </script>
+
+
+
+<!-- مودال لعرض الفورم -->
+<div class="modal fade" id="quarterModal" tabindex="-1" aria-labelledby="quarterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="quarterModalLabel">الفترة الزمنية</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- الفورم -->
+        <form action="#" method="post" class="form">
+          {% csrf_token %}
+          <div class="row align-items-center">
+            <!-- حقل الربع -->
+            <div class="col-md-12 mb-3">
+              <select class="form-control text-center" name="quarter" id="quarter"
+                style="border: none; background-color: #f1f1f1;">
+                <option value="q1">الربع الأول</option>
+                <option value="q2">الربع الثاني</option>
+                <option value="q3">الربع الثالث</option>
+                <option value="q4">الربع الرابع</option>
+                <option value="0">سنة</option>
+              </select>
+            </div>
+
+            <!-- حقل السنة (ديناميكي) -->
+            <div class="col-md-12 mb-3">
+              <select class="form-control text-center" name="year" id="year"
+                style="border: none; background-color: #f1f1f1;">
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-primary  w-100">عرض</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- تضمين مكتبة Bootstrap (نسخة 5 فأحدث) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 {% endblock %}

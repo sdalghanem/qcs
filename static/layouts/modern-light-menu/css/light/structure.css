@@ -1021,7 +1021,7 @@ body .navbar .dark-mode, body:not(.dark) .navbar .dark-mode {
   width: 12px;
   height: 12px;
   stroke-width: 4px;
-  color: #506690;
+  color: #0AD0AC;
 }
 
 .sidebar-closed .sidebar-wrapper ul.menu-categories li.menu.menu-heading > .heading .feather-minus {
@@ -1035,7 +1035,7 @@ body .navbar .dark-mode, body:not(.dark) .navbar .dark-mode {
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  color: #02024B;
+  color: #0AD0AC;
   padding: 32px 36px 10px 0;
   letter-spacing: 1px;
 }

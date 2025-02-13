@@ -37,7 +37,6 @@ def departments_rate(request , y , q):
             'mngPostion' : 'مدير عام' ,
             'companyLogo': request.session['companylogo'],
             'menubrands': Brand.objects.filter(company_id = request.session['company_id']) ,
-            'companyName': Company.objects.get(id = request.session['company_id']).description ,
             ########################
             'row' : sorted_data, #  معلومات الادارات
             'perlist': perlist,
@@ -45,6 +44,10 @@ def departments_rate(request , y , q):
             'y': y,
             'q': q,
             'years':years ,
+            'position': request.session['position'] ,
+            'companyName': request.session['companyName'] ,
+
+
                 }
             return render(request , 'departments/deptsRate.html' , data) 
     else:
@@ -65,7 +68,7 @@ def get_orders_by_company(id , y , q):
             for o in orders :
                 orlist.append(o.id)
     return orlist
-# ##############################################################################
+###############################################################################
 
 def sections_rate(request , id ,y , q):
     # id for department
@@ -83,6 +86,7 @@ def sections_rate(request , id ,y , q):
                 listdept =  get_sec_terms(s.id)# تجيب لسته البنود
                 listscore = get_score(listdept , y , q)# تجيب لسته نتايج القسم بناء على لسته البنود 
                 total = 0
+                print(listscore)
                 for lis in listscore:
                     total += lis['score']
                     if len(listscore) == 0 :
@@ -117,6 +121,9 @@ def sections_rate(request , id ,y , q):
                 'years': years,
                 'y': y,
                 'q': q,
+                'position': request.session['position'] ,
+                'companyName': request.session['companyName'] ,
+
                 }
             print(Department.objects.get(id = id).description)
             return render(request , 'departments/sectionsRate.html' , data) 
@@ -171,6 +178,8 @@ def terms_rate(request, id , y , q):
                     'y': y,
                     'q': q,
                     'years': years,
+                    'position': request.session['position'] ,
+                    'companyName': request.session['companyName'] ,
                 }
                 # print(data)
                 return render(request, 'departments/termsRate.html', data)
@@ -314,12 +323,15 @@ def get_score(terms_list, y, q):
             
             # التكرار على جميع السجلات المطابقة
             for t in tscores:
-                score = {
-                    'score': int(t.score),
-                    #'term': t.term_id.description,
-                }
-                row.append(score)
-
+                if t.score == ' ':
+                    pass
+                else:
+                    score = {
+                        'score': int(t.score),
+                        #'term': t.term_id.description,
+                    }
+                    row.append(score)
+    print(row)
     return row
 
 

@@ -160,11 +160,29 @@ def queries(request):
 
 # Create your views here.
 def contactus(request):
-    return render(request , 'pages-contact-us.html')
+    branList = Brand.objects.filter(company_id = request.session['company_id'])
+    data = {
+    'companyLogo': request.session['companylogo'],
+    'companyName': request.session['companyName'] ,
+    'position': request.session['position'] ,
+    'menubrands': branList ,
+    'y' : '2024',
+    'q' : 'q1',
+    }
+    return render(request , 'pages-contact-us.html' , data)
 
 # Create your views here.
 def pagefaq(request):
-    return render(request , 'page-faq.html') 
+    branList = Brand.objects.filter(company_id = request.session['company_id'])
+    data = {
+    'companyLogo': request.session['companylogo'],
+    'companyName': request.session['companyName'] ,
+    'position': request.session['position'] ,
+    'menubrands': branList ,
+    'y' : '2024',
+    'q' : 'q1',
+    }
+    return render(request , 'page-faq.html' , data) 
 
 # def region_score(region_id , mngr_id):
 #     brand = Brand.objects.get(gm_manager_id = mngr_id)
