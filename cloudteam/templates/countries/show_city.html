@@ -18,48 +18,80 @@
 
   <!----------------------------------------------------------------------->
 {% block clients_home %}
-<div class="row">
-    <div class="col-12 mb-2">
-        <a class="btn btn-sm btn-dark" href="{% url 'show_region' %}"> < الرجوع للمناطق  </a>
-        <a class="btn btn-sm btn-dark" data-toggle="modal" data-target="#add_city"> + إضافة مدينة  </a>
 
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <label><img src="{% static 'src/assets/img/Logo 2.svg' %}" alt="avatar" width="80px"><b>اعداد منطقة {{regionName}}</b></label>        
+                    <div>
+                        <a class="btn btn-sm btn-primary" href="{% url 'show_region' %}"> < الرجوع للمناطق  </a>
+                        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_city"> + إضافة مدينة  </a>
+                    </div>
+                 </div>
+            </div>
+        </div>
     </div>
 </div>
-<p>{{res}}</p>
 
-<table class="table table-striped">
-    <thead>
-        <tr  class="text-center bg-dark">
-            <th colspan="3">{{regionName}}</th>
-        </tr>
-        <tr>
-            <th>المدينة</th>
-            <th>الأحياء</th>
-            <th>حذف</th>
-        </tr>
-    </thead>
-    <tbody>
-       {% if cities %}
-        {% for c in cities %}
-        <tr>
-            <td>{{c.cName}}</td>
-            <td>
-                {% for d in c.cDist %}
-                    <span> {{d.name}} <a href="{% url 'delete_district' d.id %}" class="text-danger">X</a>  |</span> 
-                {% endfor %}
-                <a class="btn btn-sm btn-dark" href="#" data-toggle="modal" data-target="#show_dist{{c.cid}}">+</a>
-            </td>
-            <td><a href="{% url 'delete_city' c.cid %}" class="btn btn-sm btn-danger">حذف</a></td>
-        </tr>
-        {% endfor %}
-       {% else %}
-       <tr class="text-center">
-        <td colspan="4"> لايوجد</td>
-       </tr>
-       {% endif %}
-    </tbody>
-</table>
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <table class="table table-striped text-center">
+                        <thead >
+                            <tr style="background-color: #0ad0ac;">
+                                <th colspan="3">منطقة {{regionName}} </th>
+                            </tr>
+                            <tr>
+                                <th>المدينة</th>
+                                <th>الأحياء</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if cities %}
+                            {% for c in cities %}
+                            <tr>
+                                <td>{{c.cName}}</td>
+                                <td>
+                                    {% for d in c.cDist %}
+                                        <span> {{d.name}} <a href="{% url 'delete_district' d.id %}" class="text-danger">X</a>  |</span> 
+                                    {% endfor %}
+                                    <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#show_dist{{c.cid}}">+</a>
+                                </td>
+                                <td><a href="{% url 'delete_city' c.cid %}" class="btn btn-sm btn-danger">حذف</a></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr class="text-center">
+                            <td colspan="4"> لايوجد</td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+       </div>
+   </div>
+</div>
+
+
+
+
+<!-----------------------------------------------------model-------------------------------------------------------------->
 <div class="modal fade" id="add_city" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -72,12 +104,12 @@
                     {% csrf_token %}
                     <input type="text" value="{{regionID}}" name="regionID" hidden />
                     <div class="mb-3">
-                        <input type="text" name="city" class="form-control" />
+                        <input type="text" name="city" class="form-control bg-light border-0 shadow-sm" placeholder="اكتب اسم المدينة .." />
                     </div>         
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
                 </div>
                 </form>
             </div>
@@ -100,12 +132,12 @@
                     <input type="text" value="{{c.cid}}" name="cid" hidden />
                     <input type="text" value="{{regionID}}" name="regionID" hidden />
                     <div class="mb-3">
-                        <input type="text" name="district" class="form-control" />
+                        <input type="text" name="district" class="form-control bg-light border-0 shadow-sm" placeholder="اكتب اسم الحي .." />
                     </div>         
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
                 </div>
                 </form>
             </div>
@@ -114,6 +146,62 @@
 </div>
 {% endfor %}
 
+
+
+<script>
+
+    let alerts= document.getElementById("alert").value;
+    if( alerts == 'exist'){
+        Swal.fire({
+         title: " موجود مسبقاً",
+         text: "قم بكتابة اسم مدينة اخرى",
+         icon: "error"
+         });         
+     } else if (alerts == 'success'){
+         Swal.fire({
+         title: "تم الحفظ",
+         text: "تم حفظ المدينة بنجاح , قم باضافة الأحياء التابعه لهذه المدينة",
+         icon: "success"
+         });        
+     }else if (alerts == 'exist_dist'){
+         Swal.fire({
+         title: "لم يتم الحذف",
+         text: "يوجد احياء تابعة لهذه المدينة , يجب حذفها اولا",
+         icon: "info"
+         });        
+     }else if (alerts == 'delete'){
+     Swal.fire({
+     title: "تم الحذف",
+     text: "تم حذف المدينة بنجاح",
+     icon: "success"
+     });        
+ }else if (alerts == 'exist_distName'){
+         Swal.fire({
+        title: " موجود مسبقاً",
+         text: "قم بكتابة اسم حي اخر",
+         icon: "error"
+         });        
+     }else if (alerts == 'success_dist'){
+         Swal.fire({
+         title: "تم الحفظ",
+         text: "تم حفظ الحي بنجاح , يمكنك الان اضافة فروع لهذا الحي",
+         icon: "success"
+         });        
+     }else if (alerts == 'exist_branch'){
+         Swal.fire({
+         title: "لم يتم الحذف",
+         text: "يوجد فروع تابعة لهذا الحي , يجب حذفها اولا",
+         icon: "info"
+         });        
+     }else if (alerts == 'delete_dist'){
+         Swal.fire({
+            title: "تم الحذف",
+            text: "تم حذف الحي بنجاح",
+            icon: "success"
+         });        
+     }
+    
+    </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

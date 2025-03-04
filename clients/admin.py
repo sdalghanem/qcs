@@ -11,9 +11,11 @@ from .models import *
 # custom_admin_site = MyAdminSite(name='myadmin')
 # custom_admin_site.register(Country)
 
-admin.site.site_header = "QCS"
-admin.site.site_title = "QCS"
-admin.site.index_title = "نظام إدارة الجودة"
+# admin.site.site_header = "QCS"
+# admin.site.site_title = "QCS"
+# admin.site.index_title = "نظام إدارة الجودة"
+
+
 
 # الدول و المناطق و المدن و الأحياء
 class RegionAdmin(admin.ModelAdmin):

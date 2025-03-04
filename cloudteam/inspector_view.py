@@ -9,6 +9,7 @@ from report.models import *
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
 from datetime import date
+from django.contrib import messages
 
 def login_insp(request):
 
@@ -153,7 +154,10 @@ def get_evaluation_points(request, zone_id , orID):
             uploaded_file_url = ''  # إذا لم يكن هناك ملف مرفوع، يكون الرابط فارغًا
    
         termid = request.POST['termid']
-        eva = request.POST['evaluation']
+        if request.POST['evaluation'] == '2':
+            eva = ' '
+        else :
+            eva = request.POST['evaluation']
         note = request.POST['note']
         print(eva)
         new = Term_score()
@@ -166,16 +170,16 @@ def get_evaluation_points(request, zone_id , orID):
         new.save()
         #  تغيير حالة الطلب من 0 الى 1 غير مكتمل
         if Report_order.objects.filter(id = orID , status = '1').exists():
-        # return redirect('/cloudteam/get_evaluation_points/' ,zone_id = zone_id , orID = orID )
-          return HttpResponseRedirect(request.get_full_path())
+          messages.success(request, "success")
+          return redirect('get_evaluation_points' ,zone_id = zone_id , orID = orID )
+          #return HttpResponseRedirect(request.get_full_path())
         else:
            ord = Report_order.objects.get(id = orID)
            ord.status = '1'
            ord.save()
-           return HttpResponseRedirect(request.get_full_path())
-             
-    else:
-       
+           messages.success(request, "success")
+           return redirect('get_evaluation_points' ,zone_id = zone_id , orID = orID )            
+    else:     
         return render (request , 'inspectors/employee/evaluate_terms.html' , data)
         # هنا يمكنك إرجاع البيانات الحقيقية بناءً على معرف المكان
         # return JsonResponse({"points": row} , safe=False )
@@ -185,4 +189,5 @@ def save_evaluation(request , id):
       ord = Report_order.objects.get(id = id)
       ord.status = '2'
       ord.save()
+      messages.success(request, "save")
       return redirect('evaluate' , id=id)

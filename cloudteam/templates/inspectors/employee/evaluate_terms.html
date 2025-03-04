@@ -17,55 +17,89 @@
   {% endblock %}
 
 {% block clients_home %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
 
-<div class="row"></div>
-<div class="col-12 mb-2">
-    <a href="{% url 'evaluate' orID %}" class="btn btn-sm btn-dark"> <  الرجوع لأماكن التقتيش  </a>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <label><img src="{% static 'src/assets/img/QLogo05.SVG' %}" alt="avatar" width="40px"><b>  مكان التقييم : {{ zoneName }}</b></label>        
+                    <div>
+                        <div>
+                            <a href="{% url 'evaluate' orID %}" class="btn btn-sm btn-primary"> <  الرجوع إلى أماكن التقييم  </a>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr class="bg-dark">
-            <th colspan="3" class="text-center">{{ zoneName }}</th>
-        </tr>
-        <tr>
-            <th>البند</th>
-            <th>تقييم</th>
-            <th>النتيجة</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in row %}
-        <tr>
-            <td>{{ r.term }} <br>
-                {% if r.termNote%}
-                <a id="showNote" href="#" class="text-danger" data-toggle="modal" data-target="#note_show{{ r.term_id }}" >شروط خاصة</a>
-               {% endif %}
-            </td>
-            <td>
-                {% if r.status %}
-                {% else %}
-                <a href="#" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#evaluationModal{{ r.term_id }}" onclick="openEvaluationModal()">قيم</a>
-                {% endif %}
-            </td>
-            <td>
-                {% if r.score %}
-                    {% if r.score == ' ' %}
-                         مستبعد
-                    {% elif r.score == '1' %}
-                    <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem;"></i>
-                    {% elif r.score == '0' %}
-                    <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem;"></i>
-                    {% endif %}
-                {% else %}
-                    لم يتم التقييم
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+        
+            {% for r in row %}
+    <div class="card mt-3 mb-3">
+    <div class="card-body">
+        <!-- عنوان السجل -->
+        <h5 class="card-title">{{ r.term }}
+        {% if r.score %}
+        {% if r.score == ' ' %}
+            <span class="text-muted margin-right: 20px; color:#625bff">مستبعد</span>
+        {% elif r.score == '1' %}
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem; margin-right: 20px;"></i>
+        {% elif r.score == '0' %}
+            <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem; margin-right: 20px;"></i>
+        {% endif %}
+        {% else %}
+        <small class="text-muted" style="margin-right: 20px;">*لم يتم التقييم </small>
+        {% endif %}
+    </h5>
+    
+
+      
+     
+
+  
+      
+    </div>
+    {% if not r.score %}
+        <div class="card-footer">
+            {% if not r.status %}
+            <a href="#" class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#evaluationModal{{ r.term_id }}" onclick="openEvaluationModal()">
+            قيم
+            </a>
+            {% endif %}
+    
+            <!-- زر شروط خاصة إذا كانت موجودة -->
+            {% if r.termNote %}
+            <a id="showNote" href="#" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#note_show{{ r.term_id }}">
+                شروط خاصة
+            </a>
+            {% endif %}
+        </div>  
+    {% endif %}
+</div>
+{% endfor %}
+
+
+        </div>
+    </div>
+</div>
 
 <!-- Evaluation Modal -->
 {% for r in row %}
@@ -77,38 +111,55 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="evaluationForm{{ r.term_id }}" method="post" action="#" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="text" value="{{r.term_id}}" name="termid" hidden />
-                    <div class="mb-3">
-                        <label for="evaluationSelect{{ r.term_id }}" class="form-label">التقييم</label>
-                        <select class="form-select evaluation-select" name="evaluation" id="evaluationSelect{{ r.term_id }}" required onchange="toggleImageAndCommentSections({{ r.term_id }})">
-                            <option value="">اختر...</option>
-                            <option value="1">نعم</option>
-                            <option value="0">لا</option>
-                            <option value=" ">تخطي</option>
-                        </select>
-                    </div>
-                    <div id="imageUploadSection{{ r.term_id }}" class="mb-3" style="display: none;">
-                        <label for="imageUpload" class="form-label">رفع صورة</label>
-                        <input class="form-control" type="file" name="img0" id="imageUpload{{ r.term_id }}" accept="image/*" capture="camera">
-                    </div>
-                    <div id="commentSection{{ r.term_id }}" class="mb-3" style="display: none;">
-                        <label for="comment" class="form-label">ملاحظات</label>
-                        <textarea class="form-control" name="note" id="comment{{ r.term_id }}" rows="3"></textarea>
-                    </div>
+                <!-- تضمين مكتبة SweetAlert2 -->
+
+            <form id="evaluationForm{{ r.term_id }}" method="post" action="#" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="termid" value="{{ r.term_id }}">
+                
+                <div class="mb-3">
+                    <label for="evaluationSelect{{ r.term_id }}" class="form-label">التقييم</label>
+                    <select class="form-select evaluation-select" name="evaluation" id="evaluationSelect{{ r.term_id }}"  onchange="toggleImageAndCommentSections({{ r.term_id }})" required>
+                        <option value="">اختر...</option>
+                        <option value="1">نعم</option>
+                        <option value="0">لا</option>
+                        <option value="2">مستبعد</option>
+                    </select>
                 </div>
+                
+                <div id="imageUploadSection{{ r.term_id }}" class="mb-3" style="display: none;">
+                    <label for="imageUpload{{ r.term_id }}" class="form-label">رفع صورة</label>
+                    <input class="form-control" type="file" name="img0" id="imageUpload{{ r.term_id }}" accept="image/*" capture="camera">
+                </div>
+                
+                <div id="commentSection{{ r.term_id }}" class="mb-3" style="display: none;">
+                    <label for="comment{{ r.term_id }}" class="form-label">ملاحظات</label>
+                    <textarea class="form-control" name="note" id="comment{{ r.term_id }}" rows="3"></textarea>
+                </div>
+                
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="confirmSubmission('{{ r.term_id }}')">حفظ</button>
+
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <!-- تغيير نوع الزر من submit إلى button واستدعاء دالة التأكيد -->
                 </div>
-                </form>
+            </form>
+
+
+
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center mt-4 mb-4">
+                <a href="{% url 'evaluate' orID %}" class="btn  btn-primary"> <  الرجوع إلى أماكن التقييم  </a>
+        </div>
+    </div>
+</div>
 
      <!-- Modal -->
      {% for r in row %}
@@ -117,14 +168,12 @@
           <div class="modal-content">
             <div class="modal-header">             
             </div>
-            <div class="modal-body">
-             
+            <div class="modal-body">             
                 <h3>{{r.termNote}}</h3>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-           
-            </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+        </div>
         </div>
       </div>
     </div>
@@ -155,6 +204,54 @@
         });
     });
 </script>
+
+<script>
+    function confirmSubmission(termId) {
+        var selectElem = document.getElementById('evaluationSelect' + termId);
+        // التأكد من أن المستخدم قد اختار قيمة من السيلكت
+        if (!selectElem.value || selectElem.value.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ',
+                text: 'يرجى التقييم قبل الحفظ'
+            });
+            return false;
+        }
+        
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من تغيير التقييم لاحقاً!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم, حفظ',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('evaluationForm' + termId).submit();
+            }
+        });
+    }
+    </script>
+    
+    <script>
+  
+        let alerts= document.getElementById("alert").value;
+          //alert(alerts)
+       
+           if( alerts == 'success'){
+              Swal.fire({
+               title: "تم التقييم",
+               icon: "success"
+               });         
+           } else if( alerts == 'save'){
+              Swal.fire({
+               title: "تم اكمال التقييم بنجاح , بانتظار الاعتماد من قبل المشرف",
+               icon: "success"
+               });         
+           }
+</script>
+    
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

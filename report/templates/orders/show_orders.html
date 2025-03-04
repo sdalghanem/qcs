@@ -18,104 +18,357 @@
   {% endblock %}
 
 
-{% block search %}
-
-<input type="text" id="search-input"  placeholder="  بحث .. " style="padding: 8px; border: none; background-color: #f1f1f1; border-radius: 20px; margin-left: 20px;">
-<div class="btn-group " role="group">
-    <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد">جديد</button>
-    <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل">مكتمل</button>
-    <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل">غير مكتمل</button>
-    <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد">معتمد</button>
-    <button class="btn btn-primary filter-btn btn-sm" data-filter="all">الكل</button>
-</div>
-
-<a href="{% url 'new_order' %}" class="btn btn-sm btn-secondary " style="margin-right: 20px;">+ اضافة طلب جديد</a>
-
-{% endblock %}
-
 {% block clients_home %}
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+<div class="row">
+    <!-- عرض العلامات التجارية-->
+    <div class="container mt-2">
 
+    <div class="card ">
 
-<div class="row mt-2">
-    <div class="card">
-    <div class="col-12 card-body">
+    <div class="m-4">
+        <label><img src="../../../{{brandLogo}}" alt="avatar" width="80px"><b>{{brandName}}</b></label>        
+        <div>
+            <a href="{% url 'brands_dashbord' companyId %}" class="btn btn-sm btn-primary "> الرجوع للعلامات التجارية </a>
+            <a href="{% url 'new_order' brand_id %}" class="btn btn-sm btn-primary "> انشاء طلب تقييم جديد </a>
 
-        <table class="table table-striped">
-                <thead class="bg-dark">
-                    <tr>
-                        <th>رقم الطلب</th>
-                        <th>الفرع</th>
-                        <th>حالة الطلب</th>
-                        <th>العلامة التجارية</th>
-                        <th>الشركة</th>
-                        <th>المفتش</th>
-                        <th>تاريخ الطلب</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    {% for o in orders %}
-                    <tr>
-                        <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
-                        <td>{{o.bransh_id.description}}</td>
-                        <td>{% if o.status == '0' %} جديد {% elif o.status == '1' %} غير مكتمل{% elif o.status == '2' %} مكتمل{% elif o.status == '3' %} معتمد {% endif %}</td> 
-                        <td>{{o.bransh_id.brand_id.description}}</td>
-                        <td>{{o.bransh_id.brand_id.company_id.description}}</td>
-                        <td>{{o.employee_id}}</td>
-                        <td>{{o.registerDate}}</td>
-                        <td><a href="{% url 'show_order_details' o.id %}" class="btn btn-sm btn-primary"> عرض</a></td>
-                    </tr>
-                    {% endfor %}
-                 </tbody>
-        </table>
+        </div>
     </div>
 
     </div>
+</div><!--end row-->
+
+<!-- الفلتر-->
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header" style="background-color: white;">
+          <div>  
+            <input type="text" id="search-input" placeholder="بحث في الطلبات.." class="shadow-sm" style="padding: 8px; border: none; background-color: #f1f1f1; border-radius: 20px; margin-left: 20px;">
+            <!-- مجموعة أزرار فلترة حالة الطلب -->
+            <div class="btn-group" role="group">
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد" data-column="3">جديد</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل" data-column="3">غير مكتمل</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل" data-column="3">مكتمل</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد" data-column="3">معتمد</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="all" data-column="3">الكل</button>
+            </div>
+            <!-- مجموعة أزرار فلترة الأرباع السنوية -->
+            <div class="btn-group" role="group">
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="الربع الأول" data-column="4">الربع الأول</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="الربع الثاني" data-column="4">الربع الثاني</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="الربع الثالث" data-column="4">الربع الثالث</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="الربع الرابع" data-column="4">الربع الرابع</button>
+              <button class="btn btn-primary filter-btn btn-sm" data-filter="all" data-column="4">الكل</button>
+            </div>
+          </div> 
+        </div>
+        <div class="card-body">
+          <form class="form-inline pb-2" action="#">
+            <!-- مجموعة أزرار الراديو -->
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-sm">
+                <input type="radio" name="bulkAction" id="actionAdd" value="add" autocomplete="off"> تعديل المفتش
+              </label>
+              <label class="btn btn-sm">
+                <input type="radio" name="bulkAction" id="actionDelete" value="delete" autocomplete="off"> حذف
+              </label>
+            </div>
+            <!-- زر التنفيذ -->
+            <button id="executeBtn" class="btn btn-sm btn-primary border-0 bg-light mb-2 ml-2" disabled>تنفيذ</button>
+          </form>
+          <!-- الجدول -->
+          <table class="table table-striped">
+            <thead style="background-color: #0ad0ac;">
+              <tr>
+                <th>
+                  <!-- خانة اختيار لتحديد الكل باستخدام custom checkbox من بوتستراب -->
+                  <div class="custom-control custom-checkbox">
+                    {% csrf_token %}
+                    <input type="checkbox" class="custom-control-input" id="select-all" onclick="toggleSelectAll(this)">
+                    <label class="custom-control-label" for="select-all"></label>
+                  </div>
+                </th>
+                <th>رقم الطلب</th>
+                <th>الفرع</th>
+                <th>حالة الطلب</th>
+                <th>الربع السنوي</th>
+                <th>السنة</th>
+                <th>المفتش</th>
+                <th>تاريخ الطلب</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              {% for o in orders %}
+              <tr>
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input row-checkbox" id="checkbox{{ o.id }}" value="{{ o.id }}">
+                    <label class="custom-control-label" for="checkbox{{ o.id }}"></label>
+                  </div>
+                </td>
+                <td>HC-{{ o.id }}-{{ o.bransh_id }}</td>
+                <td>{{ o.branchName }}</td>
+                <td>
+                  {% if o.status == '0' %}
+                    جديد
+                  {% elif o.status == '1' %}
+                    غير مكتمل
+                  {% elif o.status == '2' %}
+                    مكتمل
+                  {% elif o.status == '3' %}
+                    معتمد
+                  {% endif %}
+                </td>
+                <td>
+                  {% if o.quarter == 'q1' %}
+                    الربع الأول
+                  {% elif o.quarter == 'q2' %}
+                    الربع الثاني
+                  {% elif o.quarter == 'q3' %}
+                    الربع الثالث
+                  {% elif o.quarter == 'q4' %}
+                    الربع الرابع
+                  {% endif %}
+                </td>
+                <td>{{ o.year }}</td>
+                <td>{{ o.employee_id }}</td>
+                <td>{{ o.registerDate }}</td>
+                <td>
+                  <a href="{% url 'show_order_details' o.id %}" class="btn btn-sm btn-primary">عرض</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+
+
+
+<!-- (مثال لمودال Bootstrap لإضافة مسؤولين) -->
+<div class="modal fade" id="responsibleModal" tabindex="-1" aria-labelledby="responsibleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="responsibleModalLabel">تعديل المفتش</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- يمكنك وضع نموذج أو محتوى الإضافة هنا -->
+        <form action="{% url 'process_responsible' brand_id %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" value="" name="orderids" >
+          <div class="form-inline">
+            <label>اسم الموظف</label>
+            <select class="form-select shadow-sm border-0 bg-light" name="employee">
+              {% for e in emps %}
+              <option value="{{e.id}}">{{e.user.first_name}} {{e.user.last_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">إغلاق</button>
+        <button type="submit" class="btn btn-primary btn-sm">حفظ</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- تضمين مكتبات jQuery و Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-            // فلترة الجدول عند الكتابة في حقل البحث
-            $('#search-input').on('input', function() {
-                //alert("work")
-                let searchText = $(this).val().toLowerCase();
-      
-                $('#table-body tr').each(function() {
-                    // البحث في كل خلية في الصف
-                    let rowText = $(this).text().toLowerCase();
-                    if (rowText.includes(searchText)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
-
-        // عند الضغط على زر فلترة
-        $('.filter-btn').click(function() {
-            // استعادة الألوان الافتراضية للأزرار
-            $('.filter-btn').removeClass('active-filter');
-            
-            // إضافة اللون النشط للزر المضغوط
-            $(this).addClass('active-filter');
+  $(document).ready(function() {
+    // تعريف متغيرات لتخزين قيم الفلترة
+    let statusFilter = 'all';
+    let quarterFilter = 'all';
   
-            // الحصول على الكلمة المراد البحث عنها
-            let filter = $(this).data('filter');
+    // دالة لتطبيق جميع عوامل الفلترة معاً
+    function filterRows() {
+      let searchText = $('#search-input').val().toLowerCase();
   
-            // فلترة الصفوف بناءً على الكلمة المختارة
-            $('#table-body tr').each(function() {
-                let rowText = $(this).find('td:eq(2)').text();
-                if (filter === 'all' || rowText.includes(filter)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
+      $('#table-body tr').each(function() {
+        let row = $(this);
+        let rowText = row.text().toLowerCase();
+        let statusText = row.find('td').eq(3).text().trim();
+        let quarterText = row.find('td').eq(4).text().trim();
+  
+        // التحقق من تطابق البحث، حالة الطلب والربع السنوي
+        let searchMatch = rowText.includes(searchText);
+        let statusMatch = (statusFilter === 'all' || statusText.includes(statusFilter));
+        let quarterMatch = (quarterFilter === 'all' || quarterText.includes(quarterFilter));
+  
+        if (searchMatch && statusMatch && quarterMatch) {
+          row.show();
+        } else {
+          row.hide();
+        }
+      });
+    }
+  
+    // فلترة البحث عند كتابة نص في حقل البحث
+    $('#search-input').on('input', filterRows);
+  
+    // التعامل مع ضغط أزرار الفلترة
+    $('.filter-btn').click(function() {
+      let column = $(this).data('column');
+      let filter = $(this).data('filter');
+  
+      // إزالة اللون النشط من الأزرار في نفس المجموعة وإضافة اللون للنشط
+      $('.filter-btn[data-column="' + column + '"]').removeClass('active-filter');
+      $(this).addClass('active-filter');
+  
+      // تحديث المتغير المناسب بناءً على العمود
+      if (column == 3) {
+        statusFilter = filter;
+      } else if (column == 4) {
+        quarterFilter = filter;
+      }
+  
+      // تطبيق الفلترة بعد تحديث القيم
+      filterRows();
     });
-  </script>
+  });
+</script>
+<script>
+      $('.row-checkbox, input[name="bulkAction"]').on('change', function() {
+      let anyChecked = $('.row-checkbox:checked').length > 0;
+      let bulkActionSelected = $('input[name="bulkAction"]:checked').length > 0;
+      $('#executeBtn').prop('disabled', !(anyChecked && bulkActionSelected));
+    });
 
+    // دالة لتحديد الكل
+    window.toggleSelectAll = function(source) {
+      $('.row-checkbox').each(function() {
+        $(this).prop('checked', source.checked);
+      });
+      $('input[name="bulkAction"]').trigger('change');
+    };
+
+    // التعامل مع زر "تنفيذ"
+    $("#executeBtn").click(function(e) {
+  e.preventDefault();
+  // قراءة العملية المختارة من أزرار الراديو
+  let action = $('input[name="bulkAction"]:checked').val();
+  // جمع الـ IDs من الصفوف المحددة
+  let selectedIds = [];
+  $('.row-checkbox:checked').each(function(){
+    selectedIds.push($(this).val());
+  });
+  if(action === "add") {
+    // فتح المودال وتعبئة الحقل بقائمة الـ IDs المفصولة بفواصل
+    $("#responsibleModal").modal('show');
+    $("input[name='orderids']").val(selectedIds.join(','));
+  } else if(action === "delete") {
+  ///////////////////////////////حذف /////////////////////////
+  const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+  
+  // جمع قيم الـ id من كل checkbox
+  const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+  //selectedIds orders ids
+  // طباعة النتيجة في وحدة التحكم (console)
+  console.log("المعرفات المختارة:", selectedIds);
+
+        $.ajax({
+            type: 'post',
+            url:'/report/remove_order',
+            async: true,
+            data:{
+            selectedIds : selectedIds , 
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+                if (data === 'error') {
+                    Swal.fire({
+                      title: "خطأ",
+                      text: "يتم حذف الطلبات الجديدة فقط",
+                      icon: "error"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        location.reload();
+                      }
+                    });
+                  } else if (data === 'notall') {
+                    Swal.fire({
+                      title: "لم يتم حذف جميع الطلبات المختارة",
+                      text: "يتم حذف الطلبات الجديدة فقط",
+                      icon: "info"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        location.reload();
+                      }
+                    });
+                  } else if (data === 'ok') {
+                    Swal.fire({
+                      title: "تم الحذف",
+                      text: "تم حذف الطلبات المختارة بنجاح",
+                      icon: "success"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        location.reload();
+                      }
+                    });
+                  }
+            },
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+    });
+    ///////////////////////////////حذف /////////////////////////
+
+  }
+});
+
+</script>  
+  
+<script>
+  
+  let alerts= document.getElementById("alert").value;
+    //alert(alerts)
+    
+     if( alerts == 'success_update'){
+        Swal.fire({
+         title: "تم التعديل",
+         text: "تم حفظ التعديل بنجاح",
+         icon: "success"
+         });         
+     } else if ( alerts == 'success_addNewOrder'){
+        Swal.fire({
+         title: "تم انشاء الطلب",
+         text: "تم انشاء طلب لفرع بنجاح",
+         icon: "success"
+         });         
+     } else if ( alerts == 'success_addNewBrandsOrder'){
+        Swal.fire({
+         title: "تم انشاء الطلب",
+         text: "تم انشاء طلب لجميع فروع العلامة التجارية بنجاح",
+         icon: "success"
+         });         
+     } else if ( alerts == 'ok'){ // تنبية حفظ العلامات التجارية
+        Swal.fire({
+         title: "تم انشاء الطلبات ",
+         text: "تم انشاء طلبات لتقارير التقييم لجميع فروع العلامة التجارية بنجاح",
+         icon: "success"
+         });         
+     }
+</script>
 {% endblock %}

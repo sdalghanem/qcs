@@ -16,45 +16,98 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
   
-{% block search %}
-<div style="margin-left: 300px;">
-    <a href="{% url 'emp_orders' %}" class="btn btn-sm btn-primary ml-4"> <  الرجوع للتقارير  </a>
-    {% if complete == 'ok'  and orStatus == '1' %}
-    <a href="{% url 'save_evaluation' orID %}" class="btn btn-sm btn-secondary ">حفظ الطلب</a>
-    {% endif %}
-</div>
-
-{% endblock %}
 
 
 {% block clients_home %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <label><img src="{% static 'src/assets/img/QLogo05.SVG' %}" alt="avatar" width="40px"><b> طلب رقم {{orNum}}</b></label>        
+                    <div>
+                        <div>
+                            <a href="{% url 'emp_orders' %}" class="btn btn-sm btn-primary ml-4"> <  الرجوع للطلبات  </a>
+                            {% if complete == 'ok'  and orStatus == '1' %}
+                            <a href="{% url 'save_evaluation' orID %}" class="btn btn-sm btn-secondary" onclick="confirmRedirect(event, this.href);">حفظ الطلب</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <table class="table   text-center " >
+                        <thead>
+                            <tr style="background: linear-gradient(45deg, rgba(98,91,255,0.2), rgba(10,208,172,0.2));">
+                                <th>الفرع</th>
+                                <th>تاريخ الطلب</th>
+                                <th>حاله الطلب</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td> {{orBrn}} </td>
+                            <td> {{orDate}} </td>
+                            <td> {% if orStatus == '0' %} جديد{% elif orStatus == '1' %} غير مكتمل {% elif orStatus == '2' %} مكتمل {% elif orStatus == '3' %} معتمد{% endif %}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
-<table class="table  table-striped">.
-    <thead>
-        <tr class=" bg-dark">
-        <th>رقم الطلب</th>
-        <th>الفرع</th>
-        <th>تاريخ الطلب</th>
-        <th>حاله الطلب</th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-        <td> {{orNum}}</td>
-        <td> {{orBrn}} </td>
-        <td> {{orDate}} </td>
-        <td>{% if orStatus == '0' %} جديد{% elif orStatus == '1' %} غير مكتمل {% elif orStatus == '2' %} مكتمل {% elif orStatus == '3' %} معتمد{% endif %}</td>
-    </tr>
-    </tbody>
-</table>
 
-    <div class="container my-4">    
+<div class="container">
+    <div class="row">
+        {% for z in zones %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card mt-4 text-center">
+                    {% if z.check == 'ok' %}
+                    <div class="card-header" style="background-color: #0ac0ad;">
+                        {% elif z.check == 'not' %}
+                        <div class="card-header bg-danger" >
+                            {% endif %}
+                </div>
+                <div class="card-body">
+                   <h4>{{z.zoneName}}</h4> 
+                    {% if z.check == 'ok' %}
+                    <p>تم التقييم</p>
+                    {% elif z.check == 'not' %}
+                    <p class="text-danger">لم يتم تقييم </p>
+                    {% endif %}
+
+                </div>
+                <div class="card-footer">
+                    {% if z.check == 'ok' %}
+                    <a class="btn btn-sm btn-secondary" href="{% url 'get_evaluation_points' z.id orNum %}">ابدأ</a>
+                    {% elif z.check == 'not' %}
+                    <a class="btn btn-sm btn-danger" href="{% url 'get_evaluation_points' z.id orNum %}">ابدأ</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+    <div class="container " hidden>    
         <!-- Table -->
-        <table class="table  table-striped ">
-            <thead>
+        <table class="table  table-striped  ">
+            <thead style="background-color: #0ac0ad;">
                 <tr>
                     <th class="text-center">المكان</th>
                     <th class="text-center">التقييم</th>
@@ -84,9 +137,36 @@
 
 
    
-    </script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+  <script>
+    function confirmRedirect(event, url) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: " سيتم حفظ الطلب المكتمل للإعتماد.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم, حفظ',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+    </script>
+        <script>
+  
+            let alerts= document.getElementById("alert").value;
+              //alert(alerts)
+              if( alerts == 'save'){
+                  Swal.fire({
+                   title: "تم اكمال التقييم بنجاح , بانتظار الاعتماد من قبل المشرف",
+                   icon: "success"
+                   });         
+               }
+    </script>
+    
 {% endblock %}

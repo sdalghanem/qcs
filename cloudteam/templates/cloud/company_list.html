@@ -47,22 +47,23 @@
         <div class="card text-center shadow-sm">
             <div class="card-header bg-white">
                 <div class="d-flex align-items-center justify-content-center">
-                    <img src="../../../{{ r.logo }}" alt="avatar" class="rounded-circle me-2" width="50" height="50">
-                    <h5 class="mb-0">{{ r.description }}</h5>
+                    <img src="../../../{{ r.company_logo }}" alt="avatar" class="rounded-circle me-2" width="50" height="50">
+                    <h5 class="mb-0">{{ r.companyName }}</h5>
                 </div>
             </div>
             <div class="card-body">
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <small class="text-muted">حالة التعاقد</small>
                     <p class="mb-0">نشط</p>
-                </div>
+                </div> -->
                 <div>
                     <small class="text-muted">مدير عام الشركة</small>
-                    <p class="mb-0">{{r.packege}}</p>
+                    <p class="mb-0">{{r.manager}}</p>                   
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="{% url 'brands_dashbord' r.id %}" class="btn btn-sm btn-primary">العلامات التجارية</a>
+                <a href="{% url 'brands_dashbord' r.company_id %}" class="btn btn-sm btn-primary">العلامات التجارية</a>
+
             </div>
         </div>
     </div>
@@ -76,7 +77,7 @@
 
 
 
-<!-- Evaluation Modal -->
+<!-- مودل اضافة ملف شركة جديدة -->
 
 <div class="modal fade" id="addNew" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -101,7 +102,8 @@
             </div>
         </div>
     </div>
-</div>
+
+
 <script>
   
     let alerts= document.getElementById("alert").value;
@@ -109,17 +111,11 @@
    
        if( alerts == 'success'){
           Swal.fire({
-           title: "تم الحفظ",
-           text: "تم انشاء ملف عميل بنجاح",
+           title: "تمت الاضافة",
+           text: "تم اضافة مسؤولين بنجاح",
            icon: "success"
            });         
-       } else if( alerts == 'exist'){
-          Swal.fire({
-           title: "موجود مسبقاً",
-           text: "اسم شركة العميل مضاف مسبقاً",
-           icon: "error"
-           });         
-       } 
+       }
   </script>
 
 

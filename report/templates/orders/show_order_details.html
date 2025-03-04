@@ -20,96 +20,173 @@
 {% block search %}
 
 <a href="{% url 'show_orders' %}" class="btn btn-sm btn-primary">  < الرجوع للتقارير</a>
-{% for o in orinfo %}
-{% if btnOn == '1' and o.status == '2' %}
-<a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-secondary"> اعتماد التقييم </a>                         
-{% endif %}
-{% endfor %}
+
 
 
 {% endblock %}
 
 {% block clients_home %}
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <label><img src="../../../{{order.bransh_id.brand_id.logo}}" alt="avatar" width="80px"><b>{{order.bransh_id.brand_id.description}}</b></label>        
+                    <div>
+                    <a href="{% url 'show_orders' order.bransh_id.brand_id.id %}" class="btn btn-sm btn-primary "> < العودة إلى قائمة الطلبات</a>
+                    {% for o in orinfo %}
+                    {% if btnOn == '1' and o.status == '2' %}
+                    <a href="{% url 'submit_result' fainl_res o.id %}" class="btn btn-sm btn-secondary confirm-evaluation">اعتماد التقييم</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 
 
 
 
-<div class="row mt-2">
-    <div class="card">
-    <div class="col-12 card-body">
-        <table class="table table-striped">
-                <thead class="bg-dark">
-                    <tr>
-                        <th>رقم الطلب</th>
-                        <th>الفرع</th>
-                        <th>العلامة التجارية</th>
-                        <th>الشركة</th>
-                        <th>المفتش</th>
-                        <th>تاريخ</th>
-                        <th>الربع</th>
-                        <th>السنه</th>
-                        <th>الدرجة النهائية</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for o in orinfo %}
-                    <tr>
-                        <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
-                        <td>{{o.bransh_id.description}}</td>
-                        <td>{{o.bransh_id.brand_id.description}}</td>
-                        <td>{{o.bransh_id.brand_id.company_id.description}}</td>
-                        <td>{{o.employee_id}}</td>
-                        <td>{{o.registerDate}}</td>
-                        <td>{{o.quarter}}</td>
-                        <td>{{o.year}}</td>
-                        <td>{{fainl_res}} %   
-                            </td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
-        <table class="table table-striped">
-            <thead class="bg-dark">
-                <tr>
-                    <th>البند</th>
-                    <th>التقييم</th>
-                    <th>الملاحظات</th>
-                    <th>المرفقات</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if terms %}
-                    {% for t in terms %}
-                    <tr>
-                        <td>{{t.term_id.description}}</td>
-                        <td>
-                            {% if t.score == ' ' %}
-                                مستبعد
-                            {% elif t.score == '1' %}
-                                <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem;"></i>
-                            {% elif t.score == '0' %}
-                                <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem;"></i>
-                            {% endif %}
-        
-                        </td>
-                        <td>{{t.note}}</td>
-                        <td> {% if t.img %}
-                            <a href="../../../{{t.img}}" class="btn btn-sm btn-dark">عرض</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                
-                    {% else %}
-                    <tr class="text-center">
-                        <td colspan="4">لايوجد</td>
-                    </tr>
-                {% endif %}
-                
-            </tbody>
-    </table>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <table class="table table-striped text-center">
+                            <thead style="background-color: #0ad0ac;">
+                                <tr>
+                                    <th>رقم الطلب</th>
+                                    <th>الفرع</th>
+                                    <th>المفتش</th>
+                                    <th>تاريخ</th>
+                                    <th>الربع</th>
+                                    <th>السنه</th>
+                                    <th>الدرجة النهائية</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in orinfo %}
+                                <tr>
+                                    <td>HC-{{o.id}}-{{o.bransh_id.id}}</td>
+                                    <td>{{o.bransh_id.description}}</td>
+                                    <td>{{o.employee_id}}</td>
+                                    <td>{{o.registerDate}}</td>
+                                    <td>
+                                        {% if o.quarter == 'q1' %}
+                                        الربع الأول
+                                      {% elif o.quarter == 'q2' %}
+                                        الربع الثاني
+                                      {% elif o.quarter == 'q3' %}
+                                        الربع الثالث
+                                      {% elif o.quarter == 'q4' %}
+                                        الربع الرابع
+                                      {% endif %}
+                    
+                                    </td>
+                                    <td>{{o.year}}</td>
+                                    <td>{{fainl_res}} %   
+                                        </td> <!-- هنا تسوي زر حساب التوتل بعد مايكون التقرير كامل واذا ضغطته تظهر ويحفظ التقرير-->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead style="background-color: #0ad0ac;">
+                            <tr>
+                                <th>البند</th>
+                                <th>التقييم</th>
+                                <th>الملاحظات</th>
+                                <th>المرفقات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if terms %}
+                                {% for t in terms %}
+                                <tr>
+                                    <td>{{t.term_id.description}}</td>
+                                    <td>
+                                        {% if t.score == ' ' %}
+                                            مستبعد
+                                        {% elif t.score == '1' %}
+                                        نعم
+                                            <!-- <i class="bi bi-check-circle-fill text-success" style="font-size: 1rem;"></i> -->
+                                        {% elif t.score == '0' %}
+                                        لا
+                                            <!-- <i class="bi bi-x-circle-fill text-danger" style="font-size: 1rem;"></i> -->
+                                        {% endif %}                   
+                                    </td>
+                                    <td>{{t.note}}</td>
+                                    <td> {% if t.img %}
+                                        <a href="../../../{{t.img}}" class="btn btn-sm btn-primary">عرض</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            
+                                {% else %}
+                                <tr class="text-center">
+                                    <td colspan="4">لايوجد</td>
+                                </tr>
+                            {% endif %}                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-</div></div>
+<script>
+    // الاستماع لحدث النقر على الرابط
+    document.querySelector('.confirm-evaluation').addEventListener('click', function(e) {
+        e.preventDefault(); // منع الانتقال الفوري للرابط
+        const url = this.href; // الحصول على الرابط من الخاصية href
+  
+        // اظهار رسالة التأكيد باستخدام SweetAlert2
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "سيتم اعتماد النتيجة بعد التأكيد  و تظهر في التقرير النهائي للعميل",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم، اعتمد',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                 window.location.href = url;
+                // الانتقال إلى الرابط عند التأكيد          
+            }
+        });
+    });
+
+
+    let alerts= document.getElementById("alert").value;
+
+    if (alerts === 'ok') {
+                    Swal.fire({
+                    title: "تم اعتماد النتيجه بنجاح",
+                    text: "ستظهر النتيجه النهائية للعميل الآن",
+                    icon: "success"})
+                    }
+  </script>
+  
 {% endblock %}

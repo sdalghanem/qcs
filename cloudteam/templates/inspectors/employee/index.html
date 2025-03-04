@@ -21,6 +21,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>QCS | Quality Control System </title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="icon" type="image/x-icon" href="{% static '/src/assets/img/favicon.ico'%}"/>
     <link href="{% static '/layouts/modern-light-menu/css/light/loader.css'%}" rel="stylesheet" type="text/css" />
     <link href="{% static '/layouts/modern-light-menu/css/dark/loader.css'%}" rel="stylesheet" type="text/css" />
@@ -101,21 +103,13 @@
             <a href="javascript:void(0);" class="sidebarCollapse " style="margin-left: 100px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </a>
-            {% block search %}
-         
-
-            {% endblock %}
-            <!-- <div class="search-animated toggle-search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <form class="form-inline search-full form-inline search" role="search">
-                    <div class="search-bar">
-                        <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="Search...">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x search-close"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  
+                     <!--لوجو الهيدر-->
+                     <div>
+                        <!-- <img src="{% static 'src/assets/img/QLogo05.SVG'%}" width="40px" > -->
+                        <img src="{% static 'src/assets/img/Logo 2.svg' %}" alt="avatar" width="80px">
                     </div>
-                </form>
-                <span class="badge badge-secondary">Ctrl + /</span>
-            </div> -->
-            <!--مكان بحث الارباع-->
+        
             
             <ul class="navbar-item flex-row ms-lg-auto ms-0">
 
@@ -193,7 +187,7 @@
                             
                         </div> -->
                          <div class="nav-item">
-                            <img src="{% static 'src/assets/img/logo 2.svg'%}" width="80%" >
+                            <img src="{% static 'src/assets/img/Logow.svg'%}" width="80%" >
 
                         </div> 
                     </div>
@@ -212,8 +206,8 @@
                             {% endblock %}
                         </div>
                         <div class="profile-content">
-                            <h6 class="">{% block username %} {% endblock %}</h6>
-                            <p class="">مراقب </p>
+                            <p  style="font-size: 1rem;" >{% block username %} {% endblock %}</p>
+                            <span>مراقب</span>
                         </div>
                     </div>
                 </div>

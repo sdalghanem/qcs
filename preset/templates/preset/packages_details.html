@@ -18,41 +18,55 @@
   {% endblock %}
 
 {% block clients_home %}
-<p> <a href="{% url 'packege' %}" class="btn btn-sm btn-darck"> العودة للباقات  </a>  </p>
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+<div class="container">
+  <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+              <div class="card-body">
+                  <div>
+                      <label>
+                          <img src="{% static 'src/assets/img/Logo 2.svg' %}" alt="avatar" width="80px">
+                          <b>{{pckName}}</b> 
+                      </label>        
+                  </div>
+                      <!-- <h6 style="color:#02024B"> | الباقات</h6> -->
+                      <a href="{% url 'packege' %}" class="btn btn-sm btn-primary"> العودة للباقات  </a>  
+                      <a  href="#" data-toggle="modal" data-target="#add_sec"  class="btn btn-primary btn-sm" >+ إضافة عنوان رئيسي</a>
+                      <a  href="#" data-toggle="modal" data-target="#upload"  class="btn btn-secondary btn-sm" >رفع ملف</a>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
 <!------------------------------------------------------------------------------------------------->
-<div class=" card">
-        <h6 style="color:#02024B" class="p-4">
-          | {{pckName}} 
-           <a  href="#" data-toggle="modal" data-target="#add_sec"  class="btn btn-primary btn-sm" >+ إضافة عنوان رئيسي</a>
-        </h6>
 
-   
-        <div class="card-body">
-            <div class="row">
-           
-                <div class="searchable-container col-lg-12">
-                    {% for t in titles %}
-                    <div class="items">
-                        <div class="user-name">
-                            <b>{{t.section}}</b>
-                        </div>                
-                        <div class="action-btn">
-                            <a href="{% url 'add_termsPage' t.id %}"  class="btn btn-secondary btn-sm">+ إضافة </a>
-                            <!-- <a href="{% url 'section_details' t.id %}" class="btn btn-primary btn-sm" >عرض </a> -->
-                            <a data-toggle="modal" data-target="#show{{t.id}}" class="btn btn-primary btn-sm" >عرض </a>
-                            <a data-toggle="modal" data-target="#edit_title{{t.id}}" class="badge outline-badge-warning"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+<!------------------------>
+<div class="row">
+  {% for t in titles %}
+  <div class="col-lg-4 col-md-6 col-sm-12">
+          <dic class="card mt-4 text-center shadow">
+              <div class="card-header" style="background: #0ad0ac"></div>
+              <div class="card-body"><h5 style="color:#02024b">{{t.section}}</h5></div>
+              <div class="card-footer">
+                <a href="{% url 'add_termsPage' t.id %}"  class="btn btn-primary btn-sm">إعداد البنود</a>
+                <!-- <a href="{% url 'section_details' t.id %}" class="btn btn-primary btn-sm" >عرض </a> -->
+                <!-- <a data-toggle="modal" data-target="#show{{t.id}}" class="btn btn-primary btn-sm" >البنود </a> -->
+                <a data-toggle="modal" data-target="#edit_title{{t.id}}" class="btn btn-primary btn-sm">تغيير العنوان</a>
+                <a href="{% url 'deleteTitle' t.id %}"  class="btn btn-danger btn-sm">حذف</a>
 
-                        </div>                
-                    </div>   
-                    {% endfor %}             
-                </div>
-            </div>  
-        </div>
-    </div>
+              </div>
+          </dic>
+      </div>
+      {% endfor %}
 
-
-    <!--------------------------------111111110000000111111000000111111------------------------------->
-
+</div>
+<!--end-->
 
 
     {% for t in titles %}
@@ -66,13 +80,13 @@
         </div>
         <div class="modal-body">
          
-            <form class="section general-info " method="post" action="{% url 'update_term_title' t.id %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'update_term_title' t.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
                                
-                                    <input type="text" style="border: none; background-color:aliceblue; border-radius: 50px; width: 100%;  padding: 8px;" name="description" placeholder="العنوان" value="{{t.section}}">                 
+                                    <input type="text" class="border-0 bg-light shadow-sm form-control" name="description" placeholder="العنوان" value="{{t.section}}">                 
                                
                                
                             </div>
@@ -83,7 +97,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-secondary btn-sm" type="submit" >تحديث</button>
+          <button  class="btn btn-primary btn-sm" type="submit" >تحديث</button>
         </form>
 
         </div>
@@ -101,17 +115,17 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">إضافة عنوان جديد</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle">إضافة عنوان رئيسي جديد</h5>
          
         </div>
         <div class="modal-body">         
-            <form class="section general-info " method="post" action="{% url 'add_new_term_title' pkid %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'add_new_term_title' pkid %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
                                
-                                    <input type="text"  style="border: none; background-color:aliceblue; border-radius: 50px; width: 100%;  padding: 8px;" name="description" placeholder="اكتب العنوان">                 
+                                    <input type="text" class="form-control border-0 bg-light shadow-sm "   name="description" placeholder="اكتب العنوان">                 
                                
                                
                             </div>
@@ -120,7 +134,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-secondary btn-sm" type="submit" >حفظ</button>
+          <button  class="btn btn-primary btn-sm" type="submit" >حفظ</button>
         </form>
 
         </div>
@@ -169,6 +183,82 @@
 {% endfor %}
 <!--end model -->
 
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">رفع ملف </h5>
+       
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'upload_packge_details' pkid %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="excel_file" accept=".xlsx" required>
+      </div> 
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-primary">رفع الملف</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+      let alerts= document.getElementById("alert").value;
+
+      if( alerts == 'success'){
+                Swal.fire({
+                title: "تم الحفظ",
+                text: "  قم  باضافة اقسام للباقة",
+                icon: "success"
+                });         
+            }  else if( alerts == 'exist'){
+                Swal.fire({
+                title: "موجود مسبقاً",
+                text: " العنوان الرئيسي المدخل موجود مسبقاً , قم بكتابة عنوان مختلف",
+                icon: "error"
+                });         
+            } else if( alerts == 'successadd'){
+                Swal.fire({
+                  title: "تم الحفظ",
+                  text: " تم حفظ العنوان الرئيسي بنجاح , قم الآن بإعداد البنود ",
+                icon: "success"
+                });         
+            } else  if( alerts == 'update'){
+                Swal.fire({
+                title: "تم التعديل",
+                text: "تم تعديل العنوان الرئيسي لمجموعة البنود بنجاح" ,
+                icon: "success"
+                });         
+            } else  if( alerts == 'exist_terms'){
+                Swal.fire({ 
+                title: "لم يتم الحذف",
+                text: "يوجد بنود تابع لعنوان الرئيسي , يجب حذف جميع البنود التابعه" ,
+                icon: "info"
+                });         
+            } else  if( alerts == 'delete'){
+                Swal.fire({ 
+                title: "تم الحذف",
+                text: "تم حذف العنوان الرئيسي" ,
+                icon: "success"
+                });         
+            } else  if( alerts == 'success_upload'){
+                Swal.fire({ 
+                title: "تم رفع الملف ",
+                text: "تم حفظ تفاصيل الباقه بنجاح" ,
+                icon: "success"
+                });         
+            } else {
+                Swal.fire({ 
+                title: "خطأ",
+                text: alerts ,
+                icon: "error"
+                });         
+            }
+</script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

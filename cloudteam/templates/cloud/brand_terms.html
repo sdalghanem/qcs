@@ -18,84 +18,139 @@
   {% endblock %}
 
 {% block clients_home %}
-<div class="row ">
-    <div class="col-4 text-center">
-        <h5><img src="../../../{{brandName.logo}}" alt="avatar" width="10%">      {{brandName}}<span > {% if pckName %}    |  {{pckName}} {% endif %}</h5>    </span>
-        <a href="{% url 'brands_dashbord' companyId %}"  class="btn btn-sm btn-dark">  الرجوع للعلامات التجارية</a>
-        <a href="#" class="btn btn-sm btn-dark  " data-toggle="modal" data-target="#location"> أماكن التفتيش </a>
-    </div>
-</div>
-<div class="row  mt-2">
 
-</div>
-<div class="container ">
-    <div class="input-group mt-4 mb-4 ">
-        {% csrf_token %}
-        <select class="form-control"  id="packege">
-            <option>اضغط لاختيار الباقة</option>
-            {% for p in pcks %}
-            <option value="{{p.id}}">{{p.description}}</option>
-            {% endfor %}
-        </select>
-      
-        <button class="btn btn-success" type="button" onclick="save_packege()">تفعيل الباقة</button>
-    </div>
-    <div  class="card">
-        <div class="card-body">
-            <!-- <div class=" input-group  mb-3 mt-2" >
-                <input type="text" class="form-control " name="inputField[]" placeholder="اكتب البند">
-                <button class="btn btn-primary" type="button" onclick="addRow()">+</button>
-            </div>
-            <div id="inputContainer"> -->
-                <!-- البنود الاضافيه تعرض هنا-->
-            <!-- </div>  
-            <button class="btn btn-primary mt-2" type="button" onclick="">إضافة</button>
-            <button class="btn btn-success mt-2" type="button" onclick="add_term()">حفظ بنود التفتيش </button>
-                <hr> -->
-            <div  class="mb-3">
-              
-                  
-                    <!-- <a href="#" class="badge badge-warning " data-toggle="modal" data-target="#exampleModalCenter{{t.id}}"> تخصيص القسم المسؤول</a>  -->
-                    <br>
-                    <div class="container mt-4">
-                        <table class="table table-striped">
-                            <tr>
-                            <th>بنود تفتيش تقرير الجودة</th>
-                            <th>الملاحظات</th>
-                            <th>المسؤوليات</th>
-                            <th>التفاصيل</th>
-                            
-                        </tr>
-                      
-                        {% for trm in terms %}
-                        
-                        <tr>
-                            <td>{{trm.description }}</td>
-                            <td> <!--في حال وجود ملاحظات  لايظهر الزر و تظهر الملاحظات-->
-                                {% if trm.note %}
-                                {{trm.note}}  <a href="#" class="text-danger" onclick="remove_note('{{trm.id}}')">X</a>
 
-                               {% else %}
-                                <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#note{{trm.id}}"> +  إضافة ملاحظة</a> 
-                                {% endif %}
-                            </td>
-                            <td> <a href="#" class="badge badge-primary " data-toggle="modal" data-target="#responiple{{trm.id}}"> + </a> </td>
-                            <td> <a href="{% url 'show_responsible' trm.id %}" class="badge badge-primary "> عرض </a></td>
-                        </tr>
-                        {% endfor %}
-                        </table>
-                    </div>
-                    
-                  
-              
-                <!-- {% for t in terms %}
-                <div class="input-group mb-3 mt-2">   
-                    <input type="text" class="form-control" name="terms[]" value="{{t}}"/>  
-                </div>
-                {% endfor %}        -->
+
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+
+<div class="container mt-2">
+<!-- عرض العلامات التجارية-->
+    <div class="card">
+        <div class="m-4">
+            <label><img src="../../../{{brandName.logo}}" alt="avatar" width="50px"><b>{{brandName}}</b></label>        
+            <div>
+                <a href="{% url 'brands_dashbord' companyId %}" class="btn btn-sm btn-primary "> الرجوع للعلامات التجارية </a> 
+                <a href="#" class="btn btn-sm btn-primary "  data-toggle="modal" data-target="#location">أماكن التفتيش</a> 
+                <a href="#" class="btn btn-sm btn-primary "  data-toggle="modal" data-target="#packegeModle">تعيين باقة</a> 
             </div>
         </div>
+    </div>
+</div>
+<!--end row-->
 
+<!-- عرض  الباقة الاساسية وتغيير الباقة-->
+
+<div class="container  mt-2">
+    <div  class="card">
+        <div class="card-header p-4" style="background-color: white;">
+            <label style="color:#625bff">الباقة الحالية</label>
+            <h5 style="color:#02024b">{{pckName}}</h5> 
+        </div>
+        <div class="card-body">
+        
+                <div class="col-12 pb-2">
+
+                  <form class="form-inline pb-2" action="#">
+                    <!-- مجموعة أزرار الراديو -->
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-sm">
+                        <input type="radio" name="bulkAction" id="actionAdd" value="add" autocomplete="off"> إضافة مسؤوليات
+                      </label>
+                      <label class="btn btn-sm">
+                        <input type="radio" name="bulkAction" id="actionDelete" value="delete" autocomplete="off"> حذف
+                      </label>
+                    </div>
+                  
+                    <!-- زر التنفيذ -->
+                    <button id="executeBtn" class="btn btn-sm btn-primary border-0 bg-light mb-2 ml-2" disabled>تنفيذ</button>
+                  
+                    <!-- حقل البحث -->
+                    
+                  </form>
+                  
+
+
+<!-- الجدول مع إضافة معرف (id) للجدول لتسهيل الوصول إليه -->
+<table id="terms-table" class="table table-striped">
+  <thead style="background-color: #0ad0ac;">
+    <tr>
+      <th>
+        <!-- خانة اختيار لتحديد الكل باستخدام custom checkbox من بوتستراب -->
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="select-all" onclick="toggleSelectAll(this)">
+          <label class="custom-control-label" for="select-all"></label>
+        </div>
+      </th>
+      <th>
+        <div class="d-flex align-items-center">
+          <input type="text" id="table-search" 
+                 class="form-control form-control-sm border-0 shadow-sm bg-light ml-2" 
+                 placeholder="البحث في بنود تقرير الجودة..." 
+                 onkeyup="searchTable()" 
+                 style="width: 320px; margin-right: 10px;">
+        </div>
+      </th>
+      <th>الملاحظات</th>
+      <th>التفاصيل</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for trm in terms %}
+    <tr>
+      <td>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input row-checkbox" id="checkbox{{ trm.id }}" value="{{ trm.id }}">
+          <label class="custom-control-label" for="checkbox{{ trm.id }}"></label>
+        </div>
+      </td>
+      <td>{{ trm.description }}</td>
+      <td>
+        {% if trm.note %}
+          {{ trm.note }}
+          <a href="#" class="text-danger" onclick="remove_note('{{ trm.id }}')">X</a>
+        {% else %}
+          <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#note{{ trm.id }}">+ إضافة ملاحظة</a>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'show_responsible' trm.id %}" class="btn btn-sm btn-primary">عرض</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- دالة البحث -->
+<script>
+function searchTable() {
+  var input = document.getElementById("table-search");
+  var filter = input.value.toUpperCase();
+  var tbody = document.querySelector("#terms-table tbody");
+  var rows = tbody.getElementsByTagName("tr");
+
+  // نفترض أن عمود الوصف هو الثاني (index 1)
+  for (var i = 0; i < rows.length; i++) {
+    var cell = rows[i].getElementsByTagName("td")[1];
+    if (cell) {
+      var textValue = cell.textContent || cell.innerText;
+      // إذا كان النص الموجود في الخلية يحتوي على النص المطلوب (بغير حساسية لحالة الأحرف)
+      if (textValue.toUpperCase().indexOf(filter) > -1) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+              
+        </div>
     </div>
 </div>
 
@@ -138,61 +193,93 @@
           
 {% endfor %}
 
-{% for trm in terms %}
-
-        <!-- Modal -->
-        <div class="modal fade" id="responiple{{trm.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal fade" id="responiple" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">اضافة مسؤول </h5>
-                 
+                  <h5 class="modal-title">إضافة مسؤول</h5>
                 </div>
                 <div class="modal-body">
-                 
-                    <form class="section general-info pt-4" method="post" action="{% url 'insert_responsible'  brandId  trm.id%}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-md-12  pt-4">
-                                    <div class="form-group">
-                                        <div class="col-lg-12 layout-spacing"   >
-                                            <select class="form-select" aria-label="Default select example" name="secid">
-                                                {% for s in secs %}
-                                                <option value="{{s.id}}">{{s.description}}</option>
-                                                {% endfor %}
-                                            </select>                   
-                                        </div>
-                                    </div>
-                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12  pt-4">
-                                    <div class="form-group">
-                                        <div class="col-lg-12 layout-spacing"   >
-                                            <select class="form-select" aria-label="Default select example" name="zoneid">
-                                                {%if zones %}
-                                                {% for z in zones %}
-                                                <option value="{{z.id}}">{{z.name}}</option>
-                                                {% endfor %}
-                                                {% endif %}
-                                            </select>                   
-                                        </div>
-                                    </div>
-                                 </div>
-                            </div>
-                           
+                  <form method="post" action="{% url 'add_responsibles' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- حقل مخفي لتمرير معرّفات البنود المحددة -->
+                    <input type="hidden" name="selected_terms" id="selected_terms" value=""> 
+                    <input type="hidden" name="brandId" value="{{brandId}}"> 
+                    <div id="responsibles-container">
+                      <!-- أول مجموعة من الحقول -->
+                      <div class="row align-items-center mb-2 responsible-group">
+                        <div class="col-md-5">
+                          <select class="form-select border-0 shadow-sm bg-light" name="secid[]">
+                            {% for s in secs %}
+                              <option value="{{ s.id }}">{{ s.description }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-md-5">
+                          <select class="form-select border-0 shadow-sm bg-light" name="zoneid[]">
+                            {% if zones %}
+                              {% for z in zones %}
+                                <option value="{{ z.id }}">{{ z.name }}</option>
+                              {% endfor %}
+                            {% endif %}
+                          </select>
+                        </div>
+                        <div class="col-md-2">
+                          <button type="button" class="btn btn-secondary btn-sm add-responsible">+</button>
+                        </div>
+                      </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                </form>
+                  <button class="btn btn-primary btn-sm" type="submit">إضافة</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">إغلاق</button>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-          {% endfor %}
-
+          
+          <script>
+            // إضافة ديناميكي لمجموعات المسؤولين
+            document.addEventListener("DOMContentLoaded", function () {
+              document.querySelector(".add-responsible").addEventListener("click", function () {
+                let container = document.getElementById("responsibles-container");
+          
+                // إنشاء نسخة جديدة من الحقول
+                let newGroup = document.createElement("div");
+                newGroup.classList.add("row", "align-items-center", "mb-2", "responsible-group");
+                newGroup.innerHTML = `
+                    <div class="col-md-5">
+                        <select class="form-select border-0 shadow-sm bg-light" name="secid[]">
+                            {% for s in secs %}
+                            <option value="{{ s.id }}">{{ s.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-select border-0 shadow-sm bg-light" name="zoneid[]">
+                            {% if zones %}
+                            {% for z in zones %}
+                            <option value="{{ z.id }}">{{ z.name }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm remove-responsible">-</button>
+                    </div>
+                `;
+          
+                container.appendChild(newGroup);
+          
+                // إضافة حدث لحذف العنصر عند الضغط على زر "-"
+                newGroup.querySelector(".remove-responsible").addEventListener("click", function () {
+                  newGroup.remove();
+                });
+              });
+            });
+          </script>
+                  
 
 
 
@@ -214,7 +301,7 @@
                                 <div class="col-md-12  pt-4">
                                     <div class="form-group">
                                         <div class="col-lg-12 layout-spacing"   >
-                                            <select class="form-select" aria-label="Default select example" name="mngr">
+                                            <select class="form-select border-0 shadow-sm bg-light" aria-label="Default select example" name="mngr">
                                                 {%if zones %}
                                                 {% for z in zones %}
                                                 <option value="{{z.id}}">{{z.name}}</option>
@@ -228,8 +315,8 @@
                            
                 </div>
                 <div class="modal-footer">
-                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button  class="btn btn-sm btn-primary" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-sm  btn-secondary" data-dismiss="modal">اغلاق</button>
                 </form>
                 </div>
               </div>
@@ -254,15 +341,15 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea class=" form-control textarea" name="note" placeholder="اكتب الملاحظة لتظهر عند التقييم"></textarea>
+                                        <textarea class=" form-control shadow-sm border-0 bg-light textarea" name="note" placeholder="اكتب الملاحظة لتظهر عند التقييم"></textarea>
                                     </div>
                                  </div>
                             </div>
                            
                 </div>
                 <div class="modal-footer">
-                    <button  class="btn btn-primary" type="submit" >إضافة</button>    
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button  class="btn btn-primary btn-sm" type="submit" >إضافة</button>    
+                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
                 </form>
                 </div>
               </div>
@@ -280,18 +367,23 @@
             </div>
             <div class="modal-body">
              
-                <form class="section general-info pt-4" method="post" action="{% url 'add_newZone' brandId %}" enctype="multipart/form-data">
+                <form method="post" action="{% url 'add_newZone' brandId %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-12  pt-4">
                                 <div class="form-group">
                                     <div class="col-lg-12 layout-spacing"   >
-                                      <input type="text" class="form-control" name="name">          
+                                      <input type="text" class="form-control shadow-sm border-0 bg-light" placeholder="اكتب اسم المكان.." name="name">          
                                     </div>
                                 </div>
                              </div>
                         </div>
                         <table class="table table-striped">
+                          <thead style="background-color: #0ad0ac;">
+                            <th>
+                              الاماكن المحفوظة
+                            </th>
+                          </thead>
                             {%if zones %}
                             {% for z in zones %}
                             <tr>
@@ -304,15 +396,67 @@
                        
             </div>
             <div class="modal-footer">
-                <button  class="btn btn-primary" type="submit" >إضافة</button>    
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                <button  class="btn btn-primary btn-sm" type="submit" >إضافة</button>    
+              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
             </form>
             </div>
           </div>
         </div>
       </div>
 
+<!--تغيير الباقة-->
+
+<div class="modal fade" id="packegeModle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">تعيين باقة للعلامة التجارية</h5>
+         
+        </div>
+        <div class="modal-body">
+         
+           
+                <div class="form-group">
+                    <label>اختر الباقة </label>
+                    {% csrf_token %}
+                    <select class="form-select bg-light shadow-sm border-0"  id="packege">
+                        <option>اضغط لاختيار الباقة</option>
+                        {% for p in pcks %}
+                        <option value="{{p.id}}">{{p.description}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mt-4">
+                    <button class="btn btn-sm btn-primary" onclick="save_packege()">تفعيل الباقة</button>
+                </div>
+                     
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  
+    let alerts= document.getElementById("alert").value;
+      //alert(alerts)
+   
+       if( alerts == 'success'){
+          Swal.fire({
+           title: "تم الحفظ",
+           text: "تم انشاء ملف عميل بنجاح",
+           icon: "success"
+           });         
+       } else if( alerts == 'exist'){
+          Swal.fire({
+           title: "موجود مسبقاً",
+           text: "اسم شركة العميل مضاف مسبقاً",
+           icon: "error"
+           });         
+       } 
+  </script>
+  
 <script>
+  
 function remove_note(id){
 
     let userConfirmed = confirm("سيتم حذف الملاحظة , هل انت متأكد ؟");
@@ -378,7 +522,19 @@ function save_packege(){
         } ,
         
             success:function(data){ 
+              //  window.location.reload();
+              console.log('success ->>' + data)
+
+             // alert(data)
+             Swal.fire({
+              title: "تم التفعيل ",
+              text: "تم تفعيل الباقة بنجاح",
+              icon: "success"
+              });
+
+           setTimeout(function() {
                 window.location = "{% url 'brand_terms' 1234 %}".replace(/1234/, brandId.toString());
+            }, 3000);
                 //alert("تم تفعيل الباقة بنجاح")
             },
             done:function(data){
@@ -412,6 +568,170 @@ function save_term() {
     });
 }
 </script>
+
+
+<!-- <script>
+    // دالة لتحديد/إلغاء تحديد كافة خانات الاختيار في الجدول
+    function toggleSelectAll(source) {
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      checkboxes.forEach(cb => {
+        cb.checked = source.checked;
+      });
+      updateExecuteBtnState();
+    }
+    
+    // دالة لتحديث حالة زر التنفيذ بناءً على اختيار بند أو أكثر
+    function updateExecuteBtnState() {
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      // يتم تفعيل الزر إذا كان هناك بند مختار على الأقل
+      const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+      document.getElementById('executeBtn').disabled = !isAnyChecked;
+    }
+    
+    // إضافة مستمع للتغيير على كل خانة اختيار فردية لتحديث حالة الزر
+    document.addEventListener("DOMContentLoaded", function() {
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateExecuteBtnState);
+      });
+    });
+  </script> -->
+
+  <!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let executeBtn = document.getElementById("executeBtn");
+        let actionAdd = document.getElementById("actionAdd");
+        let actionDelete = document.getElementById("actionDelete");
+        let checkboxes = document.querySelectorAll('.row-checkbox');
+    
+        // تحديث حالة زر التنفيذ بناءً على اختيار الجدول والراديو
+        function updateExecuteBtnState() {
+            const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            const isRadioSelected = actionAdd.checked || actionDelete.checked;
+            executeBtn.disabled = !(isAnyChecked && isRadioSelected);
+        }
+    
+        // تفعيل زر التنفيذ عند تحديد خيار من الراديو
+        document.querySelectorAll('input[name="bulkAction"]').forEach(function (radio) {
+            radio.addEventListener("change", updateExecuteBtnState);
+        });
+    
+        // تفعيل زر التنفيذ عند تحديد أي صف من الجدول
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateExecuteBtnState);
+        });
+    
+        // عند الضغط على زر "تنفيذ"
+        executeBtn.addEventListener("click", function (event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+    
+            if (actionAdd.checked) {
+                // فتح المودال لإضافة مسؤول
+                let modal = new bootstrap.Modal(document.getElementById("responiple"));
+                modal.show();
+            } else if (actionDelete.checked) {
+                // عرض رسالة تنبيه للحذف
+                alert("تم الحذف");
+            }
+        });
+    });
+    </script> -->
+
+<script>
+      function toggleSelectAll(source) {
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      checkboxes.forEach(cb => {
+        cb.checked = source.checked;
+      });
+      updateExecuteBtnState();
+    }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let executeBtn = document.getElementById("executeBtn");
+    let actionAdd = document.getElementById("actionAdd");
+    let actionDelete = document.getElementById("actionDelete");
+    let checkboxes = document.querySelectorAll('.row-checkbox');
+
+    // تحديث حالة زر التنفيذ بناءً على اختيار الجدول والراديو
+    function updateExecuteBtnState() {
+      const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+      const isRadioSelected = actionAdd.checked || actionDelete.checked;
+      executeBtn.disabled = !(isAnyChecked && isRadioSelected);
+    }
+
+    // تفعيل زر التنفيذ عند تحديد خيار من الراديو
+    document.querySelectorAll('input[name="bulkAction"]').forEach(function (radio) {
+      radio.addEventListener("change", updateExecuteBtnState);
+    });
+
+    // تفعيل زر التنفيذ عند تحديد أي صف من الجدول
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', updateExecuteBtnState);
+    });
+
+    // عند الضغط على زر "تنفيذ"
+    executeBtn.addEventListener("click", function (event) {
+      event.preventDefault(); // منع إعادة تحميل الصفحة
+
+      if (actionAdd.checked) {
+        // جمع معرّفات البنود المحددة
+        let selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+        let selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value).join(',');
+        // تعيين القيمة في الحقل المخفي داخل المودال
+        document.getElementById("selected_terms").value = selectedIds;
+
+        // فتح المودال لإضافة مسؤول
+        let modal = new bootstrap.Modal(document.getElementById("responiple"));
+        modal.show();
+      } else if (actionDelete.checked) {
+        // مثال: عرض رسالة تنبيه للحذف (يمكنك تعديل العملية حسب الحاجة)
+        //
+        let brandId = '{{brandId}}'
+        let selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+        let selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value).join(',');
+        document.getElementById("selected_terms").value = selectedIds
+        console.log(selectedIds)
+        $.ajax({
+            type: 'post',
+            url:'/report/term_cancel',
+            async: true,
+            data:{
+            selected_terms : selectedIds , 
+            brandId : brandId, 
+            //row : terms ,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        } ,
+        
+            success:function(data){ 
+              //  window.location.reload();
+              console.log('success ->>' + data)
+
+               
+          Swal.fire({
+           title: "تم الحذف بنجاح",
+           text: "تم حذف البند",
+           icon: "success"
+           });
+
+           setTimeout(function() {
+                window.location = "{% url 'brand_terms' 1234 %}".replace(/1234/, brandId.toString());
+            }, 3000);
+          },         
+            done:function(data){
+                console.log('done ->>' + data)
+            },
+            error:function(data){
+                console.log('error ->>' + data);
+
+            }
+          });
+        ///////////////////////end/////////////////////
+      }
+    });
+  });
+</script>
+
+  
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

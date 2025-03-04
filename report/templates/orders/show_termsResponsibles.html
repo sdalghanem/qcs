@@ -20,40 +20,61 @@
   
 
 {% block clients_home %}
-<div class="row">
-    <div class="col-12">
-        <a href="{% url 'brand_terms' brandId %}" class="btn btn-sm btn-dark">< الرجوع للبنود</a>
+
+
+
+
+
+<div class="container mt-2">
+    <!-- عرض العلامات التجارية-->
+        <div class="card">
+            <div class="m-4">
+                <label><img src="../../../{{brandlogo}}" alt="avatar" width="50px"><b>{{brandName}}</b></label>        
+                <div>
+                    <a href="{% url 'brand_terms' brandId %}" class="btn btn-sm btn-primary">< الرجوع للبنود</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end row-->
+
+
+<div class="container mt-2">
+    <div class="card">
+        <div class="card-header p-4" style="background-color: white;">
+            <label style="color:#625bff">بند الجودة</label>
+            <h5 style="color:#02024b">{{term_desc}}</h5> 
+        </div>
+
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead style="background-color: #0ad0ac;">
+                    <tr class="text-center">
+                        <th>القسم المسؤول</th>
+                        <th>المكان </th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if respons %}
+                        {% for r in respons%}
+                        <tr class="text-center">
+                            <td>{{r.secName}}</td>
+                            <td>{{r.zoneName}}</td>
+                            <td> <a href="{% url 'delete_responsible' r.resId%}" class="btn btn-sm btn-danger"> X </a></td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td class="text-center" colspan="3">لايوجد</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+
+         </table>
+        </div>
     </div>
 </div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th colspan="3" class="text-center">
-                <h2>{{term_desc}} </h2>
-            </th>
-        </tr>
-        
-    </thead>
-    <tbody>
-        <tr class="text-center">
-            <th>القسم المسؤول</th>
-            <th>المكان </th>
-            <th>حذف</th>
-        </tr>
-        {% for r in respons%}
-        <tr class="text-center">
-            <td>{{r.secName}}</td>
-            <td>{{r.zoneName}}</td>
-            <td> <a href="{% url 'delete_responsible' r.resId%}" class="btn btn-sm btn-danger"> X </a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
-
-
-
 
 
 {% endblock %}

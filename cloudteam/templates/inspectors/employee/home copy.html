@@ -1,0 +1,178 @@
+{% extends "inspectors/employee/index.html" %}
+{% load static %}
+<!--اسم المستخدم-->
+{% block username %}
+{{username}}
+ {% endblock %}
+ {% block username2 %}
+ {{username}}
+  {% endblock %}
+
+<!--ًصورة المستخدم-->
+  {% block profileImg %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+  {% block profileImg2 %}
+  <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
+  {% endblock %}
+
+
+  
+
+{% block clients_home %}
+
+<style>
+    .active-filter {
+        background-color: #a1cfff;
+        color: white;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card mt-2 mb-2">
+                <div class="card-body">
+                    <label> <img src="{% static 'src/assets/img/QLogo05.SVG'%}" width="40px" ><b> طلبات التقييم</b></label>        
+                    <div>
+                        <input type="text" id="search-input" style="border: none; border-radius: 35px; background-color: #f1f1f1; padding: 7px; margin-left: 20px;" placeholder="ابحث ...">
+                        <div class="btn-group mr-2" role="group">
+                            <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد">جديد</button>
+                            <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل">مكتمل</button>
+                            <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل">غير مكتمل</button>
+                            <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد">معتمد</button>
+                            <button class="btn btn-primary filter-btn btn-sm" data-filter="all">الكل</button>
+                        </div>
+                      
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+   
+<div class="container" >
+    <div class="row">
+
+        {% for o in orders %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card mt-4 shadow">
+                <div class="card-header"> 
+                    <b style="margin-left: 20px;">{{o.bransh_id}} {{o.bransh_id.brand_id}}</b> 
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>حالة الطلب</td>
+                            <td>
+                                <span style="color:#625bff">  {% if o.status == '0' %} جديد{% endif %} </span>
+                                <span class="text-danger"> {% if o.status == '1' %} غير مكتمل{% endif %} </span> 
+                                <span style="color:#0202b4"> {% if o.status == '2' %} مكتمل{% endif %} </span>  
+                                <span style="color:#0ac0ad"> {% if o.status == '3' %} معتمد{% endif %}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>رقم الطلب</td>
+                            <td> {{o.id}}</td>
+                        </tr>
+                        <tr>
+                            <td>تاريخ الطلب</td>
+                            <td>{{o.registerDate}}</td>
+                        </tr>
+                    </table>
+                  
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-sm btn-primary" href="{% url 'evaluate' o.id %}" >فتح</a>   
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="col-lg-12 col-md-12 col-sm-12" hidden>
+            <div class="card  mb-2">
+                <div class="card-body">
+                    <!-- Table -->
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr style="background-color: #0ac0ad;">
+                                <th>رقم الطلب</th>
+                                <th>الفرع</th>
+                                <th>حالة الطلب</th>
+                                <th>تاريخ الطلب</th>
+                                <th>التقرير</th>
+                            
+                            </tr>
+                        </thead>
+                        <!-- <tbody id="ordersTableBody"> -->
+                            <!-- Orders will be dynamically loaded here -->
+                            <tbody id="table-body">
+                            {% for o in orders %}
+                                <tr>
+                                    <td>HC-AH-{{o.id}}</td>
+                                    <td>{{o.bransh_id}} - {{o.bransh_id.brand_id}}</td>
+                                    <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %} {% if o.status == '2' %} مكتمل{% endif %} {% if o.status == '3' %} معتمد{% endif %}</td>
+                                    <td>{{o.registerDate}}</td>
+                                    <td><a class="btn btn-sm btn-primary" href="{% url 'evaluate' o.id %}" >فتح</a></td>
+                                
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+
+    <script>
+        $(document).ready(function() {
+            // فلترة الجدول عند الكتابة في حقل البحث
+            $('#search-input').on('input', function() {
+                let searchText = $(this).val().toLowerCase();
+      
+                $('#table-body tr').each(function() {
+                    // البحث في كل خلية في الصف
+                    let rowText = $(this).text().toLowerCase();
+                    if (rowText.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+      
+            // عند الضغط على زر فلترة
+            $('.filter-btn').click(function() {
+                // استعادة الألوان الافتراضية للأزرار
+                $('.filter-btn').removeClass('active-filter');
+                
+                // إضافة اللون النشط للزر المضغوط
+                $(this).addClass('active-filter');
+      
+                // الحصول على الكلمة المراد البحث عنها
+                let filter = $(this).data('filter');
+      
+                // فلترة الصفوف بناءً على الكلمة المختارة
+                $('#table-body tr').each(function() {
+                    let rowText = $(this).find('td:eq(2)').text();
+                    if (filter === 'all' || rowText.includes(filter)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                
+                // مسح النص الموجود في حقل البحث
+                $('#search-input').val('');
+            });
+        });
+      </script>
+    
+
+
+{% endblock %}

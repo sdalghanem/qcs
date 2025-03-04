@@ -14,11 +14,24 @@ from django.contrib import messages
 #عرض الشركات 
 def company_list(request):
     if request.user.is_authenticated:
+        row = []
+
         companies = Company.objects.all()
+        for c in companies:
+            if Managers.objects.filter(company_id = c.id , position = '0').exists():
+                manager = Managers.objects.get(company_id = c.id , position = '0')
+            else:
+                manager = 'لايوجد'
+            row.append({
+                'companyName': c.description , 
+                'company_id' : c.id ,
+                'company_logo': c.logo ,
+                'manager' :manager ,
+            })
         data ={
         'username':  request.session['firestName'] ,
         'img': request.session['img'] ,
-        'rows': companies ,
+        'rows': row ,
          }
         return render(request , 'cloud/company_list.html',data)
     else :
@@ -47,7 +60,8 @@ def add_new_company(request):
     else: 
             return render(request , 'inspectors/login.html')
 
-
+def add_companyManager(request):
+    pass
 
 def brands_dashbord(request, id):    
     if request.user.is_authenticated:
@@ -325,10 +339,10 @@ def deletecityMngr(request , id , regionID):
     return redirect('cities_managers' , brandID = brandID , regionID = regionID) 
 
 def add_new_branch(request , id):
+     # id for brand
      if request.user.is_authenticated:
-
         brand = Brand.objects.get(id = id)
-        mngs = Managers.objects.filter( company_id = brand.company_id)
+        mngs = Managers.objects.filter( company_id = brand.company_id , position='4')
         # id  العلامة التجارية
         brandName = brand.description
         brandLogo = brand.logo
@@ -340,35 +354,17 @@ def add_new_branch(request , id):
             district = request.POST['district']
             # check if company name save in db same 
             if Branch.objects.filter(description = brachName).exists():
-                data = {'branchs' : branchs ,
-                        'brandName': brandName , 
-                        'brandLogo' : brandLogo ,
-                        'res' : 'موجود مسبقاً', 
-                        'brandId' : brandId,
-                        'regions' : regions ,
-                        'mngs' : mngs ,
-                        'username':  request.session['firestName'] ,
-                        'img': request.session['img']
-                        }
-                return render(request , 'cloud/brach_list.html',data)
+                messages.success(request, "exist")
+                return redirect('add_new_branch' , id = id) 
+
             else:
                 newbrand = Branch(brand_id_id = brandId , 
                                 description = brachName ,
                                 district_id_id = district,
-                                registerDate = '2011-11-11')
+                                registerDate = date.today() )
                 newbrand.save()
-            
-                data = {            'branchs' : branchs ,
-                                    'brandName': brandName , 
-                                    'brandLogo' : brandLogo ,
-                                    'res' : 'تم حفظ الفرع بنجاح', 
-                                    'brandId' : brandId ,
-                                    'regions' : regions ,
-                                    'mngs' : mngs ,
-                                    'username':  request.session['firestName'] ,
-                                    'img': request.session['img']
-                                    }
-                return render(request , 'cloud/brach_list.html',data)
+                messages.success(request, "success")
+                return redirect('add_new_branch' , id = id) 
         else:
             data = {'branchs' : branchs ,
                     'brandName': brandName ,
@@ -377,7 +373,9 @@ def add_new_branch(request , id):
                     'regions' : regions , 
                     'mngs' : mngs ,
                     'username':  request.session['firestName'] ,
-                    'img': request.session['img'],}
+                    'img': request.session['img'],
+                    'companyId':brand.company_id.id ,
+                    }
             return render(request , 'cloud/brach_list.html', data)
     
      else: # if not auth
@@ -536,6 +534,7 @@ def update_company_mngs(request , id):
      compid = update.company_id_id
      update.gm_manager_id_id = request.POST['mngr']
      update.save()
+     messages.success(request, "editmngr")
      return redirect('brands_dashbord' , id = compid) 
 
  # تحديث مدير فرع       
@@ -543,7 +542,9 @@ def update_branch_mngs(request , id):
      update = Branch.objects.get(id = id)
      brandid = update.brand_id_id
      update.manager_id_id = request.POST['mngr']
+     #update.district_id_id = request.POST['district']
      update.save()
+     messages.success(request, "succcess_update")
      return redirect('add_new_branch' , id = brandid) 
 
  # تحديث منصب المدير       
@@ -656,9 +657,9 @@ def brand_terms(request , id):
         company = Company.objects.get(id = brandName.company_id.id)
         pcks = Packege.objects.all()
         secs = Section.objects.filter(Brand_id = id)
-        print(company.packege)
-        if  company.packege :
-            #print(packege_terms(company.packege.id))
+       
+        if  brandName.packege :
+        #print(packege_terms(company.packege.id))
         # terms = packege_terms(company.packege.id)
             terms = Term.objects.filter(brand_id = id , cancel = 0)
         else:
@@ -668,7 +669,7 @@ def brand_terms(request , id):
             'brandName' : brandName ,
             'pcks' : pcks ,
             'brandId': id ,
-            'pckName' : company.packege,
+            'pckName' : brandName.packege,
             'terms' : terms ,
             'secs' : secs ,
             'companyId' :company.id ,

@@ -50,7 +50,6 @@ class District(models.Model):
 class Company(models.Model):
     description = models.CharField(max_length=100 , verbose_name ='اسم الشركة')
     logo = models.FileField(upload_to='customer/profile/Company/logo', null=True , verbose_name ='الشعار')
-    packege = models.ForeignKey("preset.Packege", on_delete=models.CASCADE , verbose_name =' المدينة' , null=True)
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
     class Meta:
         verbose_name_plural = "الشركات"
@@ -88,6 +87,7 @@ class Brand(models.Model):
     gm_manager_id = models.ForeignKey( Managers , verbose_name=("مدير عام العلامة التجارية"),  null= True, on_delete=models.CASCADE)
     description = models.CharField(max_length=100 , verbose_name ='العلامة التجارية')
     company_id = models.ForeignKey( Company , verbose_name=("الشركة"), on_delete=models.CASCADE)
+    packege = models.ForeignKey("preset.Packege", on_delete=models.CASCADE , verbose_name =' الباقة' , null=True)
     logo = models.FileField(upload_to='customer/profile/Company/brand', null=True , verbose_name ='الشعار')
     registerDate = models.DateField(null=True , verbose_name ='تاريخ التسجيل')
     class Meta:

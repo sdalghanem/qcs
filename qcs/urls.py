@@ -19,6 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 #from clients.admin import custom_admin_site
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import get_user_model
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +31,15 @@ urlpatterns = [
     path('clients/', include('clients.urls')),
     path('preset/', include('preset.urls')),
     path('report/', include('report.urls')),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    # صفحة تأكيد إرسال البريد
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    # رابط تعيين كلمة المرور الجديد
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    # صفحة نجاح إعادة التعيين
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

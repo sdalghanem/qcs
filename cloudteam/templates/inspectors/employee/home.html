@@ -16,17 +16,7 @@
   <img alt="avatar" src="../../../{{img}}" class="rounded-circle">
   {% endblock %}
 
-  {% block search %}
-  <input type="text" id="search-input" style="border: none; border-radius: 35px; background-color: #f1f1f1; padding: 7px; margin-left: 20px;" placeholder="ابحث ...">
-  <div class="btn-group mr-2" role="group">
-      <button class="btn btn-primary filter-btn btn-sm" data-filter="جديد">جديد</button>
-      <button class="btn btn-primary filter-btn btn-sm" data-filter="مكتمل">مكتمل</button>
-      <button class="btn btn-primary filter-btn btn-sm" data-filter="غير مكتمل">غير مكتمل</button>
-      <button class="btn btn-primary filter-btn btn-sm" data-filter="معتمد">معتمد</button>
-      <button class="btn btn-primary filter-btn btn-sm" data-filter="all">الكل</button>
-  </div>
 
-  {% endblock %}
   
 
 {% block clients_home %}
@@ -37,85 +27,126 @@
         color: white;
     }
 </style>
-
-   
-
-        <!-- Table -->
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>رقم الطلب</th>
-                    <th>الفرع</th>
-                    <th>حالة الطلب</th>
-                    <th>تاريخ الطلب</th>
-                    <th>التقرير</th>
-                 
-                </tr>
-            </thead>
-            <!-- <tbody id="ordersTableBody"> -->
-                <!-- Orders will be dynamically loaded here -->
-                <tbody id="table-body">
-                 {% for o in orders %}
-                    <tr>
-                        <td>HC-AH-{{o.id}}</td>
-                        <td>{{o.bransh_id}} - {{o.bransh_id.brand_id}}</td>
-                        <td>{% if o.status == '0' %} جديد{% endif %} {% if o.status == '1' %} غير مكتمل{% endif %} {% if o.status == '2' %} مكتمل{% endif %} {% if o.status == '3' %} معتمد{% endif %}</td>
-                        <td>{{o.registerDate}}</td>
-                        <td><a class="btn btn-sm btn-dark" href="{% url 'evaluate' o.id %}" >فتح</a></td>
-                      
-                    </tr>
-                 {% endfor %}
-            </tbody>
-        </table>
+<!-- قسم البحث وزر التصفية مع تأثيرات Bootstrap Collapse -->
+<div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="card mt-2 mb-2">
+          <div class="card-body">
+            <label>
+              <img src="{% static 'src/assets/img/QLogo05.SVG' %}" width="40px">
+              <b> طلبات التقييم</b>
+            </label>
+            <div class="d-flex align-items-center flex-wrap">
+              <input type="text" id="search-input" class="flex-grow-1" style="border: none; border-radius: 35px; background-color: #f1f1f1; padding: 7px; margin: 10px;" placeholder="ابحث ...">
+              <!-- زر التصفيه يستخدم Collapse من Bootstrap -->
+              <button class="btn  btn-sm m-1" style="background-color:#625bff ; color: #f1f1f1;" type="button" data-bs-toggle="collapse" data-bs-target="#filter-buttons-container" aria-expanded="false" aria-controls="filter-buttons-container">
+                تصفية
+              </button>
+            </div>
+            <!-- أزرار التصفية داخل Collapse ومنسقة باستخدام Flexbox -->
+            <div class="collapse mt-2" id="filter-buttons-container">
+              <div class="d-flex flex-wrap justify-content-center">
+                <button class="btn btn-primary filter-btn btn-sm m-1" data-filter="جديد">جديد</button>
+                <button class="btn btn-primary filter-btn btn-sm m-1" data-filter="مكتمل">مكتمل</button>
+                <button class="btn btn-primary filter-btn btn-sm m-1" data-filter="غير مكتمل">غير مكتمل</button>
+                <button class="btn btn-primary filter-btn btn-sm m-1" data-filter="معتمد">معتمد</button>
+                <button class="btn btn-primary filter-btn btn-sm m-1" data-filter="all">الكل</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- عرض البطاقات الخاصة بالطلبات مع إضافة data-status -->
+  <div class="container">
+    <div class="row">
+      {% for o in orders %}
+      <div class="col-lg-4 col-md-6 col-sm-12 order-card" data-status="{{ o.status }}">
+        <div class="card mt-4 shadow">
+          <div class="card-header text-center"  style="background: linear-gradient(45deg, rgba(98,91,255,0.2), rgba(10,208,172,0.2));">
+            <b style="margin-left: 20px;">{{ o.bransh_id }} {{ o.bransh_id.brand_id }}</b>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <tr>
+                <td>حالة الطلب</td>
+                <td>
+                  <span style="color:#625bff">{% if o.status == '0' %} جديد {% endif %}</span>
+                  <span class="text-danger">{% if o.status == '1' %} غير مكتمل {% endif %}</span>
+                  <span style="color:#0202b4">{% if o.status == '2' %} مكتمل {% endif %}</span>
+                  <span style="color:#0ac0ad">{% if o.status == '3' %} معتمد {% endif %}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>رقم الطلب</td>
+                <td>{{ o.id }}</td>
+              </tr>
+              <tr>
+                <td>تاريخ الطلب</td>
+                <td>{{ o.registerDate }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="card-footer text-center">
+            <a class="btn btn-sm btn-primary" href="{% url 'evaluate' o.id %}">فتح</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- كود الجافاسكربت لتفعيل البحث والتصفية -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // خريطة تحويل النص إلى قيمة الحالة (0: جديد، 1: غير مكتمل، 2: مكتمل، 3: معتمد)
+      const statusMapping = {
+          "جديد": "0",
+          "غير مكتمل": "1",
+          "مكتمل": "2",
+          "معتمد": "3"
+      };
+      // تعيين الفلتر الافتراضي إلى "جديد"
+      let currentStatusFilter = "جديد";
+  
+      // دالة لتصفية البطاقات بناءً على البحث وحالة الطلب
+      function filterCards() {
+          const searchTerm = document.getElementById('search-input').value.toLowerCase();
+          document.querySelectorAll('.order-card').forEach(card => {
+              const cardText = card.textContent.toLowerCase();
+              const cardStatus = card.getAttribute('data-status');
+              const matchesSearch = cardText.indexOf(searchTerm) > -1;
+              const matchesStatus = (currentStatusFilter === "all" || cardStatus === statusMapping[currentStatusFilter]);
+              card.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+          });
+      }
+  
+      // تفعيل البحث عند كتابة المستخدم
+      document.getElementById('search-input').addEventListener('keyup', filterCards);
+  
+      // تفعيل التصفية عند الضغط على أزرار الفلتر
+      document.querySelectorAll('.filter-btn').forEach(button => {
+          button.addEventListener('click', function() {
+              currentStatusFilter = this.getAttribute('data-filter');
+              filterCards();
+          });
+      });
+  
+      // تطبيق التصفية الافتراضية لإظهار البطاقات ذات حالة "جديد" فقط
+      filterCards();
+  });
+  </script>
+  
+  
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
 
-    <script>
-        $(document).ready(function() {
-            // فلترة الجدول عند الكتابة في حقل البحث
-            $('#search-input').on('input', function() {
-                let searchText = $(this).val().toLowerCase();
-      
-                $('#table-body tr').each(function() {
-                    // البحث في كل خلية في الصف
-                    let rowText = $(this).text().toLowerCase();
-                    if (rowText.includes(searchText)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
-      
-            // عند الضغط على زر فلترة
-            $('.filter-btn').click(function() {
-                // استعادة الألوان الافتراضية للأزرار
-                $('.filter-btn').removeClass('active-filter');
-                
-                // إضافة اللون النشط للزر المضغوط
-                $(this).addClass('active-filter');
-      
-                // الحصول على الكلمة المراد البحث عنها
-                let filter = $(this).data('filter');
-      
-                // فلترة الصفوف بناءً على الكلمة المختارة
-                $('#table-body tr').each(function() {
-                    let rowText = $(this).find('td:eq(2)').text();
-                    if (filter === 'all' || rowText.includes(filter)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-                
-                // مسح النص الموجود في حقل البحث
-                $('#search-input').val('');
-            });
-        });
-      </script>
+   
     
 
 

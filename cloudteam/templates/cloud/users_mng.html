@@ -129,8 +129,8 @@
     {% for m in mngs %}
     <!-- إضافة كلاس card-item واستخدام data-position لتخزين قيمة position -->
     <div class="col-lg-4  col-md-6 col-sm-12 mb-4 card-item" data-position="{{ m.position }}">
-      <div class="card">
-        <div class="card-body">
+      <div class="card ">
+        <div class="card-header" style="background: linear-gradient(45deg, rgba(98,91,255,0.2), rgba(10,208,172,0.2));">
           <h5>{{ m.name }}</h5>
           <b style="color:#625bff">
             {% if m.position == '0' %}
@@ -151,7 +151,9 @@
               لايوجد
             {% endif %}
           </b>
-          <hr class="bg-dark">
+
+        </div>
+        <div class="card-body">
           <p style="color:#02024b"><b> <i class="material-icons"style="color:#625bff">person</i>{{ m.current }}</b></p>
           <p style="color:#02024b">
             <i class="material-icons"  style="color:#625bff">call</i>

@@ -17,18 +17,39 @@
   {% endblock %}
 <!----------------------------------------------------------------------------------->
 {% block clients_home %}
-<div class="row">
-    <div class="col-12 mb-2">
-        <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#add_region">+ إضافة منطقة   </button>
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <label><img src="{% static 'src/assets/img/Logo 2.svg' %}" alt="avatar" width="80px"><b>ادارة العناوين</b></label>        
+                    <div>
+                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_region">+ إضافة منطقة   </button>
+                    </div>
+                 </div>
+            </div>
+        </div>
     </div>
 </div>
-<p>{{res}}</p>
-<table class="table table-striped">
-    <thead>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card mt-2">
+                <div class="card-body">
+<table class="table table-striped text-center">
+    <thead class="text-center" style="background-color: #0ad0ac;">
         <tr>
-            <th>المنطقة</th>
-            <th>المدن</th>
+            <th colspan="3" >المناطق</th>
+            
         </tr>
     </thead>
     <tbody>
@@ -36,7 +57,7 @@
         {% for r in regions %}
         <tr>
             <td>{{r.name}}</td>
-            <td><a class="btn btn-sm btn-dark" href="{% url 'show_city' r.id %}">المدن</a></td>
+            <td><a class="btn btn-sm btn-primary" href="{% url 'show_city' r.id %}">اعداد المدن</a></td>
             <td><a href="{% url 'delete_region' r.id %}" class="btn btn-sm btn-danger">حذف</a></td>
         </tr>
         {% endfor %}
@@ -47,6 +68,11 @@
        {% endif %}
     </tbody>
 </table>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 <!----------------------------------------------------------------------------------------->
 <!-- Evaluation Modal -->
@@ -63,12 +89,12 @@
                     {% csrf_token %}
                     <input type="text" value="{{brandID}}" name="brandID" hidden />
                     <div class="mb-3">
-                        <input type="text" name="region" class="form-control"  placeholder="اكتب اسم المنطقة"/>      
+                        <input type="text" name="region" class="form-control border-0 bg-light shadow-sm"  placeholder="اكتب اسم المنطقة"/>      
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="submit" class="btn btn-sm btn-primary">حفظ</button>
                 </div>
                 </form>
             </div>
@@ -76,6 +102,36 @@
     </div>
 </div>
 
+<script>
+
+let alerts= document.getElementById("alert").value;
+if( alerts == 'exist'){
+    Swal.fire({
+     title: " موجود مسبقاً",
+     text: "قم بكتابة اسم منطقه اخرى",
+     icon: "error"
+     });         
+ } else if (alerts == 'success'){
+     Swal.fire({
+     title: "تم الحفظ",
+     text: "قم باعداد المدن  و الاحياء التابعة للمنطقة",
+     icon: "success"
+     });        
+ }else if (alerts == 'exist_cities'){
+     Swal.fire({
+     title: "لم يتم الحذف",
+     text: "يوجد مدن مضافة لهذه المنطقة , يجب حذف جميع المدن اولا",
+     icon: "info"
+     });        
+ }else if (alerts == 'delete'){
+     Swal.fire({
+     title: "تم الحذف",
+     text: "تم حذف المنطقة بنجاح",
+     icon: "success"
+     });        
+ }
+
+</script>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

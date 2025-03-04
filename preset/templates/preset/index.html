@@ -18,112 +18,81 @@
   {% endblock %}
 
 {% block clients_home %}
-
+<!-- التنبيهات-->
+{% if messages %}
+        {% for message in messages %}
+            <input type="text" id="alert" value="{{ message }}" hidden >
+        {% endfor %}
+{% endif %}
+    <!-- عرض العلامات التجارية-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <label>
+                            <img src="{% static 'src/assets/img/Logo 2.svg' %}" alt="avatar" width="80px">
+                            <b>إعداد الباقات المسبق</b> 
+                            <a href="#" data-toggle="modal" data-target="#info"><i class="material-icons" style="margin-right: 8px;">info</i></a>
+                        </label>        
+                    </div>
+                   
+                        <!-- <h6 style="color:#02024B"> | الباقات</h6> -->
+                        <a href="#" data-toggle="modal" data-target="#addNewPack" class="btn btn-sm btn-primary">إضافة باقة جديدة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!------------------------>
 <div class="row">
-    <!--اضافة علامة تجارية-->
- 
-    <!-- <div id="alertBox" class="alert  {{class}} alert-dismissible fade show" role="alert">
-        {{msg}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div> -->
-    <!-- <div class="card  col-xl-4 col-lg-4 col-md-4 ">
-        <form class="section general-info " method="post" action="{% url 'add_new_packages' %}" enctype="multipart/form-data">
-            <div class="info">
-                <div class="row">
-                    <div class="col-lg-11 mx-auto">                -->
-                        <!-- تبيهات-->
-                       
-                                <!-- <div class="card-header text-center">
-                                <label>إضافة باقة</label>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12  pt-4">
-                                        <div class="form-group">
-                                        
-                                            <input name="brandName" type="text" class="form-control mb-3" id="fullName" placeholder="اسم الباقة" value="">
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
-                                <div class="form ">
-                                    <div class="col-md-12 mt-1 card-footer">
-                                        <div class="form-group text-center">
-                                            <button type="submit" class="btn btn-secondary">حفظ</button>
-                                        </div>
-                                    </div>                                   
-                                </div>
-                            </div>                      
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>           
-     -->
-    <!------------------------>
-    <div class=" card p-4 mb-4  col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
-        <h6 style="color:#02024B"> | الباقات</h6>
-        <!-- <P>قم بإضافة باقة مسبقاً  وسيتم ظهورها في قائمة تحديد الباقات للشركات للتفعيل</P> -->
-        <!-- <p><b>الباقات هي عبارة عن بنود محفوظة مسبقاً لتسهيل اضافة بنود تقرير الجودة للعلامات التجارية للعملاء</b></p>
-        <P>خطوات اعداد الباقة :</P>
-        <ul>
-            <li>اضافة أسم الباقة</li>
-            <li>اضافة عناوين رئيسية لمجموعة البنود</li>
-            <li>قم باضافة عناوين رئيسية للبنود</li>
-            <li>إضافة البنود لكل عنوان رئيسي</li>
-            <li>بعد الانتهاء ستظهر الباقة في اعداد تقرير التفتيس الخاص بالعلامة التجارية</li>
-        </ul> -->
-        <p style="color:#625bff"><b>الباقات هي مجموعات من البنود المعرّفة مسبقاً، وتهدف إلى تسهيل عملية إضافة بنود تقرير الجودة الخاصة بالعلامات التجارية للعملاء.</b></p> <p><b>خطوات إعداد الباقة:</b></p> 
-        <ul> 
-            <li>إضافة اسم الباقة.</li>
-             <li>إضافة عناوين رئيسية لتصنيف مجموعة البنود.</li> 
-             <li>إضافة البنود الفرعية تحت كل عنوان رئيسي.</li>
-              <li>سيتم عرض الباقة ضمن الخيارات المتاحة أثناء إعداد تقرير التفتيش الخاص بالعلامة التجارية.</li> 
-            </ul>
-        <form class="section general-info " method="post" action="{% url 'add_new_packages' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input name="brandName" type="text" style="border: none; background-color:aliceblue; border-radius: 50px; width: 200px;  padding: 8px;" placeholder="اكتب اسم الباقة الجديدة" value="">
-            <button type="submit" class="btn btn-primary btn-sm">حفظ و متابعة الإعداد</button>
-        </form>
-    </div>
-    <!-- عرض العلامات التجارية-->
-    <div class=" p-4  col-xl-8 col-lg-8 col-md-8  col-sm-12">
-   
-    <div class="searchable-container ">
-    
-       
                 {% if row %}
                     {% for r in row %}
-                    <div class="items">                 
-                        <div class="user-name">
-                            <p class="">{{r.description}} </p>
-                        </div>
-                        <div class="action-btn">
-                        <a href="{% url 'packege_details' r.id %}">  <span class="btn btn-primary btn-sm">اعداد الباقة</span></a>
-                        <a href="{% url 'delete_package' r.id %}">  <span class="badge outline-badge-danger">حذف</span></a>
-                        <a data-toggle="modal" data-target="#edit_title{{r.id}}" class="badge outline-badge-warning"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <dic class="card mt-4 text-center">
+                            <div class="card-header" style="background: linear-gradient(45deg, rgba(98,91,255,0.2), rgba(10,208,172,0.2));"></div>
+                            <div class="card-body"><h5 style="color:#02024b">{{r.description}}</h5></div>
+                            <div class="card-footer">
+                                <a href="{% url 'packege_details' r.id %}">  <span class="btn btn-primary btn-sm">اعداد الباقة</span></a>
+                                <a data-toggle="modal" data-target="#edit_title{{r.id}}" class="btn btn-primary btn-sm"> تعديل </a>
+                                <a href="{% url 'delete_package' r.id %}" class="btn btn-sm  btn-danger delete-btn"> حذف </a>
 
-                        </div>
+        
+                            </div>
+                        </dic>
                     </div>
                     {% endfor %}
                 {% else %}
-            <div class="row text-center">
-                <div class="col-md-12 pt-4 pb-2 ">    
-                        <div class="items" >                 
-                                <span>لايوجد باقات </span>            
-                        </div>
-                </div>
-            </div>
+                       
+                                <p>لايوجد باقات </p>            
+            
         {% endif %}
-        </div><!---->
-    </div>
-    <!-- عرض العلامات التجارية-->
+</div>
+<!-------------models------------------------>
     
+    <div class="modal fade" id="addNewPack" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">إضافة باقة جديدة</h5>
+             
+            </div>
+            <div class="modal-body">
+                <form class="section general-info " method="post" action="{% url 'add_new_packages' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input name="packname" type="text"  class="form-control border-0 bg-light shadow-sm" placeholder="اكتب اسم الباقة الجديدة" value="">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
+              <button type="submit" class="btn btn-primary btn-sm">حفظ و متابعة الإعداد</button>
+            </form>
     
-    </div> <!--end row-->
-    
-
+            </div>
+          </div>
+        </div>
+      </div>
 <!-- Modal add title -->
 {% for r in row %}
 
@@ -136,13 +105,13 @@
         </div>
         <div class="modal-body">
          
-            <form class="section general-info " method="post" action="{% url 'edit_pck_title' r.id %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'edit_pck_title' r.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12  ">
                             <div class="form-group">
                                
-                                    <input type="text"  style="border: none; background-color:aliceblue; border-radius: 50px; width: 100%;  padding: 8px;" name="description" value="{{r.description}}" placeholder="اكتب اسم الباقة">                 
+                                    <input type="text" class="form-control border-0 bg-light shadow-sm" name="description" value="{{r.description}}" placeholder="اكتب اسم الباقة">                 
                                
                                
                             </div>
@@ -152,8 +121,8 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
-          <button  class="btn btn-secondary btn-sm" type="submit" >حفظ</button>
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">اغلاق</button>
+          <button  class="btn btn-primary btn-sm" type="submit" >حفظ</button>
         </form>
 
         </div>
@@ -163,26 +132,90 @@
 {% endfor %}
   <!--end model -->
 
+  <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">الباقات</h5>
+         
+        </div>
+        <div class="modal-body">
+            <p style="color:#0ad0ac"><b>الباقات هي مجموعات من البنود المعرّفة مسبقاً، وتهدف إلى تسهيل عملية إضافة بنود تقرير الجودة الخاصة بالعلامات التجارية للعملاء.</b></p> 
+            <p style="color:#02024b"><b>خطوات إعداد الباقة:</b></p> 
+            <ul style="color:#625bff"> 
+                <li>إضافة اسم الباقة.</li>
+                 <li>إضافة عناوين رئيسية لتصنيف مجموعة البنود.</li> 
+                 <li>إضافة البنود الفرعية تحت كل عنوان رئيسي.</li>
+                  <li>سيتم عرض الباقة ضمن الخيارات المتاحة أثناء إعداد تقرير التفتيش الخاص بالعلامة التجارية.</li> 
+            </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">اغلاق</button>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 <!-- تضمين مكتبة Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<script>
-// إخفاء التنبيه تدريجيًا بعد 10 ثوانٍ (10000 مللي ثانية)
-// إخفاء التنبيه تدريجيًا وإزالته من DOM بعد 10 ثوانٍ
-setTimeout(function() {
-    var alertBox = document.getElementById('alertBox');
-    if (alertBox) {
-        alertBox.classList.remove('show'); // إزالة الفئة "show" لتفعيل تأثير الاختفاء التدريجي
-        
-        // الانتظار حتى انتهاء تأثير الانتقال (500ms) ثم إزالة العنصر من DOM
-        alertBox.addEventListener('transitionend', function() {
-            alertBox.remove(); // إزالة العنصر من DOM
-        });
-    }
-}, 5000);
 
-</script>
+
+<script>
+  
+    let alerts= document.getElementById("alert").value;
+      //alert(alerts)
+   
+       if( alerts == 'exist'){
+          Swal.fire({
+           title: "لم يتم الحفظ",
+           text: "اسم الباقة مضاف مسبقاً, يجب اختيار اسم مختلف",
+           icon: "info"
+           });         
+       } else if( alerts == 'update'){
+          Swal.fire({
+           title: "تم التعديل",
+           text: "تم تعديل أسم الباقة بنجاح",
+           icon: "success"
+           });         
+       }
+  </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.delete-btn').forEach(function(button) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault(); // منع تنفيذ الرابط مباشرة
+          const href = this.getAttribute('href');
+          Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "سيتم حذف جميع العناوين الرئيسية و البنود التابعه للباقة!" ,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'نعم، احذفها!',
+            cancelButtonText: 'إلغاء'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                title: "تم الحذف",
+                text: "تم حذف الباقة بنجاح",
+                icon: "info"
+                }).then((result) => {
+                    window.location.href = href;
+                });                  
+            }
+          });
+        });
+      });
+    });
+    </script>
+    
 {% endblock %}

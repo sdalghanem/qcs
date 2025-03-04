@@ -32,9 +32,9 @@
     <div class="m-4">
         <label><img src="../../../{{companyLogo}}" alt="avatar" width="80px"><b>{{companyName}}</b></label>        
         <div>
-            <a href="{%url 'users_managment' companyId %}" class="btn btn-sm btn-primary "> إدارة حسابات الموظفين </a> </td>
-            <a href="{%url 'departments' companyId %}" class="btn btn-sm btn-primary ">هيكلة الإدارات</a> </td>
-            <a href="#" class="btn btn-sm btn-primary "  data-toggle="modal" data-target="#addNewBrand">إضافة علامة تجارية</a> </td>
+            <a href="{%url 'users_managment' companyId %}" class="btn btn-sm btn-primary "> إدارة حسابات الموظفين </a> 
+            <a href="{%url 'departments' companyId %}" class="btn btn-sm btn-primary ">هيكلة الإدارات</a> 
+            <a href="#" class="btn btn-sm btn-primary "  data-toggle="modal" data-target="#addNewBrand">إضافة علامة تجارية</a> 
         </div>
     </div>
 
@@ -66,7 +66,7 @@
                 {% for b in brands %}
                 <div class="col-lg-4 col-md-12 col-sm-12" >
                     <div class="card text-center">
-                        <div class="card-header" style="background-color: white;">
+                        <div class="card-header" style="background: linear-gradient(45deg, rgba(98,91,255,0.2), rgba(10,208,172,0.2));">
                             <img src="../../../{{b.logo}}" alt="avatar" class="rounded-circle me-2" width="50" height="50" >
                             {{ b.description }}
                         </div>
@@ -85,7 +85,8 @@
                      
                         <div class="card-footer">
                            <a class="btn btn-sm btn-primary" href="{% url 'regions_city_managers' b.id %}" >المناطق </a>
-                           <a href="{% url 'brand_terms' b.id %}">  <span class="btn btn-sm btn-primary">اعداد التقارير </span></a>
+                           <a href="{% url 'brand_terms' b.id %}">  <span class="btn btn-sm btn-primary">الباقة </span></a>
+                           <a href="{% url 'show_orders' b.id %}">  <span class="btn btn-sm btn-primary">طلبات التقييم </span></a>
                            <a href="{% url 'add_new_branch' b.id %}">  <span class="btn btn-sm btn-primary">الفروع</span></a>
                         </div>
                     </div>
@@ -104,28 +105,25 @@
         </div>
         <div class="modal-body">
          
-            <form class="section general-info pt-4" method="post" action="{% url 'update_company_mngs' b.id %}" enctype="multipart/form-data">
+            <form  method="post" action="{% url 'update_company_mngs' b.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
-                        <div class="col-md-12  pt-4">
                             <div class="form-group">
-                                <div class="col-lg-4 layout-spacing"   >
-                                    <select class="form-select" aria-label="Default select example" name="mngr">
+                                    <select class="form-select shadow-sm bg-light border-0" aria-label="Default select example" name="mngr">
                                         {% for m in mngs %}
-                                        <option value="{{m.id}}">{{m.user}}</option>
+                                        <option value="{{m.id}}">{{m.user.first_name}}  {{m.user.last_name}}</option>
                                         {% endfor %}
                                     </select>                   
-                                </div>
-                            </div>
                          </div>
                     </div>
-                    <button  class="btn btn-primary" type="submit" >حفظ</button>
-                </form>
           
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            <button  class="btn btn-primary btn-sm" type="submit" >حفظ</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">اغلاق</button>
         </div>
+    </form>
+
       </div>
     </div>
   </div>
@@ -182,6 +180,12 @@
            title: "موجود مسبقاً",
            text: "العلامة التجارية مضافة مسبقاً",
            icon: "error"
+           });         
+       } else if( alerts == 'editmngr'){
+          Swal.fire({
+            title: "تم التعديل",
+           text: "تم تعديل مدير عام علامة تجارية بنجاح",
+           icon: "success"
            });         
        } 
   </script>

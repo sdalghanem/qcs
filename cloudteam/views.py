@@ -8,6 +8,7 @@ from preset.models import *
 from report.models import *
 import json
 from django.contrib.auth import authenticate , login as auth_login , logout
+from django.contrib import messages
 
 #API
 def save_packege(request):
@@ -19,13 +20,13 @@ def save_packege(request):
     pck = request.POST['pck']
     brandId = request.POST['brandId']
     brand = Brand.objects.get(id = brandId)
-    update = Company.objects.get(id = brand.company_id.id)
+    #update = Company.objects.get(id = brand.company_id.id)
     
-    update.packege_id = pck
-    update.save()
+    brand.packege_id = pck
+    brand.save()
     #print(packege_terms(update.packege.id))
     # حفظ البنود بناء على الباقة
-    preset = packege_terms(update.packege.id)
+    preset = packege_terms(brand.packege.id)
     # تحول جميع البنود الى ملغيه 
     if Term.objects.filter(brand_id_id = brandId).exists:
         cancel = Term.objects.filter(brand_id_id = brandId)
@@ -65,7 +66,7 @@ def remove_note(request):
 #######################################inspectors#########################################
 
 def show_inspectors(request):
-    emps = Employee.objects.all()
+    emps = Employee.objects.filter(manager = 0 , supervisor = 0)
     data ={
         'emps': emps,
         'username':  request.session['username'] ,
@@ -74,7 +75,12 @@ def show_inspectors(request):
     return render(request , 'inspectors/show_inspectors.html' , data)
 
 def new_inspectors_form(request):
-    if  request.method =='POST':
+    if request.method == 'POST':
+        # التحقق من وجود اسم المستخدم مسبقاً
+        if User.objects.filter(username=request.POST['username']).exists():
+            messages.success(request, "exist")
+            return redirect('new_inspectors_form')
+        else:
             newUser = User()
             newUser.username = request.POST['username']
             newUser.first_name = request.POST['first_name']
@@ -88,47 +94,72 @@ def new_inspectors_form(request):
             newEmp.mobile = request.POST['mobile']
             newEmp.supervisor = 0
             newEmp.manager = 0
-            #
-            uploaded_file =  request.FILES['profile_img']
+            
+            # حفظ الصورة المرفوعة
+            uploaded_file = request.FILES['profile_img']
             fs = FileSystemStorage()
-            filename = fs.save(uploaded_file.name , uploaded_file)
+            filename = fs.save(uploaded_file.name, uploaded_file)
             uploaded_file_url = fs.url(filename)
-            #
+            
             newEmp.profile_img = uploaded_file_url
             newEmp.save()
-            data ={
-                'res' : 'تم حفظ الموظف بنجاح'
-            }
-            return render(request , 'inspectors/addNewInspectors.html' , data)
-    return render(request , 'inspectors/addNewInspectors.html')
+
+            messages.success(request, "success_newuser")
+            return redirect('show_inspectors')
+
+    return render(request, 'inspectors/addNewInspectors.html', {
+        'username': request.session['username'],
+        'img': request.session['img']
+    })
 
 
-def edit_Inspectors(request , id):
+
+from django.core.files.storage import FileSystemStorage
+
+def edit_Inspectors(request, id):
     if request.user.is_authenticated:
-        #id for employee
-        emp = Employee.objects.get(id = id)
-        user = User.objects.get(id = emp.user.id)
-        data ={
-            'userinfo' :  user ,
-            'empinfo': emp ,
-            'username':  request.session['username'] ,
+        # استرجاع بيانات الموظف والمستخدم
+        emp = Employee.objects.get(id=id)
+        user = User.objects.get(id=emp.user.id)
+        data = {
+            'userinfo': user,
+            'empinfo': emp,
+            'username': request.session['username'],
             'img': request.session['img']
         }
-        if  request.method =='POST':
-            email = request.POST['email']
-            mobile = request.POST['mobile']
-            psw= request.POST['password']
-            updatEmp = Employee.objects.get(id = id)
-            updateUser = User.objects.get(id = updatEmp.user.id)
-            updatEmp.mobile = mobile
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            mobile = request.POST.get('mobile')
+            psw = request.POST.get('password', '').strip()  # الحصول على قيمة كلمة المرور إن وُجدت
+
+            updatEmp = Employee.objects.get(id=id)
+            updateUser = User.objects.get(id=updatEmp.user.id)
+            # تحديث البريد الإلكتروني ورقم الجوال
             updateUser.email = email
-            updateUser.set_password(psw)
+            updatEmp.mobile = mobile
+
+            # تغيير كلمة المرور فقط إذا كانت القيمة غير فارغة
+            if psw:
+                updateUser.set_password(psw)
+            
+            # تعديل صورة البروفايل إذا تم رفع ملف جديد
+            if 'profile_img' in request.FILES:
+                uploaded_file = request.FILES['profile_img']
+                fs = FileSystemStorage()
+                filename = fs.save(uploaded_file.name, uploaded_file)
+                uploaded_file_url = fs.url(filename)
+                updatEmp.profile_img = uploaded_file_url
+
             updateUser.save()
             updatEmp.save()
+            messages.success(request, "edit")
             return redirect('/cloudteam/show_inspectors')
-        return render(request , 'inspectors/editInspectors.html' , data)
-    else:# not auth
-        return render(request , 'inspectors/login.html')
+
+            
+        return render(request, 'inspectors/editInspectors.html', data)
+    else:
+        return render(request, 'inspectors/login.html')
+
 
 
 

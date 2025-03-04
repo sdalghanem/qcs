@@ -17,5 +17,7 @@ path('update_term_title/<str:id>' , views.update_term_title , name='update_term_
 path('delete_term/<str:id>' , views.delete_term , name='delete_term'), 
 
 path('delete_package/<str:id>' , views.delete_package , name='delete_package'), 
-path('edit_pck_title/<str:id>' , views.edit_pck_title , name='edit_pck_title'),
+path('edit_pck_title/<str:id>' , views.edit_pck_title , name='edit_pck_title'), 
+path('deleteTitle/<str:id>' , views.deleteTitle , name='deleteTitle'), 
+path('upload_packge_details/<str:id>' , views.upload_packge_details , name='upload_packge_details'),    
 ]
